@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+#added by me
+.project
+.settings
+app/.classpath
+app/.project
+app/.settings
