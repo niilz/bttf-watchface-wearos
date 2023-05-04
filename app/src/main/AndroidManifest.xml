@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-feature android:name="android.hardware.type.watch" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
+    <uses-feature android:name="android.hardware.type.watch" />
 
     <application
         android:allowBackup="true"
@@ -14,32 +16,32 @@
         <meta-data android:name="com.google.android.wearable.standalone"
             android:value="true"/>
 
-        <service android:name=".BttfWatchface"
+        <service
+            android:name=".BttfWatchface"
+            android:exported="true"
             android:label="@string/foo"
-            android:permission="android.permission.BIND_WALLPAPER"
-            android:exported="true">
+            android:permission="android.permission.BIND_WALLPAPER">
 
             <meta-data
                 android:name="android.service.wallpaper.square_mode"
                 android:value="false" />
-
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face"/>
-
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview"
-                android:value="@drawable/preview_analog"/>
-
+                android:resource="@drawable/preview_analog"/>
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
-                android:value="@drawable/preview_analog"/>
+                android:resource="@drawable/preview_analog"/>
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>
+
                 <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
             </intent-filter>
         </service>
+
     </application>
 
 </manifest>
