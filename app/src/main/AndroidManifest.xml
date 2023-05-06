@@ -33,7 +33,7 @@
                 android:resource="@drawable/preview_analog"/>
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
-                android:resource="@drawable/preview_analog"/>
+                android:resource="@drawable/preview_analog_round"/>
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>
