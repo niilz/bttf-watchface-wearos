@@ -19,10 +19,19 @@ class BttfWatchface : CanvasWatchFaceService() {
         override fun onCreate(holder: SurfaceHolder?) {
             super.onCreate(holder)
             initializeBackground()
+            initializeTicks()
+        }
+
+        private fun initializeTicks() {
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
+            drawTicks()
+        }
+
+        private fun drawTicks() {
+
         }
 
         private fun drawBackground(canvas: Canvas) {
