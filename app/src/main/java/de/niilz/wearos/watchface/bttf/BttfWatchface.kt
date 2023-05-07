@@ -41,9 +41,10 @@ class BttfWatchface : CanvasWatchFaceService() {
         private fun drawNumbers(canvas: Canvas) {
             val now = LocalDate.now()
             val dateNums = MapperUtil.mapLocalDate(now)
-            dateNums.map { numbers.get(it) }
+                .map { numbers[it] }
                 .map { DrawableNumber(it, colors.numberColorRow1, 40f, 30f) }
-                .forEach { it.draw(canvas) }
+            val dateSlot = Slot(applicationContext, dateNums, 50, 50, 100, 100)
+            dateSlot.draw(canvas)
         }
 
         private fun drawBackground(canvas: Canvas) {
