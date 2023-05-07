@@ -16,7 +16,7 @@ class BttfWatchface : CanvasWatchFaceService() {
 
     inner class Engine : CanvasWatchFaceService.Engine() {
         private lateinit var backgroundBitmap: Bitmap
-        private lateinit var numbers: List<Bitmap?>
+        private lateinit var numbers: List<Bitmap>
 
         private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
         private val numberWidth = resources.getDimension(R.dimen.number_width)
@@ -33,15 +33,6 @@ class BttfWatchface : CanvasWatchFaceService() {
             colors = NumberColors(applicationContext)
         }
 
-        private fun initializeNumbers() {
-            fun getDrawable(idx: Int): Drawable? {
-                val id = resources.getIdentifier("number_$idx", "drawable", packageName)
-                return ContextCompat.getDrawable(applicationContext, id)
-            }
-
-            numbers = (0..9).map { getDrawable(it)?.toBitmap() }.toList()
-        }
-
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
             drawNumbers(canvas)
@@ -50,8 +41,8 @@ class BttfWatchface : CanvasWatchFaceService() {
         private fun drawNumbers(canvas: Canvas) {
             val now = LocalDate.now()
             val dateNums = MapperUtil.mapLocalDate(now)
-            dateNums.map { numbers?.get(it) }
-                .map { DrawableNumber(it!!, colors.numberColorRow1, 40f, 30f) }
+            dateNums.map { numbers.get(it) }
+                .map { DrawableNumber(it, colors.numberColorRow1, 40f, 30f) }
                 .forEach { it.draw(canvas) }
         }
 
@@ -67,17 +58,25 @@ class BttfWatchface : CanvasWatchFaceService() {
         ) {
             super.onSurfaceChanged(holder, format, width, height)
 
-            val scale = width.toFloat() / backgroundBitmap.width.toFloat()
-            backgroundBitmap = Bitmap.createScaledBitmap(
-                backgroundBitmap,
-                (backgroundBitmap.width * scale).toInt(),
-                (backgroundBitmap.height * scale).toInt(),
-                true
-            )
+            val backgroundScale = width.toFloat() / backgroundBitmap.width.toFloat()
+            backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
+
+            val numberScale = width.toFloat() / (100f * 14f)
+            numbers = numbers.map { MapperUtil.scaleBitmap(it, numberScale) }
         }
 
         private fun initializeBackground() {
             backgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
         }
+
+        private fun initializeNumbers() {
+            fun getDrawable(idx: Int): Drawable? {
+                val id = resources.getIdentifier("number_$idx", "drawable", packageName)
+                return ContextCompat.getDrawable(applicationContext, id)
+            }
+
+            numbers = (0..9).map { getDrawable(it)!!.toBitmap() }.toList()
+        }
+
     }
 }
