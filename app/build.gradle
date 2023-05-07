@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "de.niilz.wearos.watchface.bttf"
-        minSdk 25
+        minSdk 30
         targetSdk 30
         versionCode 1
         versionName "1.0"
