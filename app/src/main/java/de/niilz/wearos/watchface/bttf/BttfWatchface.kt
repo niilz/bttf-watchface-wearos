@@ -45,10 +45,10 @@ class BttfWatchface : CanvasWatchFaceService() {
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
-            drawTicks()
+            drawNumbers()
         }
 
-        private fun drawTicks() {
+        private fun drawNumbers() {
 
         }
 
