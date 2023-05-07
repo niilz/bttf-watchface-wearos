@@ -12,7 +12,8 @@ class Slot(
     private val left: Int,
     private val top: Int,
     private val right: Int,
-    private val bottom: Int
+    private val bottom: Int,
+    private val gap: Float,
 ) {
     private val background = ContextCompat.getColor(context, R.color.slot_bg_color)
 
@@ -27,7 +28,7 @@ class Slot(
 
         for (item in items) {
             item.draw(canvas, cursor, top.toFloat())
-            cursor += item.getWidth()
+            cursor += item.getWidth() * 0.8f + gap
         }
     }
 }
