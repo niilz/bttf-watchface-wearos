@@ -5,11 +5,11 @@ import android.graphics.*
 class DrawableNumber(
     private val numberBitmap: Bitmap,
     private val numColor: Int,
-    private val x: Float,
-    private val y: Float
-) {
+    private val width: Float,
+    private val height: Float,
+) : DrawableItem {
 
-    fun draw(canvas: Canvas) {
+    override fun draw(canvas: Canvas, x: Float, y: Float) {
         val numberPaint = Paint().apply {
             colorFilter = PorterDuffColorFilter(numColor, PorterDuff.Mode.SRC_IN)
             isAntiAlias = true
@@ -18,5 +18,9 @@ class DrawableNumber(
             //style = Paint.Style.FILL
         }
         canvas.drawBitmap(numberBitmap, x, y, numberPaint)
+    }
+
+    override fun getWidth(): Float {
+        return width
     }
 }
