@@ -1,9 +1,11 @@
 package de.niilz.wearos.watchface.bttf
 
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 
 class BttfWatchface : CanvasWatchFaceService() {
 
@@ -13,6 +15,7 @@ class BttfWatchface : CanvasWatchFaceService() {
 
     inner class Engine : CanvasWatchFaceService.Engine() {
         private lateinit var backgroundBitmap: Bitmap
+        private lateinit var numbers: List<Bitmap?>
 
         private val watchNumberColor =
             ContextCompat.getColor(applicationContext, R.color.watch_number_color)
@@ -32,24 +35,30 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun initializeNumbers() {
+            fun getDrawable(idx: Int): Drawable? {
+                val id = resources.getIdentifier("number_$idx", "drawable", packageName)
+                return ContextCompat.getDrawable(applicationContext, id)
+            }
+
+
+            numbers = (0..9).map { getDrawable(it)?.toBitmap() }.toList()
+
             numberPaint = Paint().apply {
-                color = watchNumberColor
-                strokeWidth = numberWidth
+                colorFilter = PorterDuffColorFilter(watchNumberColor, PorterDuff.Mode.SRC_IN)
                 isAntiAlias = true
-                style = Paint.Style.STROKE
-                setShadowLayer(
-                    shadowRadius, 0f, 0f, watchNumberShadow
-                )
+                //color = watchNumberColor
+                //strokeWidth = numberWidth
+                //style = Paint.Style.FILL
             }
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
-            drawNumbers()
+            drawNumbers(canvas, numberPaint)
         }
 
-        private fun drawNumbers() {
-
+        private fun drawNumbers(canvas: Canvas, paint: Paint) {
+            numbers?.get(7)?.let { canvas.drawBitmap(it, 25f, 25f, paint) }
         }
 
         private fun drawBackground(canvas: Canvas) {
