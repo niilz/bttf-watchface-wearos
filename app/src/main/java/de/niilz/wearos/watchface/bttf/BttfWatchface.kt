@@ -6,6 +6,7 @@ import android.support.wearable.watchface.CanvasWatchFaceService
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import java.time.LocalDate
 
 class BttfWatchface : CanvasWatchFaceService() {
 
@@ -47,7 +48,10 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun drawNumbers(canvas: Canvas) {
-            val number = numbers?.get(7)
+            val now = LocalDate.now().toString()
+            println(now)
+            val idx = now[0].digitToInt()
+            val number = numbers?.get(idx)
             val drawableNumber = DrawableNumber(number!!, colors.numberColorRow3, 40f, 25f)
             drawableNumber.draw(canvas)
         }
