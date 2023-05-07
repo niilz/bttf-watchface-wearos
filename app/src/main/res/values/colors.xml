@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="watch_number_color">#FF0000</color>
+    <color name="number_color_row_1">#FF0000</color>
+    <color name="number_color_row_2">#00FF00</color>
+    <color name="number_color_row_3">#FFFF00</color>
     <color name="watch_shadow_color">#2B3948</color>
 </resources>

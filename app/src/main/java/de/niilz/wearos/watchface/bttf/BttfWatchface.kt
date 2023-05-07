@@ -17,21 +17,19 @@ class BttfWatchface : CanvasWatchFaceService() {
         private lateinit var backgroundBitmap: Bitmap
         private lateinit var numbers: List<Bitmap?>
 
-        private val watchNumberColor =
-            ContextCompat.getColor(applicationContext, R.color.watch_number_color)
-        private val watchNumberShadow =
-            ContextCompat.getColor(applicationContext, R.color.watch_shadow_color)
-
         private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
         private val numberWidth = resources.getDimension(R.dimen.number_width)
         private val numberHeight = resources.getDimension(R.dimen.number_height)
 
         private lateinit var numberPaint: Paint
 
+        private lateinit var colors: NumberColors;
+
         override fun onCreate(holder: SurfaceHolder?) {
             super.onCreate(holder)
             initializeBackground()
             initializeNumbers()
+            colors = NumberColors(applicationContext)
         }
 
         private fun initializeNumbers() {
@@ -40,25 +38,18 @@ class BttfWatchface : CanvasWatchFaceService() {
                 return ContextCompat.getDrawable(applicationContext, id)
             }
 
-
             numbers = (0..9).map { getDrawable(it)?.toBitmap() }.toList()
-
-            numberPaint = Paint().apply {
-                colorFilter = PorterDuffColorFilter(watchNumberColor, PorterDuff.Mode.SRC_IN)
-                isAntiAlias = true
-                //color = watchNumberColor
-                //strokeWidth = numberWidth
-                //style = Paint.Style.FILL
-            }
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
-            drawNumbers(canvas, numberPaint)
+            drawNumbers(canvas)
         }
 
-        private fun drawNumbers(canvas: Canvas, paint: Paint) {
-            numbers?.get(7)?.let { canvas.drawBitmap(it, 25f, 25f, paint) }
+        private fun drawNumbers(canvas: Canvas) {
+            val number = numbers?.get(7)
+            val drawableNumber = DrawableNumber(number!!, colors.numberColorRow3, 40f, 25f)
+            drawableNumber.draw(canvas)
         }
 
         private fun drawBackground(canvas: Canvas) {
