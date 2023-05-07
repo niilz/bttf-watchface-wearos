@@ -1,11 +1,9 @@
 package de.niilz.wearos.watchface.bttf
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Rect
+import android.graphics.*
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.view.SurfaceHolder
+import androidx.core.content.ContextCompat
 
 class BttfWatchface : CanvasWatchFaceService() {
 
@@ -16,13 +14,33 @@ class BttfWatchface : CanvasWatchFaceService() {
     inner class Engine : CanvasWatchFaceService.Engine() {
         private lateinit var backgroundBitmap: Bitmap
 
+        private val watchNumberColor =
+            ContextCompat.getColor(applicationContext, R.color.watch_number_color)
+        private val watchNumberShadow =
+            ContextCompat.getColor(applicationContext, R.color.watch_shadow_color)
+
+        private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
+        private val numberWidth = resources.getDimension(R.dimen.number_width)
+        private val numberHeight = resources.getDimension(R.dimen.number_height)
+
+        private lateinit var numberPaint: Paint
+
         override fun onCreate(holder: SurfaceHolder?) {
             super.onCreate(holder)
             initializeBackground()
-            initializeTicks()
+            initializeNumbers()
         }
 
-        private fun initializeTicks() {
+        private fun initializeNumbers() {
+            numberPaint = Paint().apply {
+                color = watchNumberColor
+                strokeWidth = numberWidth
+                isAntiAlias = true
+                style = Paint.Style.STROKE
+                setShadowLayer(
+                    shadowRadius, 0f, 0f, watchNumberShadow
+                )
+            }
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
