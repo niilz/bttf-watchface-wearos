@@ -21,6 +21,7 @@ class BttfWatchface : CanvasWatchFaceService() {
         private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
         private val numberWidth = resources.getDimension(R.dimen.number_width)
         private val numberHeight = resources.getDimension(R.dimen.number_height)
+        private val gap = resources.getDimension(R.dimen.gap)
 
         private lateinit var numberPaint: Paint
 
@@ -43,7 +44,7 @@ class BttfWatchface : CanvasWatchFaceService() {
             val dateNums = MapperUtil.mapLocalDate(now)
                 .map { numbers[it] }
                 .map { DrawableNumber(it, colors.numberColorRow1, 40f, 30f) }
-            val dateSlot = Slot(applicationContext, dateNums, 50, 50, 100, 100)
+            val dateSlot = Slot(applicationContext, dateNums, 75, 65, 380, 130, gap)
             dateSlot.draw(canvas)
         }
 
@@ -62,7 +63,7 @@ class BttfWatchface : CanvasWatchFaceService() {
             val backgroundScale = width.toFloat() / backgroundBitmap.width.toFloat()
             backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
 
-            val numberScale = width.toFloat() / (100f * 14f)
+            val numberScale = width.toFloat() / (150f * 14f)
             numbers = numbers.map { MapperUtil.scaleBitmap(it, numberScale) }
         }
 
