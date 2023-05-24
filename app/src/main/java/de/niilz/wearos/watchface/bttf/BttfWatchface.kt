@@ -7,6 +7,7 @@ import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import java.time.LocalDate
+import kotlin.math.sqrt
 
 class BttfWatchface : CanvasWatchFaceService() {
 
@@ -60,7 +61,9 @@ class BttfWatchface : CanvasWatchFaceService() {
         ) {
             super.onSurfaceChanged(holder, format, width, height)
 
-            val backgroundScale = width.toFloat() / backgroundBitmap.width.toFloat()
+            val r = width / 2f;
+            val canvasInnerWidth = sqrt(2f) * r;
+            val backgroundScale = canvasInnerWidth / backgroundBitmap.width.toFloat()
             backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
 
             val numberScale = width.toFloat() / (150f * 14f)
