@@ -2,6 +2,8 @@ package de.niilz.wearos.watchface.bttf
 
 import android.graphics.Bitmap
 import java.time.LocalDate
+import kotlin.math.cos
+import kotlin.math.sin
 
 
 class MapperUtil {
@@ -17,6 +19,26 @@ class MapperUtil {
                 (bitmap.height * scale).toInt(),
                 true
             )
+        }
+
+        fun calcTopLeftCornerOnCirlce(canvasWidth: Float, canvasHeight: Float): Pair<Float, Float> {
+            // imagine a circle around (0, 0) of the canvas square
+            // (outside the watch circle) with a radius one:
+            // x-----
+            // |     |
+            //  -----
+            // imagine the target (top-left -45-deg  position to be the
+            // target on our watch circle, but just here outside the view
+            // on this mini circle
+            val cornerCirlceX = -sin(3.14 / 4f).toFloat()
+            val cornerCircleY = -cos(3.14 / 4f).toFloat()
+
+            val canvasCenterX = canvasWidth / 2f
+            val canvasCenterY = canvasHeight / 2f
+
+            val topLeftX = canvasCenterX + cornerCirlceX * canvasCenterX
+            val topLeftY = canvasCenterY + cornerCircleY * canvasCenterX
+            return Pair(topLeftX, topLeftY)
         }
     }
 

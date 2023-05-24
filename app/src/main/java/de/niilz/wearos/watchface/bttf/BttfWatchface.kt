@@ -50,7 +50,11 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun drawBackground(canvas: Canvas) {
-            canvas.drawBitmap(backgroundBitmap, 0f, 0f, null)
+            val (bgX, bgY) = MapperUtil.calcTopLeftCornerOnCirlce(
+                canvas.width.toFloat(),
+                canvas.height.toFloat()
+            )
+            canvas.drawBitmap(backgroundBitmap, bgX, bgY, null)
         }
 
         override fun onSurfaceChanged(
