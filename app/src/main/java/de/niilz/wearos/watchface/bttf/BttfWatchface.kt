@@ -27,6 +27,10 @@ class BttfWatchface : CanvasWatchFaceService() {
         private lateinit var numberPaint: Paint
 
         private lateinit var colors: NumberColors;
+        private var topLeftX = 0f
+        private var topLeftY = 0f
+        private var radius = 0f
+        private var canvasInnerWidthOrHeight = 0f
 
         override fun onCreate(holder: SurfaceHolder?) {
             super.onCreate(holder)
@@ -45,16 +49,20 @@ class BttfWatchface : CanvasWatchFaceService() {
             val dateNums = MapperUtil.mapLocalDate(now)
                 .map { numbers[it] }
                 .map { DrawableNumber(it, colors.numberColorRow1, 40f, 30f) }
-            val dateSlot = Slot(applicationContext, dateNums, 75, 65, 380, 130, gap)
+            val dateSlot = Slot(
+                applicationContext,
+                dateNums,
+                topLeftX.toInt(),
+                topLeftY.toInt(),
+                380,
+                130,
+                gap
+            )
             dateSlot.draw(canvas)
         }
 
         private fun drawBackground(canvas: Canvas) {
-            val (bgX, bgY) = MapperUtil.calcTopLeftCornerOnCirlce(
-                canvas.width.toFloat(),
-                canvas.height.toFloat()
-            )
-            canvas.drawBitmap(backgroundBitmap, bgX, bgY, null)
+            canvas.drawBitmap(backgroundBitmap, topLeftX, topLeftY, null)
         }
 
         override fun onSurfaceChanged(
@@ -65,9 +73,8 @@ class BttfWatchface : CanvasWatchFaceService() {
         ) {
             super.onSurfaceChanged(holder, format, width, height)
 
-            val r = width / 2f;
-            val canvasInnerWidth = sqrt(2f) * r;
-            val backgroundScale = canvasInnerWidth / backgroundBitmap.width.toFloat()
+            caldInnerSquare(width.toFloat(), height.toFloat());
+            val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
             backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
 
             val numberScale = width.toFloat() / (150f * 14f)
@@ -76,6 +83,14 @@ class BttfWatchface : CanvasWatchFaceService() {
 
         private fun initializeBackground() {
             backgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
+        }
+
+        private fun caldInnerSquare(width: Float, height: Float) {
+            radius = width / 2f;
+            canvasInnerWidthOrHeight = sqrt(2f) * radius;
+            val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
+            topLeftX = x
+            topLeftY = y
         }
 
         private fun initializeNumbers() {
