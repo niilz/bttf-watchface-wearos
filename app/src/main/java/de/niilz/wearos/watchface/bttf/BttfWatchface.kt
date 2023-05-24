@@ -73,7 +73,7 @@ class BttfWatchface : CanvasWatchFaceService() {
         ) {
             super.onSurfaceChanged(holder, format, width, height)
 
-            caldInnerSquare(width.toFloat(), height.toFloat());
+            calcInnerSquare(width.toFloat(), height.toFloat());
             val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
             backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
 
@@ -85,7 +85,7 @@ class BttfWatchface : CanvasWatchFaceService() {
             backgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
         }
 
-        private fun caldInnerSquare(width: Float, height: Float) {
+        private fun calcInnerSquare(width: Float, height: Float) {
             radius = width / 2f;
             canvasInnerWidthOrHeight = sqrt(2f) * radius;
             val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
