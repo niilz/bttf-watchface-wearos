@@ -5,8 +5,6 @@ import android.graphics.*
 class DrawableNumber(
     private val numberBitmap: Bitmap,
     private val numColor: Int,
-    private val width: Float,
-    private val height: Float,
 ) : DrawableItem {
 
     override fun draw(canvas: Canvas, x: Float, y: Float) {
@@ -21,6 +19,10 @@ class DrawableNumber(
     }
 
     override fun getWidth(): Float {
-        return width
+        return numberBitmap.width.toFloat()
+    }
+
+    override fun getHeight(): Float {
+        return numberBitmap.height.toFloat()
     }
 }

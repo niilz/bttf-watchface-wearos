@@ -31,6 +31,8 @@ class BttfWatchface : CanvasWatchFaceService() {
         private var topLeftY = 0f
         private var radius = 0f
         private var canvasInnerWidthOrHeight = 0f
+        private var topOffset = 0f
+        private var leftOffet = 0f
 
         override fun onCreate(holder: SurfaceHolder?) {
             super.onCreate(holder)
@@ -46,16 +48,16 @@ class BttfWatchface : CanvasWatchFaceService() {
 
         private fun drawNumbers(canvas: Canvas) {
             val now = LocalDate.now()
-            val dateNums = MapperUtil.mapLocalDate(now)
+            val yearNums = MapperUtil.mapToNumberList(now.year)
                 .map { numbers[it] }
-                .map { DrawableNumber(it, colors.numberColorRow1, 40f, 30f) }
+                .map { DrawableNumber(it, colors.numberColorRow1) }
+            val left = topLeftX + leftOffet
+            val top = topLeftY + topOffset
             val dateSlot = Slot(
                 applicationContext,
-                dateNums,
-                topLeftX.toInt(),
-                topLeftY.toInt(),
-                380,
-                130,
+                yearNums,
+                left,
+                top,
                 gap
             )
             dateSlot.draw(canvas)
@@ -73,11 +75,11 @@ class BttfWatchface : CanvasWatchFaceService() {
         ) {
             super.onSurfaceChanged(holder, format, width, height)
 
-            calcInnerSquare(width.toFloat(), height.toFloat());
+            calcValues(width.toFloat(), height.toFloat())
             val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
             backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
 
-            val numberScale = width.toFloat() / (150f * 14f)
+            val numberScale = canvasInnerWidthOrHeight / (150f * 14f)
             numbers = numbers.map { MapperUtil.scaleBitmap(it, numberScale) }
         }
 
@@ -85,12 +87,14 @@ class BttfWatchface : CanvasWatchFaceService() {
             backgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
         }
 
-        private fun calcInnerSquare(width: Float, height: Float) {
+        private fun calcValues(width: Float, height: Float) {
             radius = width / 2f;
             canvasInnerWidthOrHeight = sqrt(2f) * radius;
             val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
             topLeftX = x
             topLeftY = y
+            leftOffet = canvasInnerWidthOrHeight * 0.05f
+            topOffset = canvasInnerWidthOrHeight * 0.05f
         }
 
         private fun initializeNumbers() {

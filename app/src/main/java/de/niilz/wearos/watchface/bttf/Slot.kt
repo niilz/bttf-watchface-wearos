@@ -9,17 +9,21 @@ import androidx.core.content.ContextCompat
 class Slot(
     context: Context,
     private val items: List<DrawableItem>,
-    private val left: Int,
-    private val top: Int,
-    private val right: Int,
-    private val bottom: Int,
+    private val left: Float,
+    private val top: Float,
     private val gap: Float,
 ) {
     private val background = ContextCompat.getColor(context, R.color.slot_bg_color)
 
+    private var width = 0f
+
     fun draw(canvas: Canvas) {
-        var cursor = left.toFloat()
-        val bgRect = Rect(left, top, right, bottom)
+        var cursor = left + gap
+        val marginTop = top + gap
+        width = items.size * items[0].getWidth() + items.size * gap
+        val right = left + width + (2 * gap)
+        val bottom = top + items[0].getHeight() + (2 * gap)
+        val bgRect = Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
         val rectPaint = Paint().apply {
             color = background
             style = Paint.Style.FILL
@@ -27,8 +31,8 @@ class Slot(
         canvas.drawRect(bgRect, rectPaint)
 
         for (item in items) {
-            item.draw(canvas, cursor, top.toFloat())
-            cursor += item.getWidth() * 0.8f + gap
+            item.draw(canvas, cursor, marginTop)
+            cursor += item.getWidth() + gap
         }
     }
 }
