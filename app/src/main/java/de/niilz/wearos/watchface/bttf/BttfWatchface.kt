@@ -43,20 +43,36 @@ class BttfWatchface : CanvasWatchFaceService() {
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
-            drawNumbers(canvas)
+            drawSlots(canvas)
         }
 
-        private fun drawNumbers(canvas: Canvas) {
+        private fun drawSlots(canvas: Canvas) {
             val now = LocalDate.now()
+            val top = topLeftY + topOffset
+
+            // Day Slot
+            val dayNums = MapperUtil.mapToNumberList(now.dayOfMonth)
+                .map { numbers[it] }
+                .map { DrawableNumber(it, colors.numberColorRow1) }
+            val leftDay = topLeftX + leftOffet
+            val daySlot = Slot(
+                applicationContext,
+                dayNums,
+                leftDay,
+                top,
+                gap
+            )
+            daySlot.draw(canvas)
+
+            // Year Slot
             val yearNums = MapperUtil.mapToNumberList(now.year)
                 .map { numbers[it] }
                 .map { DrawableNumber(it, colors.numberColorRow1) }
-            val left = topLeftX + leftOffet
-            val top = topLeftY + topOffset
+            val leftYear = leftDay + daySlot.getWidth() + (3 * gap)
             val dateSlot = Slot(
                 applicationContext,
                 yearNums,
-                left,
+                leftYear,
                 top,
                 gap
             )
