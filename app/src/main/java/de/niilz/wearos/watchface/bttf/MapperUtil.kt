@@ -44,6 +44,15 @@ class MapperUtil {
             val topLeftY = canvasCenterY + cornerCircleY * canvasCenterX
             return Pair(topLeftX, topLeftY)
         }
+
+        fun percentOfInnerCanvasSkalar(
+            canvasWidthOrHight: Float,
+            itemSize: Float,
+            targetPercentOfCanvas: Int
+        ): Float {
+            val targetSize = canvasWidthOrHight * (targetPercentOfCanvas / 100f)
+            return (targetSize / itemSize) / 100f
+        }
     }
 
 }

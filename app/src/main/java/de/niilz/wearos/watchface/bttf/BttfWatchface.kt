@@ -79,8 +79,13 @@ class BttfWatchface : CanvasWatchFaceService() {
             val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
             backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
 
-            val numberScale = canvasInnerWidthOrHeight / (150f * 14f)
-            numbers = numbers.map { MapperUtil.scaleBitmap(it, numberScale) }
+            val numberSkalar = MapperUtil.percentOfInnerCanvasSkalar(
+                canvasInnerWidthOrHeight,
+                numberHeight,
+                8
+            )
+            print("$numberSkalar")
+            numbers = numbers.map { MapperUtil.scaleBitmap(it, numberSkalar) }
         }
 
         private fun initializeBackground() {
