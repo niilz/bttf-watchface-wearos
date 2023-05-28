@@ -84,7 +84,6 @@ class BttfWatchface : CanvasWatchFaceService() {
                 numberHeight,
                 8
             )
-            print("$numberSkalar")
             numbers = numbers.map { MapperUtil.scaleBitmap(it, numberSkalar) }
         }
 
