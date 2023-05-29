@@ -22,6 +22,7 @@ class BttfWatchface : CanvasWatchFaceService() {
         private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
         private val numberWidth = resources.getDimension(R.dimen.number_width)
         private val numberHeight = resources.getDimension(R.dimen.number_height)
+        private var initialNumberHeight = 0.0f
         private val gap = resources.getDimension(R.dimen.gap)
 
         private lateinit var numberPaint: Paint
@@ -41,35 +42,34 @@ class BttfWatchface : CanvasWatchFaceService() {
             initializeBackground()
             initializeNumbers()
             colors = NumberColors(applicationContext)
+            drawService = DrawService(context = applicationContext, numberBitmaps = numbers)
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
-            drawSlots(canvas)
-            drawService = DrawService(canvas, applicationContext)
+            drawService.canvas = drawService.canvas ?: canvas
+            drawService.updateNumbers(canvasInnerWidthOrHeight, initialNumberHeight, 8)
+            drawSlots()
         }
 
-        private fun drawSlots(canvas: Canvas) {
+        private fun drawSlots() {
             val now = LocalDate.now()
             val top = topLeftY + topOffset
 
-            // Day
+            // FIRST-ROW
+            // Day Slot
             val dayNums = MapperUtil.mapToNumberList(now.dayOfMonth)
-            val drawableDayNums =
-                MapperUtil.numbersToDrawables(dayNums, numbers, colors.numberColorRow1)
             val leftStart = topLeftX + leftOffet
-
 
             // Year Slot
             val yearNums = MapperUtil.mapToNumberList(now.year)
-            val drawableYearNums: List<DrawableItem> =
-                MapperUtil.numbersToDrawables(yearNums, numbers, colors.numberColorRow1)
 
-            drawService.drawDrawables(
-                listOf(drawableDayNums, drawableYearNums),
+            drawService.drawNumberSlot(
+                listOf(dayNums, yearNums),
                 leftStart,
                 top,
-                gap
+                gap,
+                colors.numberColorRow1
             )
         }
 
@@ -89,12 +89,6 @@ class BttfWatchface : CanvasWatchFaceService() {
             val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
             backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
 
-            val numberSkalar = MapperUtil.percentOfInnerCanvasSkalar(
-                canvasInnerWidthOrHeight,
-                numberHeight,
-                8
-            )
-            numbers = numbers.map { MapperUtil.scaleBitmap(it, numberSkalar) }
         }
 
         private fun initializeBackground() {
@@ -116,8 +110,8 @@ class BttfWatchface : CanvasWatchFaceService() {
                 val id = resources.getIdentifier("number_$idx", "drawable", packageName)
                 return ContextCompat.getDrawable(applicationContext, id)
             }
-
             numbers = (0..9).map { getDrawable(it)!!.toBitmap() }.toList()
+            initialNumberHeight = numbers[0].height.toFloat()
         }
     }
 }

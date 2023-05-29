@@ -51,7 +51,7 @@ class MapperUtil {
             targetPercentOfCanvas: Int
         ): Float {
             val targetSize = canvasWidthOrHight * (targetPercentOfCanvas / 100f)
-            return (targetSize / itemSize) / 100f
+            return (targetSize / itemSize)
         }
 
         fun numbersToDrawables(
