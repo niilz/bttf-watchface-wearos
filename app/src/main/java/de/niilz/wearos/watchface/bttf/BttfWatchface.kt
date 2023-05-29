@@ -27,7 +27,6 @@ class BttfWatchface : CanvasWatchFaceService() {
 
         private lateinit var numberPaint: Paint
 
-        private lateinit var colors: NumberColors;
         private var topLeftX = 0f
         private var topLeftY = 0f
         private var radius = 0f
@@ -41,7 +40,6 @@ class BttfWatchface : CanvasWatchFaceService() {
             super.onCreate(holder)
             initializeBackground()
             initializeNumbers()
-            colors = NumberColors(applicationContext)
             drawService = DrawService(context = applicationContext, numberBitmaps = numbers)
         }
 
@@ -69,7 +67,6 @@ class BttfWatchface : CanvasWatchFaceService() {
                 leftStart,
                 top,
                 gap,
-                colors.numberColorRow1
             )
         }
 

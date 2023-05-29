@@ -57,11 +57,13 @@ class MapperUtil {
         fun numbersToDrawables(
             numbersRaw: List<Int>,
             numberBitmaps: List<Bitmap>,
-            color: Int
+            backgroundBitmap: Bitmap,
+            color: Int,
+            bgColor: Int,
         ): List<DrawableItem> {
             return numbersRaw
                 .map { numberBitmaps[it] }
-                .map { DrawableNumber(it, color) }
+                .map { DrawableNumber(it, backgroundBitmap, color, bgColor) }
         }
     }
 

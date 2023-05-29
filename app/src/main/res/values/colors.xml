@@ -3,6 +3,7 @@
     <color name="number_color_row_1">#FF0000</color>
     <color name="number_color_row_2">#00FF00</color>
     <color name="number_color_row_3">#FFFF00</color>
+    <color name="number_background_color">#333333</color>
     <color name="watch_shadow_color">#2B3948</color>
     <color name="slot_bg_color">#444444</color>
 </resources>

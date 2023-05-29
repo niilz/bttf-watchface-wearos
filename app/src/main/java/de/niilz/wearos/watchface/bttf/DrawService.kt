@@ -11,16 +11,24 @@ class DrawService(
 ) {
     constructor(context: Context, numberBitmaps: List<Bitmap>) : this(context, numberBitmaps, null)
 
+    private val colors = NumberColors(context)
+
     fun drawNumberSlot(
         slotData: List<List<Int>>,
         leftStart: Float,
         topStart: Float,
         gap: Float,
-        color: Int
     ) {
+        // FIRST-ROW
         var currentLeft = leftStart
         for (data in slotData) {
-            val numbersToDraw = MapperUtil.numbersToDrawables(data, numberBitmaps, color)
+            val numbersToDraw = MapperUtil.numbersToDrawables(
+                data,
+                numberBitmaps,
+                numberBitmaps[8],
+                colors.numberColorRow1,
+                colors.numberBackgroundColor
+            )
             val slot = Slot(
                 context,
                 numbersToDraw,

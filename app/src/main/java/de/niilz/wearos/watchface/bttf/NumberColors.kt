@@ -11,7 +11,8 @@ class NumberColors(context: Context) {
         ContextCompat.getColor(context, R.color.number_color_row_2)
     val numberColorRow3 =
         ContextCompat.getColor(context, R.color.number_color_row_3)
+    val numberBackgroundColor =
+        ContextCompat.getColor(context, R.color.number_background_color)
     val watchNumberShadow =
         ContextCompat.getColor(context, R.color.watch_shadow_color)
-
 }
