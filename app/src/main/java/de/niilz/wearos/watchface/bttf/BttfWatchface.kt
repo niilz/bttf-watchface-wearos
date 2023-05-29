@@ -46,10 +46,10 @@ class BttfWatchface : CanvasWatchFaceService() {
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
             drawSlots(canvas)
+            drawService = DrawService(canvas, applicationContext)
         }
 
         private fun drawSlots(canvas: Canvas) {
-            drawService = DrawService(canvas, applicationContext)
             val now = LocalDate.now()
             val top = topLeftY + topOffset
 
@@ -66,7 +66,6 @@ class BttfWatchface : CanvasWatchFaceService() {
                 MapperUtil.numbersToDrawables(yearNums, numbers, colors.numberColorRow1)
 
             drawService.drawDrawables(
-                applicationContext,
                 listOf(drawableDayNums, drawableYearNums),
                 leftStart,
                 top,

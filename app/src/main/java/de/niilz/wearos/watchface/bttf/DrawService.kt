@@ -3,10 +3,9 @@ package de.niilz.wearos.watchface.bttf
 import android.content.Context
 import android.graphics.Canvas
 
-class DrawService(val canvas: Canvas, context: Context) {
+class DrawService(private val canvas: Canvas, private val context: Context) {
 
     fun drawDrawables(
-        context: Context,
         slotData: List<List<DrawableItem>>,
         leftStart: Float,
         topStart: Float,
