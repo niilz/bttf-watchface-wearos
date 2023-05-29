@@ -53,6 +53,16 @@ class MapperUtil {
             val targetSize = canvasWidthOrHight * (targetPercentOfCanvas / 100f)
             return (targetSize / itemSize) / 100f
         }
+
+        fun numbersToDrawables(
+            numbersRaw: List<Int>,
+            numberBitmaps: List<Bitmap>,
+            color: Int
+        ): List<DrawableItem> {
+            return numbersRaw
+                .map { numberBitmaps[it] }
+                .map { DrawableNumber(it, color) }
+        }
     }
 
 }

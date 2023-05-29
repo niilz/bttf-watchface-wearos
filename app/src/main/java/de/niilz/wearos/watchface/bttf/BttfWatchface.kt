@@ -34,6 +34,8 @@ class BttfWatchface : CanvasWatchFaceService() {
         private var topOffset = 0f
         private var leftOffet = 0f
 
+        private lateinit var drawService: DrawService;
+
         override fun onCreate(holder: SurfaceHolder?) {
             super.onCreate(holder)
             initializeBackground()
@@ -47,36 +49,29 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun drawSlots(canvas: Canvas) {
+            drawService = DrawService(canvas, applicationContext)
             val now = LocalDate.now()
             val top = topLeftY + topOffset
 
-            // Day Slot
+            // Day
             val dayNums = MapperUtil.mapToNumberList(now.dayOfMonth)
-                .map { numbers[it] }
-                .map { DrawableNumber(it, colors.numberColorRow1) }
-            val leftDay = topLeftX + leftOffet
-            val daySlot = Slot(
-                applicationContext,
-                dayNums,
-                leftDay,
-                top,
-                gap
-            )
-            daySlot.draw(canvas)
+            val drawableDayNums =
+                MapperUtil.numbersToDrawables(dayNums, numbers, colors.numberColorRow1)
+            val leftStart = topLeftX + leftOffet
+
 
             // Year Slot
             val yearNums = MapperUtil.mapToNumberList(now.year)
-                .map { numbers[it] }
-                .map { DrawableNumber(it, colors.numberColorRow1) }
-            val leftYear = leftDay + daySlot.getWidth() + (3 * gap)
-            val dateSlot = Slot(
+            val drawableYearNums: List<DrawableItem> =
+                MapperUtil.numbersToDrawables(yearNums, numbers, colors.numberColorRow1)
+
+            drawService.drawDrawables(
                 applicationContext,
-                yearNums,
-                leftYear,
+                listOf(drawableDayNums, drawableYearNums),
+                leftStart,
                 top,
                 gap
             )
-            dateSlot.draw(canvas)
         }
 
         private fun drawBackground(canvas: Canvas) {
@@ -125,6 +120,5 @@ class BttfWatchface : CanvasWatchFaceService() {
 
             numbers = (0..9).map { getDrawable(it)!!.toBitmap() }.toList()
         }
-
     }
 }
