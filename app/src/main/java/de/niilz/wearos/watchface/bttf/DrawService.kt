@@ -30,7 +30,7 @@ class DrawService(
                 colors.numberColorRow1,
                 colors.numberBackgroundColor
             )
-            val slot = Slot(
+            val drawableSlot = DrawableSlot(
                 context,
                 numbersToDraw,
                 label,
@@ -39,9 +39,9 @@ class DrawService(
                 gap
             )
             canvas?.let {
-                slot.draw(it)
+                drawableSlot.draw(it)
             }
-            currentLeft += slot.getWidth() + (3 * gap)
+            currentLeft += drawableSlot.getWidth() + (3 * gap)
         }
     }
 

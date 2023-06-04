@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import androidx.core.content.ContextCompat
 
-class Slot(
+class DrawableSlot(
     context: Context,
     private val items: List<DrawableItem>,
     private val label: DrawableItem,
