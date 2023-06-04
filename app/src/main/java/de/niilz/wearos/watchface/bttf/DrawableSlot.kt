@@ -22,12 +22,11 @@ class DrawableSlot(
         var cursor = left + gap
         var marginTop = top + gap
 
-        // TODO: add XXX to 'cursor' so that label is center
-        label.draw(canvas, cursor, marginTop)
+        label.draw(canvas, left + labelToItemOffset(), marginTop)
         val valuesTop = marginTop + label.getHeight() + gap
 
 
-        val right = left + slotWidth + (2 * gap)
+        val right = left + slotWidth + gap
         val bottom = valuesTop + items[0].getHeight() + (2 * gap)
         val bgRect = Rect(left.toInt(), valuesTop.toInt(), right.toInt(), bottom.toInt())
         val rectPaint = Paint().apply {
@@ -40,6 +39,12 @@ class DrawableSlot(
             item.draw(canvas, cursor, valuesTop + gap)
             cursor += item.getWidth() + gap
         }
+    }
+
+    private fun labelToItemOffset(): Float {
+        val slotCenter = slotWidth / 2f
+        val labelCenter = label.getWidth() / 2f
+        return slotCenter - labelCenter
     }
 
     fun getWidth(): Float {

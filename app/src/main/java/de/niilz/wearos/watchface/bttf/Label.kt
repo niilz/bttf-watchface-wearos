@@ -26,7 +26,7 @@ class Label(
     override fun draw(canvas: Canvas, x: Float, y: Float) {
         canvas.drawRect(x, y, x + getWidth(), y + getHeight(), bgPaint)
         val textTop = y + textPaint.textSize
-        val textLeft = x + padding;
+        val textLeft = x + padding
         canvas.drawText(text, textLeft, textTop, textPaint)
     }
 
@@ -35,6 +35,6 @@ class Label(
     }
 
     override fun getHeight(): Float {
-        return bgPaint.textSize + (2 * padding)
+        return bgPaint.textSize + (2f * padding)
     }
 }
