@@ -22,6 +22,7 @@ class DrawService(
         // FIRST-ROW
         var currentLeft = leftStart
         for (data in slotData) {
+            val label = Label("Foo", 17f)
             val numbersToDraw = MapperUtil.numbersToDrawables(
                 data,
                 numberBitmaps,
@@ -32,6 +33,7 @@ class DrawService(
             val slot = Slot(
                 context,
                 numbersToDraw,
+                label,
                 currentLeft,
                 topStart,
                 gap
