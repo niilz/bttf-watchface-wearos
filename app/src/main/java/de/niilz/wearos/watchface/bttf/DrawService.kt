@@ -12,8 +12,9 @@ class DrawService(
     constructor(context: Context, numberBitmaps: List<Bitmap>) : this(context, numberBitmaps, null)
 
     private val colors = NumberColors(context)
+    private val LABEL_SIZE = 16f
 
-    fun drawNumberSlots(
+    fun drawSlots(
         slotData: List<SlotMetadata>,
         leftStart: Float,
         topStart: Float,
@@ -22,17 +23,23 @@ class DrawService(
         // FIRST-ROW
         var currentLeft = leftStart
         for (data in slotData) {
-            val numbersToDraw = MapperUtil.numbersToDrawables(
-                data.numbers,
-                numberBitmaps,
-                numberBitmaps[8],
-                colors.numberColorRow1,
-                colors.numberBackgroundColor
-            )
-            val label = Label(data.labelText, 16f)
+            val numbersToDraw = data.numbers?.let {
+                MapperUtil.numbersToDrawables(
+                    it,
+                    numberBitmaps,
+                    numberBitmaps[8],
+                    colors.numberColorRow1,
+                    colors.numberBackgroundColor
+                )
+            }
+            val textToDraw = data.text?.let {
+                listOf(DrawableText(it, 24f, colors.numberColorRow1))
+            }
+            val itemToDraw = numbersToDraw ?: textToDraw
+            val label = Label(data.labelText, LABEL_SIZE)
             val drawableSlot = DrawableSlot(
                 context,
-                numbersToDraw,
+                itemToDraw!!,
                 label,
                 currentLeft,
                 topStart,

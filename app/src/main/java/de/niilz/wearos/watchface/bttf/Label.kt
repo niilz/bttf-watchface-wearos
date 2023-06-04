@@ -35,6 +35,6 @@ class Label(
     }
 
     override fun getHeight(): Float {
-        return bgPaint.textSize + (2f * padding)
+        return textPaint.textSize + (2f * padding)
     }
 }
