@@ -67,6 +67,6 @@ class DrawService(
         )
         // TODO: Make better height-Skalar value or width calculation
         numberBitmaps =
-            numberBitmaps.map { MapperUtil.scaleBitmap(it, numberSkalar * 0.5f, numberSkalar) }
+            numberBitmaps.map { MapperUtil.scaleBitmap(it, numberSkalar * 0.7f, numberSkalar) }
     }
 }
