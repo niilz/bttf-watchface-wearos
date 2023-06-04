@@ -23,6 +23,7 @@ class DrawService(
         // FIRST-ROW
         var currentLeft = leftStart
         for (data in slotData) {
+            // TODO: Be smarter with the handling of "is it a number or Text"
             val numbersToDraw = data.numbers?.let {
                 MapperUtil.numbersToDrawables(
                     it,
@@ -32,9 +33,11 @@ class DrawService(
                     colors.numberBackgroundColor
                 )
             }
+            // TODO: Be smarter with the handling of "is it a number or Text"
             val textToDraw = data.text?.let {
                 listOf(DrawableText(it, 24f, colors.numberColorRow1))
             }
+            // TODO: Be smarter with the handling of "is it a number or Text"
             val itemToDraw = numbersToDraw ?: textToDraw
             val label = Label(data.labelText, LABEL_SIZE)
             val drawableSlot = DrawableSlot(
