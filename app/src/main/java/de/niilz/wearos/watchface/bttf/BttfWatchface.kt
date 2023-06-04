@@ -64,7 +64,7 @@ class BttfWatchface : CanvasWatchFaceService() {
             val yearNums = MapperUtil.mapYearToInts(now.year)
             val yearSlotData = SlotMetadata("YEAR", yearNums)
 
-            drawService.drawNumberSlot(
+            drawService.drawNumberSlots(
                 listOf(daySlotData, yearSlotData),
                 leftStart,
                 top,

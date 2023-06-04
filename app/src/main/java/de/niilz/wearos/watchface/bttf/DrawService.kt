@@ -13,7 +13,7 @@ class DrawService(
 
     private val colors = NumberColors(context)
 
-    fun drawNumberSlot(
+    fun drawNumberSlots(
         slotData: List<SlotMetadata>,
         leftStart: Float,
         topStart: Float,
