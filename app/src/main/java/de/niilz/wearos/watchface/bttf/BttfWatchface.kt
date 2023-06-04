@@ -6,7 +6,7 @@ import android.support.wearable.watchface.CanvasWatchFaceService
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.math.sqrt
 
 class BttfWatchface : CanvasWatchFaceService() {
@@ -51,25 +51,33 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun drawSlots() {
-            val now = LocalDate.now()
+            val now = LocalDateTime.now()
             val top = topLeftY + topOffset
 
             // FIRST-ROW
 
             // Month-Name Slot
             val leftStart = topLeftX + leftOffet
-            val monthSlotData = SlotMetadata("MONTH", "JUN")
+            val monthSlotData = SlotMetadata("MONTH", now.month.toString().substring(0, 3))
 
             // Day Slot
-            val dayNums = MapperUtil.mapDayToInts(now.dayOfMonth)
+            val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
             val daySlotData = SlotMetadata("DAY", dayNums)
 
             // Year Slot
             val yearNums = MapperUtil.mapYearToInts(now.year)
             val yearSlotData = SlotMetadata("YEAR", yearNums)
 
+            // Hour Slot
+            val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
+            val hourSlotData = SlotMetadata("HOUR", hourNums)
+
+            // Minute Slot
+            val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
+            val minuteSlotData = SlotMetadata("MIN", minuteNums)
+
             drawService.drawSlots(
-                listOf(monthSlotData, daySlotData, yearSlotData),
+                listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
                 leftStart,
                 top,
                 gap,

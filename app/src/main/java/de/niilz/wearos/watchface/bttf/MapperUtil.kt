@@ -12,7 +12,7 @@ class MapperUtil {
             return date.toString().replace("-", "").toCharArray().map { it.digitToInt() }.toList()
         }
 
-        fun mapDayToInts(number: Int): List<Int> {
+        fun mapTwoDigitNumToInts(number: Int): List<Int> {
             return mapToNumberList(number, 2)
         }
 
