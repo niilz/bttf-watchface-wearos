@@ -14,7 +14,7 @@ class DrawService(
     private val colors = NumberColors(context)
 
     fun drawNumberSlot(
-        slotData: List<List<Int>>,
+        slotData: List<SlotMetadata>,
         leftStart: Float,
         topStart: Float,
         gap: Float,
@@ -22,14 +22,14 @@ class DrawService(
         // FIRST-ROW
         var currentLeft = leftStart
         for (data in slotData) {
-            val label = Label("Foo", 17f)
             val numbersToDraw = MapperUtil.numbersToDrawables(
-                data,
+                data.numbers,
                 numberBitmaps,
                 numberBitmaps[8],
                 colors.numberColorRow1,
                 colors.numberBackgroundColor
             )
+            val label = Label(data.labelText, 16f)
             val drawableSlot = DrawableSlot(
                 context,
                 numbersToDraw,
