@@ -12,8 +12,20 @@ class MapperUtil {
             return date.toString().replace("-", "").toCharArray().map { it.digitToInt() }.toList()
         }
 
-        fun mapToNumberList(numbers: Int): List<Int> {
-            return numbers.toString().toCharArray().map { it.digitToInt() }.toList()
+        fun mapDayToInts(number: Int): List<Int> {
+            return mapToNumberList(number, 2)
+        }
+
+        fun mapYearToInts(number: Int): List<Int> {
+            return mapToNumberList(number, 4)
+        }
+
+        private fun mapToNumberList(numbers: Int, width: Int): List<Int> {
+            return numbers.toString()
+                .padStart(width, '0')
+                .toCharArray()
+                .map { it.digitToInt() }
+                .toList()
         }
 
         fun scaleBitmap(bitmap: Bitmap, scale: Float): Bitmap {
