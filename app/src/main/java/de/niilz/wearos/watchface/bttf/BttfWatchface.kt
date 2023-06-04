@@ -98,7 +98,8 @@ class BttfWatchface : CanvasWatchFaceService() {
 
             calcValues(width.toFloat(), height.toFloat())
             val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
-            backgroundBitmap = MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale)
+            backgroundBitmap =
+                MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale, backgroundScale)
 
         }
 

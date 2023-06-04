@@ -65,6 +65,8 @@ class DrawService(
             initialNumberHeight,
             targetPercentOfCanvas
         )
-        numberBitmaps = numberBitmaps.map { MapperUtil.scaleBitmap(it, numberSkalar) }
+        // TODO: Make better height-Skalar value or width calculation
+        numberBitmaps =
+            numberBitmaps.map { MapperUtil.scaleBitmap(it, numberSkalar * 0.5f, numberSkalar) }
     }
 }

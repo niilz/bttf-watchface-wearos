@@ -28,11 +28,11 @@ class MapperUtil {
                 .toList()
         }
 
-        fun scaleBitmap(bitmap: Bitmap, scale: Float): Bitmap {
+        fun scaleBitmap(bitmap: Bitmap, widthScale: Float, heightScale: Float): Bitmap {
             return Bitmap.createScaledBitmap(
                 bitmap,
-                (bitmap.width * scale).toInt(),
-                (bitmap.height * scale).toInt(),
+                (bitmap.width * widthScale).toInt(),
+                (bitmap.height * heightScale).toInt(),
                 true
             )
         }
