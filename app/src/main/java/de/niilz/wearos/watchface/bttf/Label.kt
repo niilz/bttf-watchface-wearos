@@ -21,22 +21,20 @@ class Label(
         color = rgb(80, 0, 0)
     }
 
+    private val padding = textPaint.textSize * 0.2f
+
     override fun draw(canvas: Canvas, x: Float, y: Float) {
-        canvas.drawRect(x, y, x + 50, y + 20, bgPaint)
-        canvas.drawText(text, x, y, textPaint)
+        canvas.drawRect(x, y, x + getWidth(), y + getHeight(), bgPaint)
+        val textTop = y + textPaint.textSize
+        val textLeft = x + padding;
+        canvas.drawText(text, textLeft, textTop, textPaint)
     }
 
     override fun getWidth(): Float {
-        // TODO: Give actual text width (mayby with getTextHeight(labelText, char-count)
-        // TODO: Calculate BG-Width based on label text
-        // TODO: Return BG-Rect-Width
-        return 50f
+        return textPaint.measureText(text) + (2f * padding)
     }
 
     override fun getHeight(): Float {
-        // TODO: Give actual text hight (mayby with getTextHeight(labelText, )
-        // TODO: Calculate BG-Hight based on label text
-        // TODO: Return BG-Rect-Hight
-        return bgPaint.textSize
+        return bgPaint.textSize + (2 * padding)
     }
 }
