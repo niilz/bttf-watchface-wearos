@@ -3,6 +3,7 @@ package de.niilz.wearos.watchface.bttf
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
+import kotlin.math.absoluteValue
 
 class DrawableText(
     private val text: String,
@@ -18,7 +19,7 @@ class DrawableText(
     }
 
     override fun draw(canvas: Canvas, x: Float, y: Float) {
-        canvas.drawText(text, x, y + getHeight(), textPaint)
+        canvas.drawText(text, x, y + getHeightWithoughtLowPart(), textPaint)
     }
 
     override fun getWidth(): Float {
@@ -26,6 +27,16 @@ class DrawableText(
     }
 
     override fun getHeight(): Float {
-        return textPaint.textSize
+        val fontMetrics = textPaint.fontMetrics
+        // Caclulates the maximum letter height
+        // (ascent from base to above, negative value)
+        // (descent from base to below, positive value)
+        // subtracting ascent is like adding
+        return fontMetrics.descent - fontMetrics.ascent
+    }
+
+    fun getHeightWithoughtLowPart(): Float {
+        val fontMetrics = textPaint.fontMetrics
+        return fontMetrics.ascent.absoluteValue
     }
 }
