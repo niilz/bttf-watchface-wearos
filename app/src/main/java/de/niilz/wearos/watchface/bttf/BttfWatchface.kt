@@ -22,6 +22,7 @@ class BttfWatchface : CanvasWatchFaceService() {
         private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
         private val numberWidth = resources.getDimension(R.dimen.number_width)
         private val numberHeight = resources.getDimension(R.dimen.number_height)
+        private var initialNumberWidth = 0.0f
         private var initialNumberHeight = 0.0f
         private val gap = resources.getDimension(R.dimen.gap)
 
@@ -46,7 +47,13 @@ class BttfWatchface : CanvasWatchFaceService() {
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
             drawBackground(canvas)
             drawService.canvas = drawService.canvas ?: canvas
-            drawService.updateNumbers(canvasInnerWidthOrHeight, initialNumberHeight, 8)
+            drawService.updateNumbers(
+                canvasInnerWidthOrHeight,
+                initialNumberWidth,
+                initialNumberHeight,
+                16,
+                12
+            )
             drawSlots()
         }
 
@@ -123,7 +130,9 @@ class BttfWatchface : CanvasWatchFaceService() {
                 return ContextCompat.getDrawable(applicationContext, id)
             }
             numbers = (0..9).map { getDrawable(it)!!.toBitmap() }.toList()
-            initialNumberHeight = numbers[0].height.toFloat()
+            val firstNumber = numbers[0]
+            initialNumberWidth = firstNumber.width.toFloat()
+            initialNumberHeight = firstNumber.height.toFloat()
         }
     }
 }

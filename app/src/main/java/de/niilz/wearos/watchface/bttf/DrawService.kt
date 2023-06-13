@@ -61,16 +61,30 @@ class DrawService(
     fun updateNumbers(
         canvasInnerWidthOrHeight: Float,
         initialNumberHeight: Float,
-        targetPercentOfCanvas: Int
+        initialNumberWidth: Float,
+        maxNumbersPerRow: Int,
+        maxNumbersPerCol: Int
     ) {
-        val numberSkalar = MapperUtil.percentOfInnerCanvasSkalar(
+        val targetWidthFractionOfCanvas = 1f / maxNumbersPerRow
+        val widthScalar = MapperUtil.percentOfInnerCanvasSkalar(
+            canvasInnerWidthOrHeight,
+            initialNumberWidth,
+            targetWidthFractionOfCanvas
+        )
+        val targetHeightFractionOfCanvas = 1f / maxNumbersPerCol
+        val heightScalar = MapperUtil.percentOfInnerCanvasSkalar(
             canvasInnerWidthOrHeight,
             initialNumberHeight,
-            targetPercentOfCanvas
+            targetHeightFractionOfCanvas
         )
-        // TODO: Make better height-Skalar value or width calculation
         numberBitmaps =
-            numberBitmaps.map { MapperUtil.scaleBitmap(it, numberSkalar * 0.7f, numberSkalar) }
+            numberBitmaps.map {
+                MapperUtil.scaleBitmap(
+                    it,
+                    widthScale = widthScalar,
+                    heightScale = heightScalar
+                )
+            }
     }
 
     private fun getCharWidth(): Float {

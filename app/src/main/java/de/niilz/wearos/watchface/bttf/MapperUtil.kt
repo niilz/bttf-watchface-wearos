@@ -60,10 +60,11 @@ class MapperUtil {
         fun percentOfInnerCanvasSkalar(
             canvasWidthOrHight: Float,
             itemSize: Float,
-            targetPercentOfCanvas: Int
+            targetFractionOfCanvas: Float
         ): Float {
-            val targetSize = canvasWidthOrHight * (targetPercentOfCanvas / 100f)
-            return (targetSize / itemSize)
+            val targetSize = canvasWidthOrHight * targetFractionOfCanvas
+            // (100 / itemSize = targetFractionOfCanvas / targetSize ) / 100
+            return targetSize / itemSize
         }
 
         fun numbersToDrawables(
