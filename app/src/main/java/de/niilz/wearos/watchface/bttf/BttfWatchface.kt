@@ -91,7 +91,6 @@ class BttfWatchface : CanvasWatchFaceService() {
                 listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
                 leftStart,
                 top,
-                gap,
             )
         }
 
@@ -125,7 +124,7 @@ class BttfWatchface : CanvasWatchFaceService() {
             topLeftX = x
             topLeftY = y
             leftOffet = canvasInnerWidthOrHeight * 0.05f
-            topOffset = canvasInnerWidthOrHeight * 0.05f
+            topOffset = canvasInnerWidthOrHeight * 0.02f
         }
 
         private fun initializeNumbers() {

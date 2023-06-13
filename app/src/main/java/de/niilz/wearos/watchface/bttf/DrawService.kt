@@ -21,7 +21,6 @@ class DrawService(
         slotData: List<SlotMetadata>,
         leftStart: Float,
         topStart: Float,
-        gap: Float,
     ) {
         // FIRST-ROW
         var currentLeft = leftStart
@@ -49,12 +48,12 @@ class DrawService(
                 label,
                 currentLeft,
                 topStart,
-                gap
+                data.marginRight
             )
             canvas?.let {
                 drawableSlot.draw(it)
             }
-            currentLeft += drawableSlot.getWidth() + (3 * gap)
+            currentLeft += drawableSlot.getWidth() + (3 * data.marginRight)
         }
     }
 
