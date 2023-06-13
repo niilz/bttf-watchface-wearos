@@ -35,7 +35,7 @@ class DrawService(
             }
             // TODO: Be smarter with the handling of "is it a number or Text"
             val textToDraw = data.text?.let {
-                listOf(DrawableText(it, 24f, colors.numberColorRow1))
+                listOf(DrawableText(it, 24f, getCharWidth(), colors.numberColorRow1))
             }
             // TODO: Be smarter with the handling of "is it a number or Text"
             val itemToDraw = numbersToDraw ?: textToDraw
@@ -68,5 +68,9 @@ class DrawService(
         // TODO: Make better height-Skalar value or width calculation
         numberBitmaps =
             numberBitmaps.map { MapperUtil.scaleBitmap(it, numberSkalar * 0.7f, numberSkalar) }
+    }
+
+    fun getCharWidth(): Float {
+        return numberBitmaps[0].width.toFloat()
     }
 }

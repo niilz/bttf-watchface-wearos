@@ -8,6 +8,7 @@ import kotlin.math.absoluteValue
 class DrawableText(
     private val text: String,
     private val textHeight: Float,
+    private val charwidth: Float,
     private val textColor: Int,
 ) : DrawableItem {
 
@@ -19,6 +20,7 @@ class DrawableText(
     }
 
     override fun draw(canvas: Canvas, x: Float, y: Float) {
+        textPaint.textScaleX = calculateTextScaleX()
         canvas.drawText(text, x, y + getHeightWithoughtLowPart(), textPaint)
     }
 
@@ -35,8 +37,13 @@ class DrawableText(
         return fontMetrics.descent - fontMetrics.ascent
     }
 
-    fun getHeightWithoughtLowPart(): Float {
+    private fun getHeightWithoughtLowPart(): Float {
         val fontMetrics = textPaint.fontMetrics
         return fontMetrics.ascent.absoluteValue
+    }
+
+    private fun calculateTextScaleX(): Float {
+        val targetWidth = charwidth * 3
+        return targetWidth / getWidth()
     }
 }
