@@ -12,7 +12,10 @@ class DrawService(
     constructor(context: Context, numberBitmaps: List<Bitmap>) : this(context, numberBitmaps, null)
 
     private val colors = NumberColors(context)
-    private val LABEL_SIZE = 16f
+
+    companion object {
+        private const val LABEL_SIZE = 16f
+    }
 
     fun drawSlots(
         slotData: List<SlotMetadata>,
@@ -70,7 +73,7 @@ class DrawService(
             numberBitmaps.map { MapperUtil.scaleBitmap(it, numberSkalar * 0.7f, numberSkalar) }
     }
 
-    fun getCharWidth(): Float {
+    private fun getCharWidth(): Float {
         return numberBitmaps[0].width.toFloat()
     }
 }
