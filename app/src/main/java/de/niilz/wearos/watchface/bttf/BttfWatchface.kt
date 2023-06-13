@@ -52,7 +52,7 @@ class BttfWatchface : CanvasWatchFaceService() {
                 initialNumberWidth,
                 initialNumberHeight,
                 16,
-                12
+                17
             )
             drawSlots()
         }
@@ -65,23 +65,27 @@ class BttfWatchface : CanvasWatchFaceService() {
 
             // Month-Name Slot
             val leftStart = topLeftX + leftOffet
-            val monthSlotData = SlotMetadata("MONTH", now.month.toString().substring(0, 3))
+            val monthSlotData = SlotMetadata(
+                "MONTH",
+                gap,
+                now.month.toString().substring(0, 3),
+            )
 
             // Day Slot
             val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
-            val daySlotData = SlotMetadata("DAY", dayNums)
+            val daySlotData = SlotMetadata("DAY", gap, dayNums)
 
             // Year Slot
             val yearNums = MapperUtil.mapYearToInts(now.year)
-            val yearSlotData = SlotMetadata("YEAR", yearNums)
+            val yearSlotData = SlotMetadata("YEAR", gap, yearNums)
 
             // Hour Slot
             val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
-            val hourSlotData = SlotMetadata("HOUR", hourNums)
+            val hourSlotData = SlotMetadata("HOUR", gap, hourNums)
 
             // Minute Slot
             val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
-            val minuteSlotData = SlotMetadata("MIN", minuteNums)
+            val minuteSlotData = SlotMetadata("MIN", gap, minuteNums)
 
             drawService.drawSlots(
                 listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
