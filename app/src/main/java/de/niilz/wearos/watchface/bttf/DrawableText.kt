@@ -20,12 +20,12 @@ class DrawableText(
     }
 
     override fun draw(canvas: Canvas, x: Float, y: Float) {
-        textPaint.textScaleX = calculateTextScaleX()
+        textPaint.textScaleX = calcTextScaleX()
         canvas.drawText(text, x, y + getHeightWithoughtLowPart(), textPaint)
     }
 
     override fun getWidth(): Float {
-        return textPaint.measureText(text)
+        return calcTextWidth() * calcTextScaleX()
     }
 
     override fun getHeight(): Float {
@@ -42,8 +42,12 @@ class DrawableText(
         return fontMetrics.ascent.absoluteValue
     }
 
-    private fun calculateTextScaleX(): Float {
+    private fun calcTextWidth(): Float {
+        return textPaint.measureText(text)
+    }
+
+    private fun calcTextScaleX(): Float {
         val targetWidth = charwidth * 3
-        return targetWidth / getWidth()
+        return targetWidth / calcTextWidth()
     }
 }
