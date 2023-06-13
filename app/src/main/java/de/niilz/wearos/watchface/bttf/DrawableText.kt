@@ -47,7 +47,7 @@ class DrawableText(
     }
 
     private fun calcTextScaleX(): Float {
-        val targetWidth = charwidth * 3
+        val targetWidth = charwidth * text.chars().count()
         return targetWidth / calcTextWidth()
     }
 }
