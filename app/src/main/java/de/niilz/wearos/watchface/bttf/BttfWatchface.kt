@@ -62,33 +62,58 @@ class BttfWatchface : CanvasWatchFaceService() {
             val top = topLeftY + topOffset
 
             // FIRST-ROW
+            var leftStart = topLeftX + leftOffet
 
             // Month-Name Slot
-            val leftStart = topLeftX + leftOffet
-            val monthSlotData = SlotMetadata(
+            val monthSlotData = TextSlotMetadata(
                 "MONTH",
                 gap,
                 now.month.toString().substring(0, 3),
             )
 
+            // TODO: Make real decisions about "gap"
             // Day Slot
             val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
-            val daySlotData = SlotMetadata("DAY", gap, dayNums)
+            val daySlotData = BitmapSlotMetadata("DAY", gap, dayNums)
 
             // Year Slot
             val yearNums = MapperUtil.mapYearToInts(now.year)
-            val yearSlotData = SlotMetadata("YEAR", gap, yearNums)
+            val yearSlotData = BitmapSlotMetadata("YEAR", gap, yearNums)
 
             // Hour Slot
             val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
-            val hourSlotData = SlotMetadata("HOUR", gap, hourNums)
+            val hourSlotData = BitmapSlotMetadata("HOUR", gap, hourNums)
 
             // Minute Slot
             val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
-            val minuteSlotData = SlotMetadata("MIN", gap, minuteNums)
+            val minuteSlotData = BitmapSlotMetadata("MIN", gap, minuteNums)
 
-            drawService.drawSlots(
-                listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
+            leftStart += drawService.drawSlot(
+                monthSlotData,
+                leftStart,
+                top,
+            )
+
+            leftStart += drawService.drawSlot(
+                daySlotData,
+                leftStart,
+                top,
+            )
+
+            leftStart += drawService.drawSlot(
+                yearSlotData,
+                leftStart,
+                top,
+            )
+
+            leftStart += drawService.drawSlot(
+                hourSlotData,
+                leftStart,
+                top,
+            )
+
+            leftStart += drawService.drawSlot(
+                minuteSlotData,
                 leftStart,
                 top,
             )
