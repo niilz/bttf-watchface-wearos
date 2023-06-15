@@ -17,43 +17,48 @@ class DrawService(
         private const val LABEL_SIZE = 16f
     }
 
-    fun drawSlots(
-        slotData: List<SlotMetadata>,
+    fun drawSlot(
+        slotData: SlotMetadata,
         leftStart: Float,
         topStart: Float,
-    ) {
-        // FIRST-ROW
+    ): Float {
         var currentLeft = leftStart
-        for (data in slotData) {
-            // TODO: Be smarter with the handling of "is it a number or Text"
-            val numbersToDraw = data.numbers?.let {
-                MapperUtil.numbersToDrawables(
-                    it,
-                    numberBitmaps,
-                    numberBitmaps[8],
-                    colors.numberColorRow1,
-                    colors.numberBackgroundColor
-                )
-            }
-            // TODO: Be smarter with the handling of "is it a number or Text"
-            val textToDraw = data.text?.let {
-                listOf(DrawableText(it, 24f, getCharWidth(), colors.numberColorRow1))
-            }
-            // TODO: Be smarter with the handling of "is it a number or Text"
-            val itemToDraw = numbersToDraw ?: textToDraw
-            val label = Label(data.labelText, LABEL_SIZE)
-            val drawableSlot = DrawableSlot(
-                context,
-                itemToDraw!!,
-                label,
-                currentLeft,
-                topStart,
-                data.marginRight
+        val itemToDraw = when (slotData) {
+            is BitmapSlotMetadata -> createBitmapSlot(slotData)
+            is TextSlotMetadata -> createTextSlot(slotData)
+            else -> throw UnsupportedOperationException("Slot-Type not supported")
+        }
+        val label = Label(slotData.labelText, LABEL_SIZE)
+        val drawableSlot = DrawableSlot(
+            context,
+            itemToDraw,
+            label,
+            currentLeft,
+            topStart,
+            slotData.marginRight
+        )
+        canvas?.let {
+            drawableSlot.draw(it)
+        }
+        // TODO: marginRight is what again? the background or the gap to the next slot?...
+        return drawableSlot.getWidth() + (3 * slotData.marginRight)
+    }
+
+    private fun createBitmapSlot(slotMetadata: BitmapSlotMetadata): List<DrawableItem> {
+        return slotMetadata.numbers.let {
+            MapperUtil.numbersToDrawables(
+                it,
+                numberBitmaps,
+                numberBitmaps[8],
+                colors.numberColorRow1,
+                colors.numberBackgroundColor
             )
-            canvas?.let {
-                drawableSlot.draw(it)
-            }
-            currentLeft += drawableSlot.getWidth() + (3 * data.marginRight)
+        }
+    }
+
+    private fun createTextSlot(slotMetadata: TextSlotMetadata): List<DrawableItem> {
+        return slotMetadata.text.let {
+            listOf(DrawableText(it, 24f, getCharWidth(), colors.numberColorRow1))
         }
     }
 
