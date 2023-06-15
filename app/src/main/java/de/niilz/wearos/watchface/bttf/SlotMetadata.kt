@@ -1,22 +1,12 @@
 package de.niilz.wearos.watchface.bttf
 
-class SlotMetadata(
+open class SlotMetadata(
     val labelText: String,
     val marginRight: Float,
-    val text: String?,
-    val numbers: List<Int>?
-) {
-    constructor(labelText: String, marginRight: Float, text: String) : this(
-        labelText,
-        marginRight,
-        text,
-        null
-    )
+) {}
 
-    constructor(labelText: String, marginRight: Float, numbers: List<Int>) : this(
-        labelText,
-        marginRight,
-        null,
-        numbers
-    )
-}
+class BitmapSlotMetadata(labelText: String, marginRight: Float, val numbers: List<Int>) :
+    SlotMetadata(labelText, marginRight) {}
+
+class TextSlotMetadata(labelText: String, marginRight: Float, val text: String) :
+    SlotMetadata(labelText, marginRight) {}
