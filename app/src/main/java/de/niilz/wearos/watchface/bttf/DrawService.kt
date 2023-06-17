@@ -58,29 +58,24 @@ class DrawService(
 
     private fun createTextSlot(slotMetadata: TextSlotMetadata): List<DrawableItem> {
         return slotMetadata.text.let {
-            listOf(DrawableText(it, 24f, getCharWidth(), colors.numberColorRow1))
+            // TODO: Actually caclulate how high the text should be
+            listOf(DrawableText(it, 30f, getCharWidth(), colors.numberColorRow1))
         }
     }
 
     fun updateNumbers(
         canvasInnerWidthOrHeight: Float,
-        initialNumberHeight: Float,
         initialNumberWidth: Float,
+        initialNumberHeight: Float,
         maxNumbersPerRow: Int,
         maxNumbersPerCol: Int
     ) {
-        val targetWidthFractionOfCanvas = 1f / maxNumbersPerRow
-        val widthScalar = MapperUtil.percentOfInnerCanvasSkalar(
-            canvasInnerWidthOrHeight,
-            initialNumberWidth,
-            targetWidthFractionOfCanvas
-        )
-        val targetHeightFractionOfCanvas = 1f / maxNumbersPerCol
-        val heightScalar = MapperUtil.percentOfInnerCanvasSkalar(
-            canvasInnerWidthOrHeight,
-            initialNumberHeight,
-            targetHeightFractionOfCanvas
-        )
+        val targetNumberWidth = canvasInnerWidthOrHeight / maxNumbersPerRow
+        val widthScalar = targetNumberWidth / initialNumberWidth
+
+        val targetNumberHeight = canvasInnerWidthOrHeight / maxNumbersPerCol
+        val heightScalar = targetNumberHeight / initialNumberHeight
+
         numberBitmaps =
             numberBitmaps.map {
                 MapperUtil.scaleBitmap(

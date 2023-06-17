@@ -22,6 +22,8 @@ class BttfWatchface : CanvasWatchFaceService() {
         private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
         private val numberWidth = resources.getDimension(R.dimen.number_width)
         private val numberHeight = resources.getDimension(R.dimen.number_height)
+        private val leftMarginScalar = resources.getDimension(R.dimen.top_margin_scalar)
+        private val topMarginScalar = resources.getDimension(R.dimen.left_margin_scalar)
         private var initialNumberWidth = 0.0f
         private var initialNumberHeight = 0.0f
         private val gap = resources.getDimension(R.dimen.gap)
@@ -32,8 +34,8 @@ class BttfWatchface : CanvasWatchFaceService() {
         private var topLeftY = 0f
         private var radius = 0f
         private var canvasInnerWidthOrHeight = 0f
-        private var topOffset = 0f
-        private var leftOffet = 0f
+        private var firstRowTopMargin = 0f
+        private var firstRowLeftMargin = 0f
 
         private lateinit var drawService: DrawService;
 
@@ -51,18 +53,18 @@ class BttfWatchface : CanvasWatchFaceService() {
                 canvasInnerWidthOrHeight,
                 initialNumberWidth,
                 initialNumberHeight,
-                16,
-                17
+                18,
+                10
             )
             drawSlots()
         }
 
         private fun drawSlots() {
             val now = LocalDateTime.now()
-            val top = topLeftY + topOffset
+            val top = topLeftY + firstRowTopMargin
 
             // FIRST-ROW
-            var leftStart = topLeftX + leftOffet
+            var leftStart = topLeftX + firstRowLeftMargin
 
             // Month-Name Slot
             val monthSlotData = TextSlotMetadata(
@@ -94,6 +96,7 @@ class BttfWatchface : CanvasWatchFaceService() {
                 top,
             )
 
+            val leftStartTemp = leftStart
             leftStart += drawService.drawSlot(
                 daySlotData,
                 leftStart,
@@ -148,8 +151,8 @@ class BttfWatchface : CanvasWatchFaceService() {
             val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
             topLeftX = x
             topLeftY = y
-            leftOffet = canvasInnerWidthOrHeight * 0.05f
-            topOffset = canvasInnerWidthOrHeight * 0.02f
+            firstRowTopMargin = canvasInnerWidthOrHeight * topMarginScalar
+            firstRowLeftMargin = canvasInnerWidthOrHeight * leftMarginScalar
         }
 
         private fun initializeNumbers() {
