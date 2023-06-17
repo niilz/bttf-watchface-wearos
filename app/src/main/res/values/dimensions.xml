@@ -3,5 +3,7 @@
     <dimen name="number_height">1dp</dimen>
     <dimen name="number_width">1dp</dimen>
     <dimen name="shadow_radius">1dp</dimen>
+    <dimen name="left_margin_scalar">0.005dp</dimen>
+    <dimen name="top_margin_scalar">0.02dp</dimen>
     <dimen name="gap">3dp</dimen>
 </resources>
