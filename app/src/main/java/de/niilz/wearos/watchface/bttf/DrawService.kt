@@ -35,13 +35,11 @@ class DrawService(
             label,
             currentLeft,
             topStart,
-            slotData.marginRight
         )
         canvas?.let {
             drawableSlot.draw(it)
         }
-        // TODO: marginRight is what again? the background or the gap to the next slot?...
-        return drawableSlot.getWidth() + (3 * slotData.marginRight)
+        return drawableSlot.getWidth()
     }
 
     private fun createBitmapSlot(slotMetadata: BitmapSlotMetadata): List<DrawableItem> {

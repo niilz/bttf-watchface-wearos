@@ -12,21 +12,26 @@ class DrawableSlot(
     private val label: DrawableItem,
     private val left: Float,
     private val top: Float,
-    private val gap: Float,
 ) {
     private val background = ContextCompat.getColor(context, R.color.slot_bg_color)
+    private val gap = context.resources.getDimension(R.dimen.gap)
+    private val padding = 2 * gap
 
 
     fun draw(canvas: Canvas) {
-        var cursor = left + gap
-        var marginTop = top + gap
+        var cursor = left + padding
+        var marginLabelToUpperRow = top + padding
 
-        label.draw(canvas, left + labelToItemOffset(), marginTop)
-        val valuesTop = marginTop + label.getHeight() + gap
+        // Draw the Label
+        label.draw(canvas, left + labelToItemOffset(), marginLabelToUpperRow)
+        // Draw the Value Box
+        val gapBetweenLabelAndValues = 3 * gap
+        val valuesTop =
+            marginLabelToUpperRow + label.getHeight() + gapBetweenLabelAndValues + padding
 
 
-        val right = left + calcSlotWidth() + gap
-        val bottom = valuesTop + items[0].getHeight() + (2 * gap)
+        val right = left + calcSlotWidth()
+        val bottom = valuesTop + items[0].getHeight() + 2 * padding
         val bgRect = Rect(left.toInt(), valuesTop.toInt(), right.toInt(), bottom.toInt())
         val rectPaint = Paint().apply {
             color = background
@@ -35,7 +40,7 @@ class DrawableSlot(
         canvas.drawRect(bgRect, rectPaint)
 
         for (item in items) {
-            item.draw(canvas, cursor, valuesTop + gap)
+            item.draw(canvas, cursor, valuesTop + padding)
             cursor += item.getWidth() + gap
         }
     }
@@ -51,6 +56,6 @@ class DrawableSlot(
     }
 
     private fun calcSlotWidth(): Float {
-        return items.size * items[0].getWidth() + items.size * gap
+        return items.size * items[0].getWidth() + (items.size * gap) + 2 * padding
     }
 }

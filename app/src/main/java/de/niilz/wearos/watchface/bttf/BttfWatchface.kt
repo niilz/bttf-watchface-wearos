@@ -69,51 +69,53 @@ class BttfWatchface : CanvasWatchFaceService() {
             // Month-Name Slot
             val monthSlotData = TextSlotMetadata(
                 "MONTH",
-                gap,
                 now.month.toString().substring(0, 3),
             )
 
-            // TODO: Make real decisions about "gap"
             // Day Slot
             val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
-            val daySlotData = BitmapSlotMetadata("DAY", gap, dayNums)
+            val daySlotData = BitmapSlotMetadata("DAY", dayNums)
 
             // Year Slot
             val yearNums = MapperUtil.mapYearToInts(now.year)
-            val yearSlotData = BitmapSlotMetadata("YEAR", gap, yearNums)
+            val yearSlotData = BitmapSlotMetadata("YEAR", yearNums)
 
             // Hour Slot
             val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
-            val hourSlotData = BitmapSlotMetadata("HOUR", gap, hourNums)
+            val hourSlotData = BitmapSlotMetadata("HOUR", hourNums)
 
             // Minute Slot
             val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
-            val minuteSlotData = BitmapSlotMetadata("MIN", gap, minuteNums)
+            val minuteSlotData = BitmapSlotMetadata("MIN", minuteNums)
+
+            // TODO: Maybe globally define margin
+            val margin = 2 * gap
 
             leftStart += drawService.drawSlot(
                 monthSlotData,
                 leftStart,
                 top,
-            )
+            ) + margin
 
-            val leftStartTemp = leftStart
             leftStart += drawService.drawSlot(
                 daySlotData,
                 leftStart,
                 top,
-            )
+            ) + margin
 
             leftStart += drawService.drawSlot(
                 yearSlotData,
                 leftStart,
                 top,
-            )
+            ) + margin
 
             leftStart += drawService.drawSlot(
                 hourSlotData,
                 leftStart,
                 top,
-            )
+            ) + 2 * margin
+
+            // TODO: Draw am-pm dots
 
             leftStart += drawService.drawSlot(
                 minuteSlotData,
@@ -146,7 +148,7 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun calcValues(width: Float, height: Float) {
-            radius = width / 2f;
+            radius = width / 2f
             canvasInnerWidthOrHeight = sqrt(2f) * radius;
             val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
             topLeftX = x
