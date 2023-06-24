@@ -59,7 +59,7 @@ class DrawService(
     private fun createTextSlot(slotMetadata: TextSlotMetadata): List<DrawableItem> {
         return slotMetadata.text.let {
             // TODO: Actually caclulate how high the text should be
-            listOf(DrawableText(it, 30f, getCharWidth(), colors.numberColorRow1))
+            listOf(DrawableText(it, getCharHeight(), getCharWidth(), colors.numberColorRow1))
         }
     }
 
@@ -88,5 +88,9 @@ class DrawService(
 
     private fun getCharWidth(): Float {
         return numberBitmaps[0].width.toFloat()
+    }
+
+    private fun getCharHeight(): Float {
+        return numberBitmaps[1].height.toFloat()
     }
 }

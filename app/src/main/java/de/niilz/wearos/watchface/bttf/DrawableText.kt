@@ -7,15 +7,17 @@ import android.graphics.Typeface
 
 class DrawableText(
     private val text: String,
-    private val textHeight: Float,
-    private val charwidth: Float,
+    private val charHeight: Float,
+    private val charWidth: Float,
     private val textColor: Int,
 ) : DrawableItem {
+
+    private var height = 0f
 
     private val textPaint = Paint().apply {
         isAntiAlias = true
         color = textColor
-        textSize = textHeight
+        textSize = charHeight * calcTextSizeScalar(charHeight)
         typeface = Typeface.DEFAULT_BOLD
     }
 
@@ -29,9 +31,17 @@ class DrawableText(
     }
 
     override fun getHeight(): Float {
+        if (height == 0f) {
+            height = getRawCharHeight()
+        }
+        return height
+    }
+
+    fun getRawCharHeight(): Float {
         val bounds = Rect()
         textPaint.getTextBounds(text, 0, text.length, bounds)
-        return bounds.height().toFloat()
+        val rawCharHeight = bounds.height().toFloat()
+        return rawCharHeight
     }
 
     private fun calcTextWidth(): Float {
@@ -39,7 +49,19 @@ class DrawableText(
     }
 
     private fun calcTextScaleX(): Float {
-        val targetWidth = charwidth * text.chars().count()
+        val targetWidth = charWidth * text.chars().count()
         return targetWidth / calcTextWidth()
+    }
+
+    private fun calcTextSizeScalar(targetTextSize: Float): Float {
+        val tempTextPaintWithPadding = Paint().apply {
+            textSize = targetTextSize
+        }
+        val bounds = Rect()
+        tempTextPaintWithPadding.getTextBounds(text, 0, text.length, bounds)
+        val rawCharHeight = bounds.height().toFloat()
+        val padding = targetTextSize - rawCharHeight
+        val paddingPercentOfTextSize = padding / targetTextSize
+        return 1 + paddingPercentOfTextSize
     }
 }
