@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+    <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLECATION_DATA" />
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
 
-        <meta-data android:name="com.google.android.wearable.standalone"
-            android:value="true"/>
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
 
         <service
             android:name=".BttfWatchface"
@@ -27,21 +28,33 @@
                 android:value="false" />
             <meta-data
                 android:name="android.service.wallpaper"
-                android:resource="@xml/watch_face"/>
+                android:resource="@xml/watch_face" />
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview"
-                android:resource="@drawable/preview_analog"/>
+                android:resource="@drawable/preview_analog" />
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
-                android:resource="@drawable/preview_analog_round"/>
+                android:resource="@drawable/preview_analog_round" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.wearableConfigurationAction"
+                android:value="de.niilz.wearos.watchface.bttf.CONFIG_COMPLICATION_SIMPLE" />
 
             <intent-filter>
-                <action android:name="android.service.wallpaper.WallpaperService"/>
+                <action android:name="android.service.wallpaper.WallpaperService" />
 
-                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE"/>
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
             </intent-filter>
         </service>
 
+        <activity android:name="android.support.wearable.complications.ComplicationHelperActivity" />
+        <activity android:name=".ComplicationConfigActivity">
+            <intent-filter>
+                <action android:name="de.niilz.wearos.watchface.bttf.CONFIG_COMPLICATION_SIMPLE" />
+
+                <category android:name="com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
