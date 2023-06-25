@@ -40,6 +40,7 @@ class BttfWatchface : CanvasWatchFaceService() {
         private lateinit var drawService: DrawService;
 
         override fun onCreate(holder: SurfaceHolder?) {
+            //println("*** onCreate ***")
             super.onCreate(holder)
             initializeBackground()
             initializeNumbers()
@@ -47,19 +48,22 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         override fun onDraw(canvas: Canvas, bounds: Rect?) {
+            //println("*** onDraw ***")
+            if (drawService.canvas == null) {
+                drawService.canvas = canvas
+            }
             drawBackground(canvas)
-            drawService.canvas = drawService.canvas ?: canvas
-            drawService.updateNumbers(
-                canvasInnerWidthOrHeight,
-                initialNumberWidth,
-                initialNumberHeight,
-                18,
-                10
-            )
             drawSlots()
         }
 
+        override fun onVisibilityChanged(visible: Boolean) {
+            //println("*** onVisibilityChanged ***")
+            super.onVisibilityChanged(visible)
+            invalidate()
+        }
+
         private fun drawSlots() {
+            //println("*** drawSlots ***")
             val now = LocalDateTime.now()
             val top = topLeftY + firstRowTopMargin
 
@@ -103,7 +107,9 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun drawBackground(canvas: Canvas) {
+            //println("*** start drawBackground ***")
             canvas.drawBitmap(backgroundBitmap, topLeftX, topLeftY, null)
+            //println("*** end drawBackground ***")
         }
 
         override fun onSurfaceChanged(
@@ -113,19 +119,30 @@ class BttfWatchface : CanvasWatchFaceService() {
             height: Int
         ) {
             super.onSurfaceChanged(holder, format, width, height)
+            //println("*** onSurfaceChanged ***")
 
             calcValues(width.toFloat(), height.toFloat())
             val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
             backgroundBitmap =
                 MapperUtil.scaleBitmap(backgroundBitmap, backgroundScale, backgroundScale)
 
+            drawService.updateNumbers(
+                canvasInnerWidthOrHeight,
+                initialNumberWidth,
+                initialNumberHeight,
+                18,
+                10
+            )
+
         }
 
         private fun initializeBackground() {
+            //println("*** initializeBackground ***")
             backgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
         }
 
         private fun calcValues(width: Float, height: Float) {
+            //println("*** calcValues ***")
             radius = width / 2f
             canvasInnerWidthOrHeight = sqrt(2f) * radius;
             val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
@@ -136,6 +153,7 @@ class BttfWatchface : CanvasWatchFaceService() {
         }
 
         private fun initializeNumbers() {
+            //println("*** initializeNumbers ***")
             fun getDrawable(idx: Int): Drawable? {
                 val id = resources.getIdentifier("number_$idx", "drawable", packageName)
                 return ContextCompat.getDrawable(applicationContext, id)
