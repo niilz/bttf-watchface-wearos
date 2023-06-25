@@ -17,6 +17,13 @@ class DrawService(
         private const val LABEL_SIZE = 16f
     }
 
+    fun drawRow(leftStart: Float, top: Float, rowData: List<SlotMetadata>) {
+        var cursor = leftStart
+        for (slotData in rowData) {
+            cursor += drawSlot(slotData, cursor, top) + slotData.marginRight
+        }
+    }
+
     fun drawSlot(
         slotData: SlotMetadata,
         leftStart: Float,
@@ -42,25 +49,6 @@ class DrawService(
         return drawableSlot.getWidth()
     }
 
-    private fun createBitmapSlot(slotMetadata: BitmapSlotMetadata): List<DrawableItem> {
-        return slotMetadata.numbers.let {
-            MapperUtil.numbersToDrawables(
-                it,
-                numberBitmaps,
-                numberBitmaps[8],
-                colors.numberColorRow1,
-                colors.numberBackgroundColor
-            )
-        }
-    }
-
-    private fun createTextSlot(slotMetadata: TextSlotMetadata): List<DrawableItem> {
-        return slotMetadata.text.let {
-            // TODO: Actually caclulate how high the text should be
-            listOf(DrawableText(it, getCharHeight(), getCharWidth(), colors.numberColorRow1))
-        }
-    }
-
     fun updateNumbers(
         canvasInnerWidthOrHeight: Float,
         initialNumberWidth: Float,
@@ -82,6 +70,29 @@ class DrawService(
                     heightScale = heightScalar
                 )
             }
+    }
+
+    private fun createBitmapSlot(slotMetadata: BitmapSlotMetadata): List<DrawableItem> {
+        return slotMetadata.numbers.let {
+            MapperUtil.numbersToDrawables(
+                it,
+                numberBitmaps,
+                numberBitmaps[8],
+                colors.numberColorRow1,
+                colors.numberBackgroundColor
+            )
+        }
+    }
+
+    private fun createTextSlot(slotMetadata: TextSlotMetadata): List<DrawableItem> {
+        return listOf(
+            DrawableText(
+                slotMetadata.text,
+                getCharHeight(),
+                getCharWidth(),
+                colors.numberColorRow1
+            )
+        )
     }
 
     private fun getCharWidth(): Float {

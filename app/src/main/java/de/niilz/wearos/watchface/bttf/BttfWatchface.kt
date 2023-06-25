@@ -70,58 +70,36 @@ class BttfWatchface : CanvasWatchFaceService() {
             val monthSlotData = TextSlotMetadata(
                 "MONTH",
                 now.month.toString().substring(0, 3),
+                gap
             )
-
-            // Day Slot
-            val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
-            val daySlotData = BitmapSlotMetadata("DAY", dayNums)
-
-            // Year Slot
-            val yearNums = MapperUtil.mapYearToInts(now.year)
-            val yearSlotData = BitmapSlotMetadata("YEAR", yearNums)
-
-            // Hour Slot
-            val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
-            val hourSlotData = BitmapSlotMetadata("HOUR", hourNums)
-
-            // Minute Slot
-            val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
-            val minuteSlotData = BitmapSlotMetadata("MIN", minuteNums)
 
             // TODO: Maybe globally define margin
             val margin = 2 * gap
 
-            leftStart += drawService.drawSlot(
-                monthSlotData,
+            // Day Slot
+            val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
+            val daySlotData = BitmapSlotMetadata("DAY", dayNums, margin)
+
+            // Year Slot
+            val yearNums = MapperUtil.mapYearToInts(now.year)
+            val yearSlotData = BitmapSlotMetadata("YEAR", yearNums, margin)
+
+            // Hour Slot
+            val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
+            val hourSlotData = BitmapSlotMetadata("HOUR", hourNums, 2 * margin)
+
+            // TODO: Draw am-pm dots (Dot-Slot / drwable Item)
+
+            // Minute Slot
+            val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
+            val minuteSlotData = BitmapSlotMetadata("MIN", minuteNums, 0f)
+
+            drawService.drawRow(
                 leftStart,
                 top,
-            ) + margin
-
-            leftStart += drawService.drawSlot(
-                daySlotData,
-                leftStart,
-                top,
-            ) + margin
-
-            leftStart += drawService.drawSlot(
-                yearSlotData,
-                leftStart,
-                top,
-            ) + margin
-
-            leftStart += drawService.drawSlot(
-                hourSlotData,
-                leftStart,
-                top,
-            ) + 2 * margin
-
-            // TODO: Draw am-pm dots
-
-            leftStart += drawService.drawSlot(
-                minuteSlotData,
-                leftStart,
-                top,
+                listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData)
             )
+
         }
 
         private fun drawBackground(canvas: Canvas) {
