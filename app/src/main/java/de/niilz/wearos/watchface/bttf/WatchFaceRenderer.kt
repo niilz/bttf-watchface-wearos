@@ -87,9 +87,9 @@ class WatchFaceRenderer(
         if (drawService.canvas == null) {
             drawService.canvas = canvas
         }
-        // TODO: Call update somewhere usefull  not on every render
+
         if (!areValuesInit) {
-            oldOnSurfaceChanged(canvas.width, canvas.height)
+            initializeValues(canvas.width, canvas.height)
             areValuesInit = true
         }
         drawBackground(canvas)
@@ -155,11 +155,11 @@ class WatchFaceRenderer(
         println("*** end drawBackground ***")
     }
 
-    fun oldOnSurfaceChanged(
+    fun initializeValues(
         width: Int,
         height: Int
     ) {
-        println("*** onSurfaceChanged ***")
+        println("*** initializeValues ***")
 
         calcValues(width.toFloat(), height.toFloat())
         val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
@@ -170,7 +170,7 @@ class WatchFaceRenderer(
             canvasInnerWidthOrHeight,
             initialNumberWidth,
             initialNumberHeight,
-            18,
+            19,
             10
         )
 
