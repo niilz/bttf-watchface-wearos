@@ -181,7 +181,6 @@ class WatchFaceRenderer(
         backgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
     }
 
-    // TODO: Do it somewhere useful
     private fun calcValues(width: Float, height: Float) {
         println("*** calcValues ***")
         radius = width / 2f
