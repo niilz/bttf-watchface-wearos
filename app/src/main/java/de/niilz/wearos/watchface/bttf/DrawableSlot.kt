@@ -20,7 +20,7 @@ class DrawableSlot(
 
     fun draw(canvas: Canvas): Pair<Float, Float> {
         var cursor = left + padding
-        var marginTopToLabels = top + gap
+        var marginTopToLabels = top + padding
 
         // Draw the Label
         label.draw(canvas, left + labelToItemOffset(), marginTopToLabels)
