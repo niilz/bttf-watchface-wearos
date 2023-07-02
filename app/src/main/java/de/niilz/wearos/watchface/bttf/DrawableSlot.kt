@@ -41,7 +41,9 @@ class DrawableSlot(
 
         for (item in items) {
             item.draw(canvas, cursor, valuesTop + padding)
-            cursor += item.getWidth() + gap
+            // TODO: Figure out why 1.3 scalar of GAP
+            //  actually spreads out the numbers evenly...
+            cursor += item.getWidth() + gap * 1.3f
         }
         // Return right-end and bottom-end of Slot
         return Pair(right - left, bottom)
