@@ -144,7 +144,8 @@ class WatchFaceRenderer(
         drawService.drawRow(
             leftStart,
             top,
-            listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData)
+            listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
+            "DESTINATION TIME"
         )
 
     }

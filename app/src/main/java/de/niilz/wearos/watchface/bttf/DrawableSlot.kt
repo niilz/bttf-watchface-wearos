@@ -18,16 +18,16 @@ class DrawableSlot(
     private val padding = 2 * gap
 
 
-    fun draw(canvas: Canvas) {
+    fun draw(canvas: Canvas): Pair<Float, Float> {
         var cursor = left + padding
-        var marginLabelToUpperRow = top + padding
+        var marginTopToLabels = top + gap
 
         // Draw the Label
-        label.draw(canvas, left + labelToItemOffset(), marginLabelToUpperRow)
+        label.draw(canvas, left + labelToItemOffset(), marginTopToLabels)
         // Draw the Value Box
-        val gapBetweenLabelAndValues = 3 * gap
+        val gapBetweenLabelAndValues = 2 * gap
         val valuesTop =
-            marginLabelToUpperRow + label.getHeight() + gapBetweenLabelAndValues + padding
+            marginTopToLabels + label.getHeight() + gapBetweenLabelAndValues
 
 
         val right = left + calcSlotWidth()
@@ -43,16 +43,14 @@ class DrawableSlot(
             item.draw(canvas, cursor, valuesTop + padding)
             cursor += item.getWidth() + gap
         }
+        // Return right-end and bottom-end of Slot
+        return Pair(right - left, bottom)
     }
 
     private fun labelToItemOffset(): Float {
         val slotCenter = calcSlotWidth() / 2f
         val labelCenter = label.getWidth() / 2f
         return slotCenter - labelCenter
-    }
-
-    fun getWidth(): Float {
-        return calcSlotWidth()
     }
 
     private fun calcSlotWidth(): Float {

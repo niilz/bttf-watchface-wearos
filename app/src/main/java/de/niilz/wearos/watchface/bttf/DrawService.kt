@@ -9,6 +9,7 @@ class DrawService(
     var numberBitmaps: List<Bitmap>,
     var canvas: Canvas?
 ) {
+    // TODO: Do we really need both constructors?
     constructor(context: Context, numberBitmaps: List<Bitmap>) : this(context, numberBitmaps, null)
 
     private val colors = NumberColors(context)
@@ -17,18 +18,41 @@ class DrawService(
         private const val LABEL_SIZE = 16f
     }
 
-    fun drawRow(leftStart: Float, top: Float, rowData: List<SlotMetadata>) {
+    fun drawRow(
+        leftStart: Float,
+        top: Float,
+        rowData: List<SlotMetadata>,
+        footerText: String
+    ) {
         var cursor = leftStart
+        var bottomEnd = 0f
         for (slotData in rowData) {
-            cursor += drawSlot(slotData, cursor, top) + slotData.marginRight
+            val (slotRightEnd, slotBottomEnd) = drawSlot(slotData, cursor, top)
+            cursor += slotRightEnd + slotData.marginRight
+            if (slotBottomEnd > bottomEnd) {
+                bottomEnd = slotBottomEnd
+            }
         }
+        val footerLabel = Label(footerText, LABEL_SIZE)
+        // TODO: Properly handle if canvas is not there
+        val labelStart = (canvas!!.width / 2) - (footerLabel.getWidth() / 2)
+        // TODO: Use a global and/or useful gap value
+        // TODO: pass in a different Color
+        canvas?.let {
+            footerLabel.draw(
+                it,
+                labelStart,
+                bottomEnd + context.resources.getDimension(R.dimen.gap) * 2
+            )
+        }
+        // TODO: Draw the footer-label
     }
 
     fun drawSlot(
         slotData: SlotMetadata,
         leftStart: Float,
         topStart: Float,
-    ): Float {
+    ): Pair<Float, Float> {
         var currentLeft = leftStart
         val itemToDraw = when (slotData) {
             is BitmapSlotMetadata -> createBitmapSlot(slotData)
@@ -44,9 +68,10 @@ class DrawService(
             topStart,
         )
         canvas?.let {
-            drawableSlot.draw(it)
+            val (rightEnd, bottomEnd) = drawableSlot.draw(it)
+            return Pair(rightEnd, bottomEnd)
         }
-        return drawableSlot.getWidth()
+        throw IllegalStateException("Could not draw slot to canvas")
     }
 
     fun updateNumbers(
