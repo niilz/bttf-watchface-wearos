@@ -41,9 +41,7 @@ class DrawableSlot(
 
         for (item in items) {
             item.draw(canvas, cursor, valuesTop + padding)
-            // TODO: Figure out why 1.3 scalar of GAP
-            //  actually spreads out the numbers evenly...
-            cursor += item.getWidth() + gap * 1.3f
+            cursor += item.getWidth() + gap
         }
         // Return right-end and bottom-end of Slot
         return Pair(right - left, bottom)
@@ -56,6 +54,9 @@ class DrawableSlot(
     }
 
     private fun calcSlotWidth(): Float {
-        return items.size * items[0].getWidth() + (items.size * gap) + 2 * padding
+        val totalWidthOfItems = items.size * items[0].getWidth()
+        val totalGapBetweenItems = ((items.size - 1) * gap)
+        val paddingLeftAndRight = 2 * padding
+        return totalWidthOfItems + totalGapBetweenItems + paddingLeftAndRight
     }
 }
