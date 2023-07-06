@@ -31,7 +31,7 @@ class DrawService(
                 bottomEnd = slotBottomEnd
             }
         }
-        val footerLabel = Label(footerText, LABEL_SIZE)
+        val footerLabel = Label(footerText, LABEL_SIZE, WatchFaceColors.LabelBackgroundColorDark)
         // TODO: Properly handle if canvas is not there
         val labelStart = (canvas!!.width / 2) - (footerLabel.getWidth() / 2)
         // TODO: Use a global and/or useful gap value
