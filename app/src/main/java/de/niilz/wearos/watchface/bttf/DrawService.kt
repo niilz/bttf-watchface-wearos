@@ -12,8 +12,6 @@ class DrawService(
     // TODO: Do we really need both constructors?
     constructor(context: Context, numberBitmaps: List<Bitmap>) : this(context, numberBitmaps, null)
 
-    private val colors = NumberColors(context)
-
     companion object {
         private const val LABEL_SIZE = 16f
     }
@@ -45,7 +43,6 @@ class DrawService(
                 bottomEnd + context.resources.getDimension(R.dimen.gap) * 2
             )
         }
-        // TODO: Draw the footer-label
     }
 
     fun drawSlot(
@@ -103,8 +100,8 @@ class DrawService(
                 it,
                 numberBitmaps,
                 numberBitmaps[8],
-                colors.numberColorRow1,
-                colors.numberBackgroundColor
+                WatchFaceColors.NumberColorRow1,
+                WatchFaceColors.NumberBackgroundColor
             )
         }
     }
@@ -115,7 +112,7 @@ class DrawService(
                 slotMetadata.text,
                 getCharHeight(),
                 getCharWidth(),
-                colors.numberColorRow1
+                WatchFaceColors.NumberColorRow1
             )
         )
     }
