@@ -20,12 +20,13 @@ class DrawService(
         leftStart: Float,
         top: Float,
         rowData: List<SlotMetadata>,
-        footerText: String
+        footerText: String,
+        backgroundColor: Int
     ): Float {
         var cursor = leftStart
         var slotBottom = 0f
         for (slotData in rowData) {
-            val (slotRightEnd, slotBottomEnd) = drawSlot(slotData, cursor, top)
+            val (slotRightEnd, slotBottomEnd) = drawSlot(slotData, cursor, top, backgroundColor)
             cursor += slotRightEnd + slotData.marginRight
             if (slotBottomEnd > slotBottom) {
                 slotBottom = slotBottomEnd
@@ -50,6 +51,7 @@ class DrawService(
         slotData: SlotMetadata,
         leftStart: Float,
         topStart: Float,
+        backgroundColor: Int,
     ): Pair<Float, Float> {
         var currentLeft = leftStart
         val itemToDraw = when (slotData) {
@@ -64,6 +66,7 @@ class DrawService(
             label,
             currentLeft,
             topStart,
+            backgroundColor
         )
         canvas?.let {
             val (rightEnd, bottomEnd) = drawableSlot.draw(it)
@@ -112,7 +115,7 @@ class DrawService(
                 slotMetadata.text,
                 getCharHeight(),
                 getCharWidth(),
-                WatchFaceColors.NumberColorRow1
+                slotMetadata.valueColor,
             )
         )
     }

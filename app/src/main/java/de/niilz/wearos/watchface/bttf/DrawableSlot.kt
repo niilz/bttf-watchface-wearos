@@ -12,8 +12,9 @@ class DrawableSlot(
     private val label: DrawableItem,
     private val left: Float,
     private val top: Float,
+    private val backgroundColor: Int,
 ) {
-    private val background = ContextCompat.getColor(context, R.color.slot_bg_color)
+    private val frameColor = ContextCompat.getColor(context, R.color.frame_color)
     private val gap = context.resources.getDimension(R.dimen.gap)
     private val padding = 2 * gap
 
@@ -29,15 +30,23 @@ class DrawableSlot(
         val valuesTop =
             marginTopToLabels + label.getHeight() + gapBetweenLabelAndValues
 
-
         val right = left + calcSlotWidth()
         val bottom = valuesTop + items[0].getHeight() + 2 * padding
-        val bgRect = Rect(left.toInt(), valuesTop.toInt(), right.toInt(), bottom.toInt())
-        val rectPaint = Paint().apply {
-            color = background
+        // TODO: Make frame slightly larger than colored bg or colored bg slightly smaller than frame
+        val frameRect = Rect(left.toInt(), valuesTop.toInt(), right.toInt(), bottom.toInt())
+        val frameRectPaint = Paint().apply {
+            color = frameColor
             style = Paint.Style.FILL
         }
-        canvas.drawRect(bgRect, rectPaint)
+        canvas.drawRect(frameRect, frameRectPaint)
+
+        val coloredBackgroundRect =
+            Rect(left.toInt(), valuesTop.toInt(), right.toInt(), bottom.toInt())
+        val coloredBackgroundRectPaint = Paint().apply {
+            color = backgroundColor
+            style = Paint.Style.FILL
+        }
+        canvas.drawRect(coloredBackgroundRect, coloredBackgroundRectPaint)
 
         for (item in items) {
             item.draw(canvas, cursor, valuesTop + padding)

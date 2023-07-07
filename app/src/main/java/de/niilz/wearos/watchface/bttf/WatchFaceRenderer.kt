@@ -107,8 +107,16 @@ class WatchFaceRenderer(
 
     private fun drawSlots() {
         println("*** drawSlots ***")
-        val now = LocalDateTime.now()
+
         val topRow1 = topLeftY + topBottomMargin
+        val bottomRow1 = drawRow1(WatchFaceColors.NumberColorRow1, topRow1) + 3 * topBottomMargin
+        val bottomRow2 = drawRow2(WatchFaceColors.NumberColorRow2, bottomRow1) + 3 * topBottomMargin
+        val bottomRow3 = drawRow3(WatchFaceColors.NumberColorRow3, bottomRow2);
+    }
+
+    private fun drawRow1(valueColor: Int, startTop: Float): Float {
+
+        val now = LocalDateTime.now()
 
         // FIRST-ROW
         var leftStart = topLeftX + firstRowLeftMargin
@@ -119,47 +127,49 @@ class WatchFaceRenderer(
         val monthSlotData = TextSlotMetadata(
             "MONTH",
             now.month.toString().substring(0, 3),
-            WatchFaceColors.NumberColorRow1,
+            valueColor,
             margin
         )
 
         // Day Slot
         val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
         val daySlotData =
-            BitmapSlotMetadata("DAY", dayNums, WatchFaceColors.NumberColorRow1, margin)
+            BitmapSlotMetadata("DAY", dayNums, valueColor, margin)
 
         // Year Slot
         val yearNums = MapperUtil.mapYearToInts(now.year)
         val yearSlotData =
-            BitmapSlotMetadata("YEAR", yearNums, WatchFaceColors.NumberColorRow1, margin)
+            BitmapSlotMetadata("YEAR", yearNums, valueColor, margin)
 
         // Hour Slot
         val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
         val hourSlotData =
-            BitmapSlotMetadata("HOUR", hourNums, WatchFaceColors.NumberColorRow1, 2 * margin)
+            BitmapSlotMetadata("HOUR", hourNums, valueColor, 2 * margin)
 
         // TODO: Draw am-pm dots (Dot-Slot / drwable Item)
 
         // Minute Slot
         val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
         val minuteSlotData =
-            BitmapSlotMetadata("MIN", minuteNums, WatchFaceColors.NumberColorRow1, 0f)
+            BitmapSlotMetadata("MIN", minuteNums, valueColor, 0f)
 
-        val bottomRow1 = drawService.drawRow(
+        return drawService.drawRow(
             leftStart,
-            topRow1,
+            startTop,
             listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
             "DESTINATION TIME",
+            DrawUtil.darkenColor(valueColor, 0.8f)
         )
+    }
 
-        val topRow2 = bottomRow1 + 3 * topBottomMargin
-        val bottomRow2 = drawService.drawRow(
-            leftStart,
-            topRow2,
-            listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
-            "PRESENT TIME"
-        )
+    fun drawRow2(valueColor: Int, bottomRow1: Float): Float {
+        // TODO: actually develop logic to draw values for row 2
+        return drawRow1(valueColor, bottomRow1)
+    }
 
+    fun drawRow3(valueColor: Int, bottomRow2: Float): Float {
+        // TODO: actually develop logic to draw values for row 3
+        return drawRow1(valueColor, bottomRow2)
     }
 
     private fun drawBackground(canvas: Canvas) {
