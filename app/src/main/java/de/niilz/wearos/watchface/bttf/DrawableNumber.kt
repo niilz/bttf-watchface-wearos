@@ -1,6 +1,10 @@
 package de.niilz.wearos.watchface.bttf
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 
 class DrawableNumber(
     private val numberBitmap: Bitmap,
@@ -13,9 +17,6 @@ class DrawableNumber(
         val numberPaint = Paint().apply {
             colorFilter = PorterDuffColorFilter(numColor, PorterDuff.Mode.SRC_IN)
             isAntiAlias = true
-            //color = watchNumberColor
-            //strokeWidth = numberWidth
-            //style = Paint.Style.FILL
         }
         val backgroundPaint = Paint().apply {
             colorFilter = PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN)

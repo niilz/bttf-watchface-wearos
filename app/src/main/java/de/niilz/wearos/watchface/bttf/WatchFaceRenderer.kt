@@ -60,7 +60,7 @@ class WatchFaceRenderer(
     private var topLeftY = 0f
     private var radius = 0f
     private var canvasInnerWidthOrHeight = 0f
-    private var firstRowTopMargin = 0f
+    private var topBottomMargin = 0f
     private var firstRowLeftMargin = 0f
     private var areValuesInit = false
 
@@ -108,44 +108,56 @@ class WatchFaceRenderer(
     private fun drawSlots() {
         println("*** drawSlots ***")
         val now = LocalDateTime.now()
-        val top = topLeftY + firstRowTopMargin
+        val topRow1 = topLeftY + topBottomMargin
 
         // FIRST-ROW
         var leftStart = topLeftX + firstRowLeftMargin
+        // TODO: Maybe globally define margin
+        val margin = 2 * gap
 
         // Month-Name Slot
         val monthSlotData = TextSlotMetadata(
             "MONTH",
             now.month.toString().substring(0, 3),
-            gap
+            WatchFaceColors.NumberColorRow1,
+            margin
         )
-
-        // TODO: Maybe globally define margin
-        val margin = 2 * gap
 
         // Day Slot
         val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
-        val daySlotData = BitmapSlotMetadata("DAY", dayNums, margin)
+        val daySlotData =
+            BitmapSlotMetadata("DAY", dayNums, WatchFaceColors.NumberColorRow1, margin)
 
         // Year Slot
         val yearNums = MapperUtil.mapYearToInts(now.year)
-        val yearSlotData = BitmapSlotMetadata("YEAR", yearNums, margin)
+        val yearSlotData =
+            BitmapSlotMetadata("YEAR", yearNums, WatchFaceColors.NumberColorRow1, margin)
 
         // Hour Slot
         val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
-        val hourSlotData = BitmapSlotMetadata("HOUR", hourNums, 2 * margin)
+        val hourSlotData =
+            BitmapSlotMetadata("HOUR", hourNums, WatchFaceColors.NumberColorRow1, 2 * margin)
 
         // TODO: Draw am-pm dots (Dot-Slot / drwable Item)
 
         // Minute Slot
         val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
-        val minuteSlotData = BitmapSlotMetadata("MIN", minuteNums, 0f)
+        val minuteSlotData =
+            BitmapSlotMetadata("MIN", minuteNums, WatchFaceColors.NumberColorRow1, 0f)
 
-        drawService.drawRow(
+        val bottomRow1 = drawService.drawRow(
             leftStart,
-            top,
+            topRow1,
             listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
-            "DESTINATION TIME"
+            "DESTINATION TIME",
+        )
+
+        val topRow2 = bottomRow1 + 3 * topBottomMargin
+        val bottomRow2 = drawService.drawRow(
+            leftStart,
+            topRow2,
+            listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
+            "PRESENT TIME"
         )
 
     }
@@ -189,7 +201,7 @@ class WatchFaceRenderer(
         val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
         topLeftX = x
         topLeftY = y
-        firstRowTopMargin = canvasInnerWidthOrHeight * topMarginScalar
+        topBottomMargin = canvasInnerWidthOrHeight * topMarginScalar
         firstRowLeftMargin = canvasInnerWidthOrHeight * leftMarginScalar
     }
 
