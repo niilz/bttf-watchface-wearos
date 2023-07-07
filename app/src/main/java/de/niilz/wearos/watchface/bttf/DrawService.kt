@@ -21,28 +21,29 @@ class DrawService(
         top: Float,
         rowData: List<SlotMetadata>,
         footerText: String
-    ) {
+    ): Float {
         var cursor = leftStart
-        var bottomEnd = 0f
+        var slotBottom = 0f
         for (slotData in rowData) {
             val (slotRightEnd, slotBottomEnd) = drawSlot(slotData, cursor, top)
             cursor += slotRightEnd + slotData.marginRight
-            if (slotBottomEnd > bottomEnd) {
-                bottomEnd = slotBottomEnd
+            if (slotBottomEnd > slotBottom) {
+                slotBottom = slotBottomEnd
             }
         }
         val footerLabel = Label(footerText, LABEL_SIZE, WatchFaceColors.LabelBackgroundColorDark)
         // TODO: Properly handle if canvas is not there
-        val labelStart = (canvas!!.width / 2) - (footerLabel.getWidth() / 2)
+        val footerLabelLeft = (canvas!!.width / 2) - (footerLabel.getWidth() / 2)
         // TODO: Use a global and/or useful gap value
-        // TODO: pass in a different Color
+        val footerLabelTop = slotBottom + context.resources.getDimension(R.dimen.gap) * 2
         canvas?.let {
             footerLabel.draw(
                 it,
-                labelStart,
-                bottomEnd + context.resources.getDimension(R.dimen.gap) * 2
+                footerLabelLeft,
+                footerLabelTop
             )
         }
+        return footerLabelTop + footerLabel.getHeight()
     }
 
     fun drawSlot(
