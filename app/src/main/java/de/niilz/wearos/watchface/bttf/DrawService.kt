@@ -102,7 +102,6 @@ class DrawService(
                 numberBitmaps,
                 numberBitmaps[8],
                 slotMetadata.valueColor,
-                WatchFaceColors.NumberBackgroundColor
             )
         }
     }

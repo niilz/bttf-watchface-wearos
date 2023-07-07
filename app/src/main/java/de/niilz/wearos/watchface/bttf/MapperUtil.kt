@@ -72,11 +72,10 @@ class MapperUtil {
             numberBitmaps: List<Bitmap>,
             backgroundBitmap: Bitmap,
             valueColor: Int,
-            bgColor: Int,
         ): List<DrawableItem> {
             return numbersRaw
                 .map { numberBitmaps[it] }
-                .map { DrawableNumber(it, backgroundBitmap, valueColor, bgColor) }
+                .map { DrawableNumber(it, backgroundBitmap, valueColor) }
         }
     }
 
