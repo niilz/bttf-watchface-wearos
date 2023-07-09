@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
+import de.niilz.wearos.watchface.bttf.drawable.DrawableLabel
 import de.niilz.wearos.watchface.bttf.drawable.DrawableSlot
 import de.niilz.wearos.watchface.bttf.drawable.DrawableText
 
@@ -36,7 +37,8 @@ class DrawService(
                 slotBottom = slotBottomEnd
             }
         }
-        val footerLabel = Label(footerText, LABEL_SIZE, WatchFaceColors.LabelBackgroundColorDark)
+        val footerLabel =
+            DrawableLabel(footerText, LABEL_SIZE, WatchFaceColors.LabelBackgroundColorDark)
         // TODO: Properly handle if canvas is not there
         val footerLabelLeft = (canvas!!.width / 2) - (footerLabel.getWidth() / 2)
         // TODO: Use a global and/or useful gap value
@@ -63,7 +65,7 @@ class DrawService(
             is TextSlotMetadata -> createTextSlot(slotData)
             else -> throw UnsupportedOperationException("Slot-Type not supported")
         }
-        val label = Label(slotData.labelText, LABEL_SIZE)
+        val label = DrawableLabel(slotData.labelText, LABEL_SIZE)
         val drawableSlot = DrawableSlot(
             context,
             itemToDraw,
