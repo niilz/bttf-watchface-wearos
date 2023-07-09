@@ -3,6 +3,7 @@ package de.niilz.wearos.watchface.bttf
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
 import de.niilz.wearos.watchface.bttf.drawable.DrawableSlot
 import de.niilz.wearos.watchface.bttf.drawable.DrawableText

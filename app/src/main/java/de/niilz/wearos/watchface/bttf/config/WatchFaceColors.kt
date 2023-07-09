@@ -1,4 +1,4 @@
-package de.niilz.wearos.watchface.bttf
+package de.niilz.wearos.watchface.bttf.config
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb

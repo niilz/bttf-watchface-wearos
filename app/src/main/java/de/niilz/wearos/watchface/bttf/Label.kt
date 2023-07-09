@@ -2,6 +2,7 @@ package de.niilz.wearos.watchface.bttf
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
 
 class Label(
