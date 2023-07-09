@@ -16,6 +16,8 @@ import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
+import de.niilz.wearos.watchface.bttf.util.DrawUtil
+import de.niilz.wearos.watchface.bttf.util.MapperUtil
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
