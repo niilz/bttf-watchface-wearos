@@ -1,10 +1,11 @@
-package de.niilz.wearos.watchface.bttf
+package de.niilz.wearos.watchface.bttf.drawable
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import androidx.core.content.ContextCompat
+import de.niilz.wearos.watchface.bttf.R
 
 class DrawableSlot(
     context: Context,

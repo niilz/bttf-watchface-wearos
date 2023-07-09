@@ -1,6 +1,8 @@
 package de.niilz.wearos.watchface.bttf
 
 import android.graphics.Bitmap
+import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
+import de.niilz.wearos.watchface.bttf.drawable.DrawableNumber
 import java.time.LocalDate
 import kotlin.math.cos
 import kotlin.math.sin

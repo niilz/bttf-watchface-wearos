@@ -1,4 +1,4 @@
-package de.niilz.wearos.watchface.bttf
+package de.niilz.wearos.watchface.bttf.drawable
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
