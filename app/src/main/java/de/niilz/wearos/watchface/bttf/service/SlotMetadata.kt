@@ -1,4 +1,4 @@
-package de.niilz.wearos.watchface.bttf
+package de.niilz.wearos.watchface.bttf.service
 
 open class SlotMetadata(
     val labelText: String,

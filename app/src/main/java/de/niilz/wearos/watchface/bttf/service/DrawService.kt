@@ -1,8 +1,9 @@
-package de.niilz.wearos.watchface.bttf
+package de.niilz.wearos.watchface.bttf.service
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import de.niilz.wearos.watchface.bttf.R
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
 import de.niilz.wearos.watchface.bttf.drawable.DrawableLabel
