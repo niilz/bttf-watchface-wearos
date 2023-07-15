@@ -73,7 +73,7 @@ class WatchFaceRenderer(
     private var drawService: DrawService;
 
     init {
-        println("*** init ***")
+        //println("*** init ***")
         initializeBackground()
         initializeNumbers()
         drawService = DrawService(context = context, numberBitmaps = numbers)
@@ -89,7 +89,7 @@ class WatchFaceRenderer(
         zonedDateTime: ZonedDateTime,
         sharedAssets: DigitalSharedAssets
     ) {
-        println("*** onDraw ***")
+        //println("*** onDraw ***")
         if (drawService.canvas == null) {
             drawService.canvas = canvas
         }
@@ -112,7 +112,7 @@ class WatchFaceRenderer(
     }
 
     private fun drawSlots() {
-        println("*** drawSlots ***")
+        //println("*** drawSlots ***")
 
         val topRow1 = topLeftY + topBottomMargin
         val bottomRow1 = drawRow1(WatchFaceColors.NumberColorRow1, topRow1) + 3 * topBottomMargin
@@ -179,16 +179,16 @@ class WatchFaceRenderer(
     }
 
     private fun drawBackground(canvas: Canvas) {
-        println("*** start drawBackground ***")
+        //println("*** start drawBackground ***")
         canvas.drawBitmap(backgroundBitmap, topLeftX, topLeftY, null)
-        println("*** end drawBackground ***")
+        //println("*** end drawBackground ***")
     }
 
     fun initializeValues(
         width: Int,
         height: Int
     ) {
-        println("*** initializeValues ***")
+        //println("*** initializeValues ***")
 
         calcValues(width.toFloat(), height.toFloat())
         val backgroundScale = canvasInnerWidthOrHeight / backgroundBitmap.width.toFloat()
@@ -206,12 +206,12 @@ class WatchFaceRenderer(
     }
 
     private fun initializeBackground() {
-        println("*** initializeBackground ***")
+        //println("*** initializeBackground ***")
         backgroundBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg)
     }
 
     private fun calcValues(width: Float, height: Float) {
-        println("*** calcValues ***")
+        //println("*** calcValues ***")
         radius = width / 2f
         canvasInnerWidthOrHeight = sqrt(2f) * radius;
         val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
@@ -222,7 +222,7 @@ class WatchFaceRenderer(
     }
 
     private fun initializeNumbers() {
-        println("*** initializeNumbers ***")
+        //println("*** initializeNumbers ***")
         fun getDrawable(idx: Int): Drawable? {
             val id = resources.getIdentifier("number_$idx", "drawable", context.packageName)
             return ContextCompat.getDrawable(context, id)
