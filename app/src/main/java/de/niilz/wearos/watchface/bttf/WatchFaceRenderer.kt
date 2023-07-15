@@ -100,6 +100,15 @@ class WatchFaceRenderer(
         }
         drawBackground(canvas)
         drawSlots()
+        /*
+        FIXME: has be used if complications should be rendered
+        for ((_, complication) in complicationSlotsManager.complicationSlots) {
+            if (complication.enabled) {
+                println("complication value: ${complication.complicationData.value}")
+                complication.render(canvas, zonedDateTime, renderParameters)
+            }
+        }
+         */
     }
 
     override fun renderHighlightLayer(
