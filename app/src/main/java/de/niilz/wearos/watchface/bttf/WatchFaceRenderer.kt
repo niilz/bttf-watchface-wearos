@@ -21,6 +21,7 @@ import de.niilz.wearos.watchface.bttf.service.DrawService
 import de.niilz.wearos.watchface.bttf.service.TextSlotMetadata
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
+import de.niilz.wearos.watchface.bttf.util.ValueUtil
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
@@ -177,9 +178,27 @@ class WatchFaceRenderer(
         )
     }
 
-    fun drawRow2(valueColor: Int, bottomRow1: Float): Float {
+    fun drawRow2(valueColor: Int, startTop: Float): Float {
+        val margin = 2 * gap
+        var leftStart = topLeftX + firstRowLeftMargin
+
+        val batteryLevel = ValueUtil.retrieveBatteryLevel(context)
+        val batterPercentNumbers = if (batteryLevel != null) {
+            MapperUtil.mapTwoDigitNumToInts(batteryLevel)
+        } else {
+            listOf(0, 0)
+        }
+        val batteryPercentSlot =
+            BitmapSlotMetadata("BAT", batterPercentNumbers, valueColor, 2 * margin)
+
         // TODO: actually develop logic to draw values for row 2
-        return drawRow1(valueColor, bottomRow1)
+        return drawService.drawRow(
+            leftStart,
+            startTop,
+            listOf(batteryPercentSlot),
+            "DESTINATION TIME",
+            DrawUtil.darkenColor(valueColor, 0.8f)
+        )
     }
 
     fun drawRow3(valueColor: Int, bottomRow2: Float): Float {
@@ -222,7 +241,7 @@ class WatchFaceRenderer(
     private fun calcValues(width: Float, height: Float) {
         //println("*** calcValues ***")
         radius = width / 2f
-        canvasInnerWidthOrHeight = sqrt(2f) * radius;
+        canvasInnerWidthOrHeight = sqrt(2f) * radius
         val (x, y) = MapperUtil.calcTopLeftCornerOnCirlce(width, height)
         topLeftX = x
         topLeftY = y
