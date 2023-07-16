@@ -188,14 +188,16 @@ class WatchFaceRenderer(
         } else {
             listOf(0, 0)
         }
+        // Slightly hacky ;) Splitting BATT ERY into one bitmap- and one textslot
         val batteryPercentSlot =
-            BitmapSlotMetadata("BAT", batterPercentNumbers, valueColor, 2 * margin)
+            BitmapSlotMetadata("BATT", batterPercentNumbers, valueColor, margin)
+        val percentSign = TextSlotMetadata("ERY", "%", valueColor, 2 * margin)
 
         // TODO: actually develop logic to draw values for row 2
         return drawService.drawRow(
             leftStart,
             startTop,
-            listOf(batteryPercentSlot),
+            listOf(batteryPercentSlot, percentSign),
             "DESTINATION TIME",
             DrawUtil.darkenColor(valueColor, 0.8f)
         )
