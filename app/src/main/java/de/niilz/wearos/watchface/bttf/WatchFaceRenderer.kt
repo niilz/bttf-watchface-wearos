@@ -11,18 +11,20 @@ import android.graphics.drawable.Drawable
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
+import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.BitmapSlotMetadata
 import de.niilz.wearos.watchface.bttf.service.DrawService
+import de.niilz.wearos.watchface.bttf.service.SlotMetadata
 import de.niilz.wearos.watchface.bttf.service.TextSlotMetadata
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
-import de.niilz.wearos.watchface.bttf.util.ValueUtil
-import java.time.LocalDateTime
+import java.time.Instant
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
 
@@ -99,17 +101,14 @@ class WatchFaceRenderer(
             initializeValues(canvas.width, canvas.height)
             areValuesInit = true
         }
+
         drawBackground(canvas)
-        drawSlots()
-        /*
-        FIXME: has be used if complications should be rendered
-        for ((_, complication) in complicationSlotsManager.complicationSlots) {
-            if (complication.enabled) {
-                println("complication value: ${complication.complicationData.value}")
-                complication.render(canvas, zonedDateTime, renderParameters)
-            }
-        }
-         */
+
+        val complications =
+            complicationSlotsManager.complicationSlots.map { (_, complication) -> complication }
+                .filter { it.enabled }
+
+        drawSlots(zonedDateTime, complications)
     }
 
     override fun renderHighlightLayer(
@@ -121,19 +120,21 @@ class WatchFaceRenderer(
         println("TODO: Can render hightlight layer here")
     }
 
-    private fun drawSlots() {
+    private fun drawSlots(dateTime: ZonedDateTime, complications: List<ComplicationSlot>) {
         //println("*** drawSlots ***")
 
         val topRow1 = topLeftY + topBottomMargin
-        val bottomRow1 = drawRow1(WatchFaceColors.NumberColorRow1, topRow1) + 3 * topBottomMargin
-        val bottomRow2 = drawRow2(WatchFaceColors.NumberColorRow2, bottomRow1) + 3 * topBottomMargin
-        val bottomRow3 = drawRow3(WatchFaceColors.NumberColorRow3, bottomRow2);
+        val bottomRow1 =
+            drawRow1(dateTime, WatchFaceColors.NumberColorRow1, topRow1) + 3 * topBottomMargin
+        val bottomRow2 = drawRow2(
+            WatchFaceColors.NumberColorRow2,
+            bottomRow1,
+            complications
+        ) + 3 * topBottomMargin
+        val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2);
     }
 
-    private fun drawRow1(valueColor: Int, startTop: Float): Float {
-
-        val now = LocalDateTime.now()
-
+    private fun drawRow1(now: ZonedDateTime, valueColor: Int, startTop: Float): Float {
         // FIRST-ROW
         var leftStart = topLeftX + firstRowLeftMargin
         // TODO: Maybe globally define margin
@@ -178,34 +179,48 @@ class WatchFaceRenderer(
         )
     }
 
-    fun drawRow2(valueColor: Int, startTop: Float): Float {
+    fun drawRow2(valueColor: Int, startTop: Float, complications: List<ComplicationSlot>): Float {
         val margin = 2 * gap
-        var leftStart = topLeftX + firstRowLeftMargin
+        val leftStart = topLeftX + firstRowLeftMargin
 
-        val batteryLevel = ValueUtil.retrieveBatteryLevel(context)
-        val batterPercentNumbers = if (batteryLevel != null) {
-            MapperUtil.mapTwoDigitNumToInts(batteryLevel)
-        } else {
-            listOf(0, 0)
-        }
+        val complicationSlotDataList: MutableList<SlotMetadata> =
+            complications.asSequence()
+                .map {
+                    Pair(
+                        it.complicationData.value.dataSource,
+                        it.complicationData.value as ShortTextComplicationData
+                    )
+                }.map {
+                    val second = it.second
+                    Pair(
+                        it.first,
+                        second.text.getTextAt(resources, Instant.now())
+                    )
+                }.map {
+                    Pair(
+                        MapperUtil.classNameToCamelCaseParts(it.first!!.shortClassName),
+                        MapperUtil.mapTwoDigitNumToInts(it.second.toString())
+                    )
+                }.map {
+                    BitmapSlotMetadata(it.first.first().uppercase(), it.second, valueColor, margin)
+                }.toMutableList()
+
         // Slightly hacky ;) Splitting BATT ERY into one bitmap- and one textslot
-        val batteryPercentSlot =
-            BitmapSlotMetadata("BATT", batterPercentNumbers, valueColor, margin)
         val percentSign = TextSlotMetadata("ERY", "%", valueColor, 2 * margin)
+        complicationSlotDataList.add(1, percentSign)
 
-        // TODO: actually develop logic to draw values for row 2
         return drawService.drawRow(
             leftStart,
             startTop,
-            listOf(batteryPercentSlot, percentSign),
+            complicationSlotDataList,
             "DESTINATION TIME",
             DrawUtil.darkenColor(valueColor, 0.8f)
         )
     }
 
-    fun drawRow3(valueColor: Int, bottomRow2: Float): Float {
+    fun drawRow3(now: ZonedDateTime, valueColor: Int, bottomRow2: Float): Float {
         // TODO: actually develop logic to draw values for row 3
-        return drawRow1(valueColor, bottomRow2)
+        return drawRow1(now, valueColor, bottomRow2)
     }
 
     private fun drawBackground(canvas: Canvas) {

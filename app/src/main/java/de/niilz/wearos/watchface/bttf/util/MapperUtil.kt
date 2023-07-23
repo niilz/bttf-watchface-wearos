@@ -18,12 +18,20 @@ class MapperUtil {
             return mapToNumberList(number, 2)
         }
 
+        fun mapTwoDigitNumToInts(number: String): List<Int> {
+            return mapToNumberList(number, 2)
+        }
+
         fun mapYearToInts(number: Int): List<Int> {
             return mapToNumberList(number, 4)
         }
 
         private fun mapToNumberList(numbers: Int, width: Int): List<Int> {
-            return numbers.toString()
+            return mapToNumberList(numbers.toString(), width)
+        }
+
+        private fun mapToNumberList(numbers: String, width: Int): List<Int> {
+            return numbers
                 .padStart(width, '0')
                 .toCharArray()
                 .map { it.digitToInt() }
@@ -78,6 +86,14 @@ class MapperUtil {
             return numbersRaw
                 .map { numberBitmaps[it] }
                 .map { DrawableNumber(it, backgroundBitmap, valueColor) }
+        }
+
+        fun classNameToCamelCaseParts(name: String): List<String> {
+            val upperCaseLetters = name.toCharArray().filter { it.isUpperCase() }
+            val className = name.split('.').last()
+                .split("[A-Z]".toRegex())
+                .filter { it.isNotBlank() }
+            return upperCaseLetters.zip(className).map { it.first + it.second }
         }
     }
 
