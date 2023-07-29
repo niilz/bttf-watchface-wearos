@@ -1,8 +1,13 @@
 package de.niilz.wearos.watchface.bttf.util
 
+import android.content.res.Resources
 import android.graphics.Bitmap
+import androidx.wear.watchface.complications.data.ComplicationData
+import androidx.wear.watchface.complications.data.NoDataComplicationData
+import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
 import de.niilz.wearos.watchface.bttf.drawable.DrawableNumber
+import java.time.Instant
 import java.time.LocalDate
 import kotlin.math.cos
 import kotlin.math.sin
@@ -86,6 +91,18 @@ class MapperUtil {
             return numbersRaw
                 .map { numberBitmaps[it] }
                 .map { DrawableNumber(it, backgroundBitmap, valueColor) }
+        }
+
+        fun compliationDataToText(complication: ComplicationData, resources: Resources): String {
+            return when (complication) {
+                is NoDataComplicationData -> "no"
+                is ShortTextComplicationData -> complication.text.getTextAt(
+                    resources,
+                    Instant.now()
+                ).toString()
+
+                else -> TODO()
+            }
         }
 
         fun classNameToCamelCaseParts(name: String): List<String> {

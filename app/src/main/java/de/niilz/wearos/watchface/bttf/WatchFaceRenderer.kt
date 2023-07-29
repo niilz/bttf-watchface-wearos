@@ -15,7 +15,6 @@ import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
-import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.BitmapSlotMetadata
@@ -24,7 +23,7 @@ import de.niilz.wearos.watchface.bttf.service.SlotMetadata
 import de.niilz.wearos.watchface.bttf.service.TextSlotMetadata
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
-import java.time.Instant
+import de.niilz.wearos.watchface.bttf.util.MapperUtil.Mappers.compliationDataToText
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
 
@@ -183,27 +182,8 @@ class WatchFaceRenderer(
         val margin = 2 * gap
         val leftStart = topLeftX + firstRowLeftMargin
 
-        val complicationSlotDataList: MutableList<SlotMetadata> =
-            complications.asSequence()
-                .map {
-                    Pair(
-                        it.complicationData.value.dataSource,
-                        it.complicationData.value as ShortTextComplicationData
-                    )
-                }.map {
-                    val second = it.second
-                    Pair(
-                        it.first,
-                        second.text.getTextAt(resources, Instant.now())
-                    )
-                }.map {
-                    Pair(
-                        MapperUtil.classNameToCamelCaseParts(it.first!!.shortClassName),
-                        MapperUtil.mapTwoDigitNumToInts(it.second.toString())
-                    )
-                }.map {
-                    BitmapSlotMetadata(it.first.first().uppercase(), it.second, valueColor, margin)
-                }.toMutableList()
+        val complicationSlotDataList =
+            mapComplicationsToSlotMetadata(complications, valueColor, margin)
 
         // Slightly hacky ;) Splitting BATT ERY into one bitmap- and one textslot
         val percentSign = TextSlotMetadata("ERY", "%", valueColor, 2 * margin)
@@ -216,6 +196,25 @@ class WatchFaceRenderer(
             "DESTINATION TIME",
             DrawUtil.darkenColor(valueColor, 0.8f)
         )
+    }
+
+    private fun mapComplicationsToSlotMetadata(
+        complications: List<ComplicationSlot>,
+        valueColor: Int,
+        margin: Float
+    ): MutableList<SlotMetadata> {
+        return complications.asSequence()
+            .map { it.complicationData.value }
+            .map {
+                Pair(
+                    MapperUtil.classNameToCamelCaseParts(it.dataSource!!.shortClassName).last()
+                        .uppercase(),
+                    compliationDataToText(it, resources)
+                )
+            }.map {
+                //BitmapSlotMetadata(it.first, it.second, valueColor, margin)
+                TextSlotMetadata(it.first, it.second, valueColor, margin)
+            }.toMutableList()
     }
 
     fun drawRow3(now: ZonedDateTime, valueColor: Int, bottomRow2: Float): Float {

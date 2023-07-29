@@ -25,31 +25,27 @@ class BttfWatchface : WatchFaceService() {
     }
 
     override fun createComplicationSlotsManager(currentUserStyleRepository: CurrentUserStyleRepository): ComplicationSlotsManager {
-        val complicationDataSources = listOf(
-            SystemDataSources.DATA_SOURCE_WATCH_BATTERY,
-            // TODO: How to get things like heartRate (DataProvider)
-            // It sounds like primaryDatasource: ComponentName as argument
-            // to createRoundRectComplicationSlotBuilder is a good option
-            // SystemDataSources.DATA_SOURCE_DAY_OF_WEEK
-        ).mapIndexed { i, dataSource ->
+        val defaultCompicationDrawable = ComplicationDrawable(applicationContext)
+        val defaultComplicationFactory =
+            CanvasComplicationFactory { watchState, listener ->
+                CanvasComplicationDrawable(defaultCompicationDrawable, watchState, listener)
+            }
+        // TODO: map from 0 to 4 and set a default value
+        val complicationSlots = (0..4).map { i ->
             val complicationDrawable = ComplicationDrawable(applicationContext)
             complicationDrawable.noDataText = "Ooops"
-            val defaultComplicationFactory =
-                CanvasComplicationFactory { watchState, listener ->
-                    CanvasComplicationDrawable(complicationDrawable, watchState, listener)
-                }
             ComplicationSlot.createRoundRectComplicationSlotBuilder(
                 id = 42 + i,
                 canvasComplicationFactory = defaultComplicationFactory,
                 supportedTypes = listOf(ComplicationType.SHORT_TEXT),
                 defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-                    dataSource,
+                    SystemDataSources.DATA_SOURCE_WATCH_BATTERY,
                     ComplicationType.SHORT_TEXT,
                 ),
                 bounds = ComplicationSlotBounds(RectF(0f, 0f, 0f, 0f))
             ).build()
         }
-        return ComplicationSlotsManager(complicationDataSources, currentUserStyleRepository)
+        return ComplicationSlotsManager(complicationSlots, currentUserStyleRepository)
     }
 
     override suspend fun createWatchFace(
