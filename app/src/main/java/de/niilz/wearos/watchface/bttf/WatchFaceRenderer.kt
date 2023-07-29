@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.text.isDigitsOnly
 import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.Renderer
@@ -23,7 +24,6 @@ import de.niilz.wearos.watchface.bttf.service.SlotMetadata
 import de.niilz.wearos.watchface.bttf.service.TextSlotMetadata
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
-import de.niilz.wearos.watchface.bttf.util.MapperUtil.Mappers.compliationDataToNumber
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
 
@@ -207,14 +207,17 @@ class WatchFaceRenderer(
             .map { it.complicationData.value }
             .map {
                 Pair(
-                    MapperUtil.classNameToCamelCaseParts(it.dataSource!!.shortClassName).last()
-                        .uppercase(),
-                    //compliationDataToText(it, resources)
-                    compliationDataToNumber(it)
+                    it.dataSource!!.shortClassName,
+                    MapperUtil.complicationDataValueToString(it, resources)
                 )
             }.map {
-                BitmapSlotMetadata(it.first, it.second, valueColor, margin)
-                //TextSlotMetadata(it.first, it.second, valueColor, margin)
+                val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
+                if (it.second.isDigitsOnly()) {
+                    val nums = MapperUtil.mapTwoDigitNumToInts(it.second)
+                    BitmapSlotMetadata(label, nums, valueColor, margin)
+                } else {
+                    TextSlotMetadata(label, it.second, valueColor, margin)
+                }
             }.toMutableList()
     }
 

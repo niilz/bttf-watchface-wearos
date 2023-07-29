@@ -93,26 +93,18 @@ class MapperUtil {
                 .map { DrawableNumber(it, backgroundBitmap, valueColor) }
         }
 
-        fun compliationDataToText(complication: ComplicationData, resources: Resources): String {
+        fun complicationDataValueToString(
+            complication: ComplicationData,
+            resources: Resources
+        ): String {
             return when (complication) {
-                is NoDataComplicationData -> "no"
+                is NoDataComplicationData -> "00"
                 is ShortTextComplicationData -> complication.text.getTextAt(
                     resources,
                     Instant.now()
                 ).toString()
 
-                else -> TODO()
-            }
-        }
-
-        fun compliationDataToNumber(
-            complication: ComplicationData,
-        ): List<Int> {
-            // TODO: actually detemin the values
-            return when (complication) {
-                is NoDataComplicationData -> listOf(0, 0)
-                is ShortTextComplicationData -> listOf(4, 2)
-                else -> TODO()
+                else -> throw IllegalStateException("Unexpected Slot type ${complication.javaClass.simpleName}")
             }
         }
 
