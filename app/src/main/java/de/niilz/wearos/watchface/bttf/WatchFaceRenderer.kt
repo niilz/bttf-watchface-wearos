@@ -23,7 +23,7 @@ import de.niilz.wearos.watchface.bttf.service.SlotMetadata
 import de.niilz.wearos.watchface.bttf.service.TextSlotMetadata
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
-import de.niilz.wearos.watchface.bttf.util.MapperUtil.Mappers.compliationDataToText
+import de.niilz.wearos.watchface.bttf.util.MapperUtil.Mappers.compliationDataToNumber
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
 
@@ -209,11 +209,12 @@ class WatchFaceRenderer(
                 Pair(
                     MapperUtil.classNameToCamelCaseParts(it.dataSource!!.shortClassName).last()
                         .uppercase(),
-                    compliationDataToText(it, resources)
+                    //compliationDataToText(it, resources)
+                    compliationDataToNumber(it)
                 )
             }.map {
-                //BitmapSlotMetadata(it.first, it.second, valueColor, margin)
-                TextSlotMetadata(it.first, it.second, valueColor, margin)
+                BitmapSlotMetadata(it.first, it.second, valueColor, margin)
+                //TextSlotMetadata(it.first, it.second, valueColor, margin)
             }.toMutableList()
     }
 

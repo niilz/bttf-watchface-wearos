@@ -105,6 +105,17 @@ class MapperUtil {
             }
         }
 
+        fun compliationDataToNumber(
+            complication: ComplicationData,
+        ): List<Int> {
+            // TODO: actually detemin the values
+            return when (complication) {
+                is NoDataComplicationData -> listOf(0, 0)
+                is ShortTextComplicationData -> listOf(4, 2)
+                else -> TODO()
+            }
+        }
+
         fun classNameToCamelCaseParts(name: String): List<String> {
             val upperCaseLetters = name.toCharArray().filter { it.isUpperCase() }
             val className = name.split('.').last()
