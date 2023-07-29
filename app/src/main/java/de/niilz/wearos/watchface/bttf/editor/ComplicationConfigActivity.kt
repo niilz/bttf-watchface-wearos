@@ -1,8 +1,9 @@
-package de.niilz.wearos.watchface.bttf
+package de.niilz.wearos.watchface.bttf.editor
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ class ComplicationConfigActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val myMod = Modifier
+            .background(color = Color.Black)
             .fillMaxWidth()
             .fillMaxSize()
         setContent {
