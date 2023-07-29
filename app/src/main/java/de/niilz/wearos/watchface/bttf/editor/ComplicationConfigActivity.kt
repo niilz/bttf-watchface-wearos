@@ -61,6 +61,9 @@ class ComplicationConfigActivity : ComponentActivity() {
         println("Clicked complication button")
 
         // TODO: have a state holder class
+        lifecycleScope.launch {
+            editorSession.openComplicationDataSourceChooser(42 + id)
+        }
         //state.setComplication(42 + id)
     }
 }
