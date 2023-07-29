@@ -13,7 +13,7 @@ import de.niilz.wearos.watchface.bttf.util.MapperUtil
 
 class DrawService(
     private val context: Context,
-    var numberBitmaps: List<Bitmap>,
+    private var numberBitmaps: List<Bitmap>,
     var canvas: Canvas?
 ) {
     // TODO: Do we really need both constructors?

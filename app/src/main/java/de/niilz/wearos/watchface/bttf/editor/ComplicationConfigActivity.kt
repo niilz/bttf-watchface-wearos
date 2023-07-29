@@ -13,12 +13,20 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.lifecycleScope
+import androidx.wear.watchface.editor.EditorSession
+import kotlinx.coroutines.launch
 
 class ComplicationConfigActivity : ComponentActivity() {
 
+    private lateinit var editorSession: EditorSession
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        lifecycleScope.launch {
+            editorSession =
+                EditorSession.createOnWatchEditorSession(this@ComplicationConfigActivity)
+        }
         /*
         lifecycleScope.launch(Dispatchers.Main.immediate) {
             state.complicationData.collect { complicationData ->

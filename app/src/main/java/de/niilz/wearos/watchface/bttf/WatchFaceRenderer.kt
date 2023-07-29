@@ -123,14 +123,26 @@ class WatchFaceRenderer(
         //println("*** drawSlots ***")
 
         val topRow1 = topLeftY + topBottomMargin
+        /*
         val bottomRow1 =
             drawRow1(dateTime, WatchFaceColors.NumberColorRow1, topRow1) + 3 * topBottomMargin
+         */
+        val bottomRow1 = drawRow2(
+            WatchFaceColors.NumberColorRow2,
+            topRow1,
+            complications
+        ) + 3 * topBottomMargin
         val bottomRow2 = drawRow2(
             WatchFaceColors.NumberColorRow2,
             bottomRow1,
             complications
         ) + 3 * topBottomMargin
-        val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2);
+        //val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2);
+        val bottomRow3 = drawRow2(
+            WatchFaceColors.NumberColorRow2,
+            bottomRow2,
+            complications
+        ) + 3 * topBottomMargin
     }
 
     private fun drawRow1(now: ZonedDateTime, valueColor: Int, startTop: Float): Float {
@@ -187,7 +199,7 @@ class WatchFaceRenderer(
 
         // Slightly hacky ;) Splitting BATT ERY into one bitmap- and one textslot
         val percentSign = TextSlotMetadata("ERY", "%", valueColor, 2 * margin)
-        complicationSlotDataList.add(1, percentSign)
+        //complicationSlotDataList.add(1, percentSign)
 
         return drawService.drawRow(
             leftStart,
@@ -205,6 +217,7 @@ class WatchFaceRenderer(
     ): MutableList<SlotMetadata> {
         return complications.asSequence()
             .map { it.complicationData.value }
+            .filter { it.dataSource != null }
             .map {
                 Pair(
                     it.dataSource!!.shortClassName,
