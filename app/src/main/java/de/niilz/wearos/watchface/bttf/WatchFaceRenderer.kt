@@ -53,9 +53,6 @@ class WatchFaceRenderer(
     private lateinit var backgroundBitmap: Bitmap
     private lateinit var numbers: List<Bitmap>
 
-    private val shadowRadius = resources.getDimension(R.dimen.shadow_radius)
-    private val numberWidth = resources.getDimension(R.dimen.number_width)
-    private val numberHeight = resources.getDimension(R.dimen.number_height)
     private val leftMarginScalar = resources.getDimension(R.dimen.top_margin_scalar)
     private val topMarginScalar = resources.getDimension(R.dimen.left_margin_scalar)
     private var initialNumberWidth = 0.0f
