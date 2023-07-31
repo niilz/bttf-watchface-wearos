@@ -227,7 +227,7 @@ class WatchFaceRenderer(
                         "LEFT",
                         MapperUtil.mapTwoDigitNumToInts(nums),
                         valueColor,
-                        margin
+                        margin * 2
                     )
                 } else {
                     TextSlotMetadata(label, it.second, valueColor, margin)
