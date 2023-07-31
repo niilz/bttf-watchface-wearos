@@ -20,6 +20,7 @@ import androidx.wear.watchface.style.CurrentUserStyleRepository
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.BitmapSlotMetadata
 import de.niilz.wearos.watchface.bttf.service.DrawService
+import de.niilz.wearos.watchface.bttf.service.MixedSlotMetadata
 import de.niilz.wearos.watchface.bttf.service.SlotMetadata
 import de.niilz.wearos.watchface.bttf.service.TextSlotMetadata
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
@@ -214,7 +215,20 @@ class WatchFaceRenderer(
                 val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
                 if (it.second.isDigitsOnly()) {
                     val nums = MapperUtil.mapTwoDigitNumToInts(it.second)
-                    BitmapSlotMetadata(label, nums, valueColor, margin)
+                    // TODO: Be smarter about the slot decision and construction (less code duplication)
+                    if (label == "BATTERY") {
+                        MixedSlotMetadata(label, nums, "%", valueColor, margin)
+                    } else {
+                        BitmapSlotMetadata(label, nums, valueColor, margin)
+                    }
+                } else if (label == "DATE") {
+                    val nums = it.second.split(" ").get(0)
+                    BitmapSlotMetadata(
+                        "LEFT",
+                        MapperUtil.mapTwoDigitNumToInts(nums),
+                        valueColor,
+                        margin
+                    )
                 } else {
                     TextSlotMetadata(label, it.second, valueColor, margin)
                 }

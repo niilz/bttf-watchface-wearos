@@ -16,3 +16,12 @@ class BitmapSlotMetadata(
 
 class TextSlotMetadata(labelText: String, val text: String, valueColor: Int, marginRight: Float) :
     SlotMetadata(labelText, valueColor, marginRight) {}
+
+class MixedSlotMetadata(
+    labelText: String,
+    val number: List<Int>,
+    val text: String,
+    valueColor: Int,
+    marginRight: Float
+) :
+    SlotMetadata(labelText, valueColor, marginRight) {}

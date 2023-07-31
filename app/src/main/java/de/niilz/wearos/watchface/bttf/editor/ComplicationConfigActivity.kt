@@ -53,6 +53,8 @@ class ComplicationConfigActivity : ComponentActivity() {
                 }
                 Button(onClick = { chooseComplication(2) }) {
                 }
+                Button(onClick = { chooseComplication(3) }) {
+                }
             }
         }
     }
