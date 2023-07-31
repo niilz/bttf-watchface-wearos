@@ -104,7 +104,13 @@ class WatchFaceRenderer(
             complicationSlotsManager.complicationSlots.map { (_, complication) -> complication }
                 .filter { it.enabled }
 
-        drawSlots(zonedDateTime, complications)
+        // NOTE: when we wait for the complicationdata to be available we have no
+        //  memory leaks (segfaults in libc) on the bitmap number data?
+        val complicationSlotsRow2 =
+            mapComplicationsToSlotMetadata(complications, WatchFaceColors.NumberColorRow2, 2 * gap)
+        if (complicationSlotsRow2.isNotEmpty()) {
+            drawSlots(zonedDateTime, complicationSlotsRow2)
+        }
     }
 
     override fun renderHighlightLayer(
@@ -116,30 +122,18 @@ class WatchFaceRenderer(
         println("TODO: Can render hightlight layer here")
     }
 
-    private fun drawSlots(dateTime: ZonedDateTime, complications: List<ComplicationSlot>) {
+    private fun drawSlots(dateTime: ZonedDateTime, complications: List<SlotMetadata>) {
         //println("*** drawSlots ***")
 
         val topRow1 = topLeftY + topBottomMargin
-        /*
         val bottomRow1 =
             drawRow1(dateTime, WatchFaceColors.NumberColorRow1, topRow1) + 3 * topBottomMargin
-         */
-        val bottomRow1 = drawRow2(
-            WatchFaceColors.NumberColorRow2,
-            topRow1,
-            complications
-        ) + 3 * topBottomMargin
         val bottomRow2 = drawRow2(
             WatchFaceColors.NumberColorRow2,
             bottomRow1,
             complications
         ) + 3 * topBottomMargin
-        //val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2);
-        val bottomRow3 = drawRow2(
-            WatchFaceColors.NumberColorRow2,
-            bottomRow2,
-            complications
-        ) + 3 * topBottomMargin
+        val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2);
     }
 
     private fun drawRow1(now: ZonedDateTime, valueColor: Int, startTop: Float): Float {
@@ -187,16 +181,12 @@ class WatchFaceRenderer(
         )
     }
 
-    fun drawRow2(valueColor: Int, startTop: Float, complications: List<ComplicationSlot>): Float {
-        val margin = 2 * gap
+    fun drawRow2(
+        valueColor: Int,
+        startTop: Float,
+        complicationSlotDataList: List<SlotMetadata>
+    ): Float {
         val leftStart = topLeftX + firstRowLeftMargin
-
-        val complicationSlotDataList =
-            mapComplicationsToSlotMetadata(complications, valueColor, margin)
-
-        // Slightly hacky ;) Splitting BATT ERY into one bitmap- and one textslot
-        val percentSign = TextSlotMetadata("ERY", "%", valueColor, 2 * margin)
-        //complicationSlotDataList.add(1, percentSign)
 
         return drawService.drawRow(
             leftStart,
