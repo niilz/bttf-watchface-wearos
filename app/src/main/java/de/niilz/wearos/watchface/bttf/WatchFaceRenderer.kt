@@ -147,32 +147,33 @@ class WatchFaceRenderer(
             "MONTH",
             valueColor,
             margin,
-            TextVal(now.month.toString().substring(0, 3)),
+            listOf(
+                TextVal(now.month.toString().substring(0, 3))
+            )
         )
 
         // Day Slot
-        val dayNums =
-            MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
+        val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth).map { NumVal(it) }
         val daySlotData =
-            SlotMetadata("DAY", valueColor, margin, NumVal(dayNums))
+            SlotMetadata("DAY", valueColor, margin, dayNums)
 
         // Year Slot
-        val yearNums = MapperUtil.mapYearToInts(now.year)
+        val yearNums = MapperUtil.mapYearToInts(now.year).map { NumVal(it) }
         val yearSlotData =
-            SlotMetadata("YEAR", valueColor, margin, NumVal(yearNums))
+            SlotMetadata("YEAR", valueColor, margin, yearNums)
 
         // Hour Slot
-        val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
+        val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour).map { NumVal(it) }
         val hourSlotData =
-            SlotMetadata("HOUR", valueColor, 2 * margin, NumVal(hourNums))
+            SlotMetadata("HOUR", valueColor, 2 * margin, hourNums)
 
         // TODO: Draw am-pm dots (Dot-Slot / drwable Item)
 
         // Minute Slot
         val minuteNums =
-            MapperUtil.mapTwoDigitNumToInts(now.minute)
+            MapperUtil.mapTwoDigitNumToInts(now.minute).map { NumVal(it) }
         val minuteSlotData =
-            SlotMetadata("MIN", valueColor, 0f, NumVal(minuteNums))
+            SlotMetadata("MIN", valueColor, 0f, minuteNums)
 
         return drawService.drawRow(
             leftStart,
@@ -214,14 +215,14 @@ class WatchFaceRenderer(
                 )
             }.map {
                 val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
-                val valueParts = it.second.split(" ")
-                SlotMetadata(label, valueColor, margin, *valueParts.map { slotVal ->
+                val slotVals = it.second.split(Regex("[:,; ]"))
+                SlotMetadata(label, valueColor, margin, slotVals.flatMap { slotVal ->
                     if (slotVal.isDigitsOnly()) {
-                        NumVal(MapperUtil.mapDigitsToInts(slotVal))
+                        MapperUtil.mapDigitsToInts(slotVal).map { NumVal(it) }
                     } else {
-                        TextVal(slotVal)
+                        listOf(TextVal(slotVal))
                     }
-                }.toTypedArray())
+                })
             }.toMutableList()
     }
 

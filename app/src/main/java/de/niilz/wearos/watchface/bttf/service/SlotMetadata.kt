@@ -4,11 +4,11 @@ class SlotMetadata(
     val labelText: String,
     val valueColor: Int,
     val marginRight: Float,
-    vararg val slotValues: SlotValue
+    val slotValues: List<SlotValue>
 ) {}
 
 open class SlotValue()
 
-data class NumVal(val numbers: List<Int>) : SlotValue()
+data class NumVal(val num: Int) : SlotValue()
 
 data class TextVal(val text: String) : SlotValue()

@@ -107,12 +107,13 @@ class DrawService(
         val color = slotMetadata.valueColor
         return slotMetadata.slotValues.map {
             when (it) {
-                is NumVal -> MapperUtil.numberToDrawable(
-                    it.number,
-                    numberBitmaps,
-                    numberBitmaps[8],
-                    color
-                )
+                is NumVal ->
+                    MapperUtil.numberToDrawable(
+                        it.num,
+                        numberBitmaps,
+                        numberBitmaps[8],
+                        color
+                    )
 
                 is TextVal ->
                     DrawableText(
@@ -124,7 +125,7 @@ class DrawService(
 
                 else -> throw IllegalStateException("Unsupported SlotValue-type: $it")
             }
-        }.toList()
+        }
     }
 
     private fun getCharWidth(): Float {
