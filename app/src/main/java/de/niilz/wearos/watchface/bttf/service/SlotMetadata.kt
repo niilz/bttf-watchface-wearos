@@ -1,27 +1,14 @@
 package de.niilz.wearos.watchface.bttf.service
 
-open class SlotMetadata(
+class SlotMetadata(
     val labelText: String,
     val valueColor: Int,
     val marginRight: Float,
+    vararg val slotValues: SlotValue
 ) {}
 
-class BitmapSlotMetadata(
-    labelText: String,
-    val numbers: List<Int>,
-    valueColor: Int,
-    marginRight: Float
-) :
-    SlotMetadata(labelText, valueColor, marginRight) {}
+open class SlotValue()
 
-class TextSlotMetadata(labelText: String, val text: String, valueColor: Int, marginRight: Float) :
-    SlotMetadata(labelText, valueColor, marginRight) {}
+data class NumVal(val numbers: List<Int>) : SlotValue()
 
-class MixedSlotMetadata(
-    labelText: String,
-    val number: List<Int>,
-    val text: String,
-    valueColor: Int,
-    marginRight: Float
-) :
-    SlotMetadata(labelText, valueColor, marginRight) {}
+data class TextVal(val text: String) : SlotValue()

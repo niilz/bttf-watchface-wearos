@@ -8,23 +8,19 @@ import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
 import de.niilz.wearos.watchface.bttf.drawable.DrawableNumber
 import java.time.Instant
-import java.time.LocalDate
 import kotlin.math.cos
 import kotlin.math.sin
 
 
 class MapperUtil {
     companion object Mappers {
-        fun mapLocalDate(date: LocalDate): List<Int> {
-            return date.toString().replace("-", "").toCharArray().map { it.digitToInt() }.toList()
-        }
 
         fun mapTwoDigitNumToInts(number: Int): List<Int> {
             return mapToNumberList(number, 2)
         }
 
-        fun mapTwoDigitNumToInts(number: String): List<Int> {
-            return mapToNumberList(number, 2)
+        fun mapDigitsToInts(number: String): List<Int> {
+            return mapToNumberList(number, number.length)
         }
 
         fun mapYearToInts(number: Int): List<Int> {
@@ -82,15 +78,13 @@ class MapperUtil {
             return targetSize / itemSize
         }
 
-        fun numbersToDrawables(
-            numbersRaw: List<Int>,
+        fun numberToDrawable(
+            number: Int,
             numberBitmaps: List<Bitmap>,
             backgroundBitmap: Bitmap,
             valueColor: Int,
-        ): List<DrawableItem> {
-            return numbersRaw
-                .map { numberBitmaps[it] }
-                .map { DrawableNumber(it, backgroundBitmap, valueColor) }
+        ): DrawableItem {
+            return DrawableNumber(numberBitmaps[number], backgroundBitmap, valueColor)
         }
 
         fun complicationDataValueToString(

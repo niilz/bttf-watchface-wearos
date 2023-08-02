@@ -18,11 +18,10 @@ import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
-import de.niilz.wearos.watchface.bttf.service.BitmapSlotMetadata
 import de.niilz.wearos.watchface.bttf.service.DrawService
-import de.niilz.wearos.watchface.bttf.service.MixedSlotMetadata
+import de.niilz.wearos.watchface.bttf.service.NumVal
 import de.niilz.wearos.watchface.bttf.service.SlotMetadata
-import de.niilz.wearos.watchface.bttf.service.TextSlotMetadata
+import de.niilz.wearos.watchface.bttf.service.TextVal
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
 import java.time.ZonedDateTime
@@ -144,34 +143,36 @@ class WatchFaceRenderer(
         val margin = 2 * gap
 
         // Month-Name Slot
-        val monthSlotData = TextSlotMetadata(
+        val monthSlotData = SlotMetadata(
             "MONTH",
-            now.month.toString().substring(0, 3),
             valueColor,
-            margin
+            margin,
+            TextVal(now.month.toString().substring(0, 3)),
         )
 
         // Day Slot
-        val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
+        val dayNums =
+            MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth)
         val daySlotData =
-            BitmapSlotMetadata("DAY", dayNums, valueColor, margin)
+            SlotMetadata("DAY", valueColor, margin, NumVal(dayNums))
 
         // Year Slot
         val yearNums = MapperUtil.mapYearToInts(now.year)
         val yearSlotData =
-            BitmapSlotMetadata("YEAR", yearNums, valueColor, margin)
+            SlotMetadata("YEAR", valueColor, margin, NumVal(yearNums))
 
         // Hour Slot
         val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour)
         val hourSlotData =
-            BitmapSlotMetadata("HOUR", hourNums, valueColor, 2 * margin)
+            SlotMetadata("HOUR", valueColor, 2 * margin, NumVal(hourNums))
 
         // TODO: Draw am-pm dots (Dot-Slot / drwable Item)
 
         // Minute Slot
-        val minuteNums = MapperUtil.mapTwoDigitNumToInts(now.minute)
+        val minuteNums =
+            MapperUtil.mapTwoDigitNumToInts(now.minute)
         val minuteSlotData =
-            BitmapSlotMetadata("MIN", minuteNums, valueColor, 0f)
+            SlotMetadata("MIN", valueColor, 0f, NumVal(minuteNums))
 
         return drawService.drawRow(
             leftStart,
@@ -213,25 +214,14 @@ class WatchFaceRenderer(
                 )
             }.map {
                 val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
-                if (it.second.isDigitsOnly()) {
-                    val nums = MapperUtil.mapTwoDigitNumToInts(it.second)
-                    // TODO: Be smarter about the slot decision and construction (less code duplication)
-                    if (label == "BATTERY") {
-                        MixedSlotMetadata(label, nums, "%", valueColor, margin)
+                val valueParts = it.second.split(" ")
+                SlotMetadata(label, valueColor, margin, *valueParts.map { slotVal ->
+                    if (slotVal.isDigitsOnly()) {
+                        NumVal(MapperUtil.mapDigitsToInts(slotVal))
                     } else {
-                        BitmapSlotMetadata(label, nums, valueColor, margin)
+                        TextVal(slotVal)
                     }
-                } else if (label == "DATE") {
-                    val nums = it.second.split(" ").get(0)
-                    BitmapSlotMetadata(
-                        "LEFT",
-                        MapperUtil.mapTwoDigitNumToInts(nums),
-                        valueColor,
-                        margin * 2
-                    )
-                } else {
-                    TextSlotMetadata(label, it.second, valueColor, margin)
-                }
+                }.toTypedArray())
             }.toMutableList()
     }
 

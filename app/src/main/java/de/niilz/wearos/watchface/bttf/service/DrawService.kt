@@ -62,13 +62,9 @@ class DrawService(
         backgroundColor: Int,
     ): Pair<Float, Float> {
         var currentLeft = leftStart
-        val itemToDraw = when (slotData) {
-            is BitmapSlotMetadata -> createBitmapSlot(slotData)
-            is TextSlotMetadata -> createTextSlot(slotData)
-            is MixedSlotMetadata -> createMixedSlot(slotData)
-            else -> throw UnsupportedOperationException("Slot-Type not supported")
-        }
+        val itemToDraw = createDrawableItems(slotData)
         val label = DrawableLabel(slotData.labelText, LABEL_SIZE)
+
         val drawableSlot = DrawableSlot(
             context,
             itemToDraw,
@@ -107,46 +103,28 @@ class DrawService(
             }
     }
 
-    private fun createBitmapSlot(slotMetadata: BitmapSlotMetadata): List<DrawableItem> {
-        return slotMetadata.numbers.let {
-            MapperUtil.numbersToDrawables(
-                it,
-                numberBitmaps,
-                numberBitmaps[8],
-                slotMetadata.valueColor,
-            )
-        }
-    }
+    private fun createDrawableItems(slotMetadata: SlotMetadata): List<DrawableItem> {
+        val color = slotMetadata.valueColor
+        return slotMetadata.slotValues.map {
+            when (it) {
+                is NumVal -> MapperUtil.numberToDrawable(
+                    it.number,
+                    numberBitmaps,
+                    numberBitmaps[8],
+                    color
+                )
 
-    private fun createTextSlot(slotMetadata: TextSlotMetadata): List<DrawableItem> {
-        return listOf(
-            DrawableText(
-                slotMetadata.text,
-                getCharHeight(),
-                getCharWidth(),
-                slotMetadata.valueColor,
-            )
-        )
-    }
+                is TextVal ->
+                    DrawableText(
+                        it.text,
+                        getCharHeight(),
+                        getCharWidth(),
+                        slotMetadata.valueColor,
+                    )
 
-    private fun createMixedSlot(slotMetadata: MixedSlotMetadata): List<DrawableItem> {
-        val mixedSlots = slotMetadata.number.let {
-            MapperUtil.numbersToDrawables(
-                it,
-                numberBitmaps,
-                numberBitmaps[8],
-                slotMetadata.valueColor
-            ).toMutableList()
-        }
-        mixedSlots.add(
-            DrawableText(
-                slotMetadata.text,
-                getCharHeight(),
-                getCharWidth(),
-                slotMetadata.valueColor,
-            )
-        )
-        return mixedSlots
+                else -> throw IllegalStateException("Unsupported SlotValue-type: $it")
+            }
+        }.toList()
     }
 
     private fun getCharWidth(): Float {
