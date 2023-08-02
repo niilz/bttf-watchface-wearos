@@ -64,7 +64,7 @@ class DrawableSlot(
     }
 
     private fun calcSlotWidth(): Float {
-        val totalWidthOfItems = items.size * items[0].getWidth()
+        val totalWidthOfItems = items.map { it.getWidth() }.sum()
         val totalGapBetweenItems = ((items.size - 1) * gap)
         val paddingLeftAndRight = 2 * padding
         return totalWidthOfItems + totalGapBetweenItems + paddingLeftAndRight

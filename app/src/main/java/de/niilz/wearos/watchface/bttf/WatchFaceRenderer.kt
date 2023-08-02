@@ -216,6 +216,9 @@ class WatchFaceRenderer(
             }.map {
                 val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
                 val slotVals = it.second.split(Regex("[:,; ]"))
+                for (value in slotVals) {
+                    println("value: $value")
+                }
                 SlotMetadata(label, valueColor, margin, slotVals.flatMap { slotVal ->
                     if (slotVal.isDigitsOnly()) {
                         MapperUtil.mapDigitsToInts(slotVal).map { NumVal(it) }
