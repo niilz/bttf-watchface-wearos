@@ -215,16 +215,26 @@ class WatchFaceRenderer(
                 )
             }.map {
                 val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
-                val slotVals = it.second.split(Regex("[:,; ]"))
-                for (value in slotVals) {
-                    println("value: $value")
-                }
-                SlotMetadata(label, valueColor, margin, slotVals.flatMap { slotVal ->
-                    if (slotVal.isDigitsOnly()) {
-                        MapperUtil.mapDigitsToInts(slotVal).map { NumVal(it) }
+                // TODO: Figure out how to split on ":" (colon) and between number an AM (e.g. 8:15PM)
+                //   but still keeping the spaces and special characters and also having all numbers as
+                //   digital numbers
+                val numberMatcher = Regex("[,;: ]")
+                val separators =
+                    numberMatcher.findAll(it.second).map { m -> m.value }.toMutableList()
+                println("separators: $separators")
+                val values = it.second.split(numberMatcher)
+                println("values: $values")
+                SlotMetadata(label, valueColor, margin, values.flatMap { slotVal ->
+                    val vals = if (slotVal.isDigitsOnly()) {
+                        MapperUtil.mapDigitsToInts(slotVal).map { num -> NumVal(num) }
                     } else {
                         listOf(TextVal(slotVal))
                     }
+                    // FIXME: This seems not to add the separator at (also it would not necessarily be in the right place
+                    if (separators.isNotEmpty()) {
+                        vals.plus(TextVal(separators.removeFirst()))
+                    }
+                    vals
                 })
             }.toMutableList()
     }
