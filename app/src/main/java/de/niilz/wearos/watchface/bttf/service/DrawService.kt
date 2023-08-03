@@ -62,12 +62,12 @@ class DrawService(
         backgroundColor: Int,
     ): Pair<Float, Float> {
         var currentLeft = leftStart
-        val itemToDraw = createDrawableItems(slotData)
+        val itemsToDraw = createDrawableItems(slotData)
         val label = DrawableLabel(slotData.labelText, LABEL_SIZE)
 
         val drawableSlot = DrawableSlot(
             context,
-            itemToDraw,
+            itemsToDraw,
             label,
             currentLeft,
             topStart,
