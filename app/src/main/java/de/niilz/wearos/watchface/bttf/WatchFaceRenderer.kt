@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.text.isDigitsOnly
 import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.Renderer
@@ -21,6 +20,7 @@ import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.DrawService
 import de.niilz.wearos.watchface.bttf.service.NumVal
 import de.niilz.wearos.watchface.bttf.service.SlotMetadata
+import de.niilz.wearos.watchface.bttf.service.SlotValue
 import de.niilz.wearos.watchface.bttf.service.TextVal
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
@@ -204,7 +204,7 @@ class WatchFaceRenderer(
         complications: List<ComplicationSlot>,
         valueColor: Int,
         margin: Float
-    ): MutableList<SlotMetadata> {
+    ): List<SlotMetadata> {
         return complications.asSequence()
             .map { it.complicationData.value }
             .filter { it.dataSource != null }
@@ -215,28 +215,9 @@ class WatchFaceRenderer(
                 )
             }.map {
                 val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
-                // TODO: Figure out how to split on ":" (colon) and between number an AM (e.g. 8:15PM)
-                //   but still keeping the spaces and special characters and also having all numbers as
-                //   digital numbers
-                val numberMatcher = Regex("[,;: ]")
-                val separators =
-                    numberMatcher.findAll(it.second).map { m -> m.value }.toMutableList()
-                println("separators: $separators")
-                val values = it.second.split(numberMatcher)
-                println("values: $values")
-                SlotMetadata(label, valueColor, margin, values.flatMap { slotVal ->
-                    val vals = if (slotVal.isDigitsOnly()) {
-                        MapperUtil.mapDigitsToInts(slotVal).map { num -> NumVal(num) }
-                    } else {
-                        listOf(TextVal(slotVal))
-                    }
-                    // FIXME: This seems not to add the separator at (also it would not necessarily be in the right place
-                    if (separators.isNotEmpty()) {
-                        vals.plus(TextVal(separators.removeFirst()))
-                    }
-                    vals
-                })
-            }.toMutableList()
+                val slotValues = parseNumbersAndTexts(it.second)
+                SlotMetadata(label, valueColor, margin, slotValues)
+            }.toList()
     }
 
     fun drawRow3(now: ZonedDateTime, valueColor: Int, bottomRow2: Float): Float {
@@ -249,6 +230,40 @@ class WatchFaceRenderer(
         canvas.drawBitmap(backgroundBitmap, topLeftX, topLeftY, null)
         //println("*** end drawBackground ***")
     }
+
+    private fun parseNumbersAndTexts(slotValue: String): List<SlotValue> {
+        val slotValues = mutableListOf<SlotValue>()
+        var tempNumbers = mutableListOf<Int>()
+        var tempTexts = mutableListOf<Char>()
+        var parsingNums = false
+        for (char in slotValue) {
+            if (char.isDigit()) {
+                if (!parsingNums && tempTexts.isNotEmpty()) {
+                    slotValues.add(TextVal(tempTexts.joinToString("")))
+                    tempTexts = mutableListOf()
+                }
+                parsingNums = true
+                tempNumbers.add(char.digitToInt())
+            } else {
+                if (parsingNums && tempNumbers.isNotEmpty()) {
+                    slotValues.addAll(tempNumbers.map { num -> NumVal(num) })
+                    tempNumbers = mutableListOf()
+                }
+                parsingNums = false
+                tempTexts.add(char)
+            }
+        }
+        if (tempNumbers.isNotEmpty()) {
+            assert(parsingNums)
+            slotValues.addAll(tempNumbers.map { num -> NumVal(num) })
+        }
+        if (tempTexts.isNotEmpty()) {
+            assert(!parsingNums)
+            slotValues.add(TextVal(tempTexts.joinToString("")))
+        }
+        return slotValues
+    }
+
 
     fun initializeValues(
         width: Int,

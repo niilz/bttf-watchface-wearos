@@ -30,7 +30,6 @@ class BttfWatchface : WatchFaceService() {
             CanvasComplicationFactory { watchState, listener ->
                 CanvasComplicationDrawable(defaultCompicationDrawable, watchState, listener)
             }
-        // TODO: map from 0 to 4 and set a default value
         val complicationSlots = (0..3).map { i ->
             val complicationDrawable = ComplicationDrawable(applicationContext)
             complicationDrawable.noDataText = "Ooops"
