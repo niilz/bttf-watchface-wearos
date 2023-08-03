@@ -240,6 +240,8 @@ class WatchFaceRenderer(
         var tempTexts = mutableListOf<Char>()
         var parsingNums = false
         for (char in slotValue.trim()) {
+            // TODO: Display degree sign correctly
+            if (char == '°') continue
             if (char.isDigit()) {
                 if (!parsingNums && tempTexts.isNotEmpty()) {
                     slotValues.add(TextVal(tempTexts.joinToString("")))
