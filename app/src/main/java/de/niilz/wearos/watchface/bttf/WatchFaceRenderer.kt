@@ -216,7 +216,7 @@ class WatchFaceRenderer(
             }.map {
                 val label = MapperUtil.classNameToCamelCaseParts(it.first).first().uppercase()
                 val slotValues = parseNumbersAndTexts(it.second).toMutableList()
-                if (label == "BATTERY" && slotValues.last() != TextVal("%")) {
+                if (label == "BATTERY" && (slotValues.last() as? TextVal)?.text?.endsWith("%") == true) {
                     slotValues.add(TextVal("%"))
                 }
                 SlotMetadata(label, valueColor, margin, slotValues)
