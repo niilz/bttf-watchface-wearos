@@ -60,7 +60,7 @@ dependencies {
     implementation("androidx.wear.watchface:watchface-complications-rendering:1.1.1")
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.05.01")
+    val composeBom = platform("androidx.compose:compose-bom:2023.06.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation("androidx.compose.material3:material3")
@@ -70,7 +70,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Test
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
