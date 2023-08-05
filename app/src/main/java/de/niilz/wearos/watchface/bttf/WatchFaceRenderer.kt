@@ -219,10 +219,11 @@ class WatchFaceRenderer(
                 if (label == "BATTERY") {
                     val lastVal = slotValues.last() as? TextVal
                     if (lastVal?.text?.endsWith('%') == true) {
-                        // do nothing
-                    } else {
+                        // Get rid of the text-version of the percent sign if the value contains one
+                        slotValues.removeLast()
                         slotValues.add(TextVal("%"))
                     }
+                    slotValues.add(TextVal("%"))
                 }
                 SlotMetadata(label, valueColor, margin, slotValues)
             }.toList()
