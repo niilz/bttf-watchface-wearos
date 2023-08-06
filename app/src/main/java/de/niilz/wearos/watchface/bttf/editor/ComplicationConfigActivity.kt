@@ -1,5 +1,7 @@
 package de.niilz.wearos.watchface.bttf.editor
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,6 +28,12 @@ class ComplicationConfigActivity : ComponentActivity() {
         lifecycleScope.launch {
             editorSession =
                 EditorSession.createOnWatchEditorSession(this@ComplicationConfigActivity)
+
+            val hasHeartRatePermission =
+                checkSelfPermission(Manifest.permission.BODY_SENSORS) == PackageManager.PERMISSION_GRANTED
+            if (!hasHeartRatePermission) {
+                requestPermissions(arrayOf(Manifest.permission.BODY_SENSORS), 1)
+            }
         }
         /*
         lifecycleScope.launch(Dispatchers.Main.immediate) {
