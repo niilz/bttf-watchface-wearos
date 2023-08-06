@@ -2,6 +2,12 @@ package de.niilz.wearos.watchface.bttf
 
 import android.graphics.RectF
 import android.view.SurfaceHolder
+import androidx.health.services.client.HealthServices
+import androidx.health.services.client.PassiveListenerCallback
+import androidx.health.services.client.data.DataPointContainer
+import androidx.health.services.client.data.DataType
+import androidx.health.services.client.data.PassiveListenerConfig
+import androidx.health.services.client.getCapabilities
 import androidx.wear.watchface.CanvasComplicationFactory
 import androidx.wear.watchface.CanvasType
 import androidx.wear.watchface.ComplicationSlot
@@ -53,6 +59,44 @@ class BttfWatchface : WatchFaceService() {
         complicationSlotsManager: ComplicationSlotsManager,
         currentUserStyleRepository: CurrentUserStyleRepository
     ): WatchFace {
+
+        val healthClient = HealthServices.getClient(applicationContext)
+        val passiveMonitoringClient = healthClient.passiveMonitoringClient
+        println("### Setup passiveMonitoringClient: $passiveMonitoringClient")
+
+        val capabilities = passiveMonitoringClient.getCapabilities()
+
+        val supportsHeartRate =
+            capabilities.supportedDataTypesPassiveMonitoring.contains(DataType.HEART_RATE_BPM)
+        if (supportsHeartRate) {
+            println("### SUPPORTS HeartRate")
+        } else {
+            println("### DOES NOT support HeartRate")
+        }
+        //println ("### Setup capabilities: $capabilities")
+        capabilities.supportedDataTypesPassiveMonitoring.forEach {
+            println { "### CAPABILITY $it" }
+        }
+
+        val dataConfig = PassiveListenerConfig.builder()
+            .setDataTypes(setOf(DataType.HEART_RATE_BPM))
+            .build()
+        println("### Setup dataConfig: $dataConfig")
+
+        val listenerCallback = object : PassiveListenerCallback {
+            override fun onNewDataPointsReceived(dataPoints: DataPointContainer) {
+                val heartRates = dataPoints.getData(DataType.HEART_RATE_BPM)
+                for (heartRate in heartRates) {
+                    println("### HeartRate: ${heartRate.value}")
+                }
+            }
+        }
+
+        println("### Setup listenerCallback: $listenerCallback")
+
+
+        passiveMonitoringClient.setPassiveListenerCallback(dataConfig, listenerCallback)
+
 
         val renderer = WatchFaceRenderer(
             applicationContext,
