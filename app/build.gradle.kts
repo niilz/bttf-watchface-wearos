@@ -72,6 +72,7 @@ dependencies {
     // Health
     implementation("androidx.health:health-services-client:1.0.0-rc01")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-core:1.0.0")
 
     // Test
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
