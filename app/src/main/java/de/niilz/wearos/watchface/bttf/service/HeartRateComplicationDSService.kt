@@ -1,10 +1,12 @@
 package de.niilz.wearos.watchface.bttf.service
 
+import android.content.ComponentName
 import android.util.Log
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import de.niilz.wearos.watchface.bttf.TAG
@@ -17,10 +19,14 @@ class HeartRateComplicationDSService : SuspendingComplicationDataSourceService()
     }
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+        //val thisDataSource = ComponentName(this, javaClass)
+        //val complicationPendingIntent = HeartRateChangeBroadcastReceiver.getUpdateIntent(this, thisDataSource, request.complicationInstanceId)
+
         val heartBeat: Int = applicationContext.dataStore.data.map { preferences ->
             preferences[HEART_RATE_PREF_KEY] ?: 0
         }.first()
 
+        Log.i(TAG, "Collected hearbeat from datastore: $heartBeat")
         val heartBeatText = "$heartBeat"
 
         return when (request.complicationType) {
