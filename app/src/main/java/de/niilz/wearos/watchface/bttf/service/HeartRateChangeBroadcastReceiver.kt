@@ -1,5 +1,6 @@
 package de.niilz.wearos.watchface.bttf.service
 
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
@@ -8,6 +9,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.datastore.preferences.core.edit
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
+import androidx.wear.watchface.editor.ChosenComplicationDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -15,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+/*
 class HeartRateChangeBroadcastReceiver() : BroadcastReceiver() {
 
   @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -22,7 +25,7 @@ class HeartRateChangeBroadcastReceiver() : BroadcastReceiver() {
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     val extras = intent.extras ?: return
-    val dataSource = extras.getParcelable<ComponentName>(EXTRA_HEART_BEAT_DATASOURCE_COMPONENT, ComponentName::class.java) ?: return
+    val dataSource = extras.getParcelable(EXTRA_HEART_BEAT_DATASOURCE_COMPONENT, ComponentName::class.java) ?: return
     val complicationId = extras.getInt(EXTRA_HEART_BEAT_DATASOURCE_ID)
 
     val result = goAsync()
@@ -45,6 +48,15 @@ class HeartRateChangeBroadcastReceiver() : BroadcastReceiver() {
   companion object {
     private const val EXTRA_HEART_BEAT_DATASOURCE_COMPONENT = "de.niilz.wearos.watchface.bttf.heartbeat.DATASOURCE_COMPONENT"
     private const val EXTRA_HEART_BEAT_DATASOURCE_ID = "de.niilz.wearos.watchface.bttf.heartbeat.COMPLICATION_ID"
+
+    fun getUpdateIntent(context: Context, dataSource: ComponentName, complicationId: Int) : PendingIntent {
+      val intent = Intent(context, HeartRateChangeBroadcastReceiver::class.java)
+      intent.putExtra(EXTRA_HEART_BEAT_DATASOURCE_COMPONENT, dataSource)
+      intent.putExtra(EXTRA_HEART_BEAT_DATASOURCE_ID, complicationId)
+
+      return PendingIntent.getBroadcast(context, complicationId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+    }
   }
 
 }
+ */
