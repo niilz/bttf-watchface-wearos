@@ -7,10 +7,6 @@ X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 y
 Iapp/src/main/java/de/niilz/wearos/watchface/bttf/drawable/DrawableItem.kt,0\f\0f5ec642668dcb53fbd773450a30c60bd20e7111
-|
-Lapp/src/main/java/de/niilz/wearos/watchface/bttf/service/HeartBeatService.kt,6\4\640c58625c7ddce612cfb697dc58c3264f727a9b
-u
-Eapp/src/main/java/de/niilz/wearos/watchface/bttf/WatchFaceRenderer.kt,f\a\fa89d8dda7854d218d280f6d74292342f20add77
 @
 build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d
 y
@@ -19,5 +15,19 @@ y
 Iapp/src/main/java/de/niilz/wearos/watchface/bttf/drawable/DrawableSlot.kt,8\d\8d8a5a267d4daebdc66d1e8b5fe9019e88775073
 w
 Gapp/src/main/java/de/niilz/wearos/watchface/bttf/service/DrawService.kt,7\8\78428fa8d56f5489a63beadd906b3202c21fb0d4
+D
+app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+u
+Eapp/src/main/java/de/niilz/wearos/watchface/bttf/WatchFaceRenderer.kt,f\a\fa89d8dda7854d218d280f6d74292342f20add77
 q
 Aapp/src/main/java/de/niilz/wearos/watchface/bttf/BttfWatchface.kt,e\7\e770d27ba7403f4e73b2cd46953dd5d25ff3ef69
+Š
+Zapp/src/main/java/de/niilz/wearos/watchface/bttf/service/HeartRateComplicationDataStore.kt,8\f\8f0c17d574bf2cff63c8fabfaf6ee0adb1d5c982
+Š
+Zapp/src/main/java/de/niilz/wearos/watchface/bttf/service/HeartRateComplicationDSService.kt,e\4\e41577bb8eafe099c78f45e7d50c271a4bc5c0be
+Œ
+\app/src/main/java/de/niilz/wearos/watchface/bttf/service/HeartRateChangeBroadcastReceiver.kt,a\9\a9f03e012cf98016fcab0a0f924944c7e69482b0
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+|
+Lapp/src/main/java/de/niilz/wearos/watchface/bttf/service/HeartBeatService.kt,6\4\640c58625c7ddce612cfb697dc58c3264f727a9b
