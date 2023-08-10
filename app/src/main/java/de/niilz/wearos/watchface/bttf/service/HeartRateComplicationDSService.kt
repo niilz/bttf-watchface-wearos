@@ -15,18 +15,17 @@ import kotlinx.coroutines.flow.map
 
 class HeartRateComplicationDSService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData? {
-        TODO("Not yet implemented")
+        Log.w(TAG, "TODO: Render Preview Here")
+        return null
     }
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
-        //val thisDataSource = ComponentName(this, javaClass)
-        //val complicationPendingIntent = HeartRateChangeBroadcastReceiver.getUpdateIntent(this, thisDataSource, request.complicationInstanceId)
 
         val heartBeat: Int = applicationContext.dataStore.data.map { preferences ->
             preferences[HEART_RATE_PREF_KEY] ?: 0
         }.first()
 
-        Log.i(TAG, "Collected hearbeat from datastore: $heartBeat")
+        Log.d(TAG, "Collected hearbeat from datastore: $heartBeat")
         val heartBeatText = "$heartBeat"
 
         return when (request.complicationType) {

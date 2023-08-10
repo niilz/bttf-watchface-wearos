@@ -56,7 +56,6 @@
         </service>
 
         <!-- DataSource for HeartRate -->
-        <!--
         <service
             android:name=".service.HeartRateComplicationDSService"
             android:exported="true"
@@ -68,12 +67,11 @@
             <meta-data
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
                 android:value="SHORT_TEXT" />
-            0 means do not poll for data every X seconds, but instead get pushed when new data is available in datasource
+            <!-- 0 means do not poll for data every X seconds, but instead get pushed when new data is available in datasource -->
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="0" />
+                android:value="1" />
         </service>
-        -->
 
         <!-- Configuration Activity to modify watchface -->
         <activity

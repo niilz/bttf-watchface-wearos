@@ -28,17 +28,16 @@ class HeartBeatService(context: Context) {
         val listenerCallback = object : PassiveListenerCallback {
             override fun onNewDataPointsReceived(dataPoints: DataPointContainer) {
                 val heartRates = dataPoints.getData(DataType.HEART_RATE_BPM)
+                scope.launch {
                     for (heartRate in heartRates) {
-                        //Log.i(TAG, "HeartRate: ${preferences[HEART_RATE_PREF_KEY]}")
-                        Log.i(TAG, "HeartRate: ${heartRate.value}")
-                        /*
                         context.dataStore.edit { preferences ->
                             preferences[HEART_RATE_PREF_KEY] = heartRate.value.toInt()
+                            Log.d(TAG, "Current HeartRate: ${preferences[HEART_RATE_PREF_KEY]}")
                         }
-                         */
                     }
                 }
             }
+        }
         passiveMonitoringClient.setPassiveListenerCallback(dataConfig, listenerCallback)
     }
 
