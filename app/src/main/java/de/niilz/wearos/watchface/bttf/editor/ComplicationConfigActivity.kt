@@ -3,6 +3,7 @@ package de.niilz.wearos.watchface.bttf.editor
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.watchface.editor.EditorSession
+import de.niilz.wearos.watchface.bttf.TAG
 import kotlinx.coroutines.launch
 
 class ComplicationConfigActivity : ComponentActivity() {
@@ -68,12 +70,11 @@ class ComplicationConfigActivity : ComponentActivity() {
     }
 
     private fun chooseComplication(id: Int) {
-        println("Clicked complication button")
+        Log.i(TAG, "Selected Complication, ID: $id")
 
         // TODO: have a state holder class
         lifecycleScope.launch {
             editorSession.openComplicationDataSourceChooser(42 + id)
         }
-        //state.setComplication(42 + id)
     }
 }
