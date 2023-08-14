@@ -7,11 +7,17 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -21,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.watchface.editor.EditorSession
 import de.niilz.wearos.watchface.bttf.TAG
@@ -65,14 +72,14 @@ fun complicationSelectRow(chooseComplication: (Int) -> Unit, ids: List<Int>) {
         .fillMaxWidth()
         .fillMaxSize()
 
-    Column(
+   Column(
         modifier = myMod,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Chose Complications", color = Color.White)
-        Row {
-            for (id in ids) {
+        LazyRow {
+            items(ids) { id ->
                 complicationChooserButton(selectComplicationHandler = chooseComplication, id = id)
             }
         }
@@ -81,8 +88,9 @@ fun complicationSelectRow(chooseComplication: (Int) -> Unit, ids: List<Int>) {
 
 @Composable
 fun complicationChooserButton(selectComplicationHandler: (Int) -> Unit, id: Int) {
+    val buttonModifier = Modifier.width(50.dp)
     val buttonColors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
-    Button(onClick = { selectComplicationHandler(id) }, colors = buttonColors) {}
+    Button(onClick = { selectComplicationHandler(id) }, modifier = buttonModifier, colors = buttonColors) {}
 }
 
 
@@ -90,5 +98,5 @@ fun complicationChooserButton(selectComplicationHandler: (Int) -> Unit, id: Int)
 @Composable
 fun preview() {
     val dummyCallback: (Int) -> Unit = { id -> println("The ID is: $id") }
-    complicationSelectRow(dummyCallback, listOf(0, 1, 2, 3))
+    complicationSelectRow(dummyCallback, listOf(0, 1, 2, 3, 4, 5, 6))
 }
