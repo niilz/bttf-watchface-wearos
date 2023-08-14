@@ -45,13 +45,6 @@ class ComplicationConfigActivity : ComponentActivity() {
                 requestPermissions(arrayOf(Manifest.permission.BODY_SENSORS), 1)
             }
         }
-        /*
-        lifecycleScope.launch(Dispatchers.Main.immediate) {
-            state.complicationData.collect { complicationData ->
-                println("### collected complication data")
-            }
-        }
-         */
 
         setContent {
             complicationSelectRow(chooseComplication = ::chooseComplication, ids = listOf(0, 1, 2, 3))
