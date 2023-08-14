@@ -19,5 +19,3 @@ D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
 u
 Eapp/src/main/java/de/niilz/wearos/watchface/bttf/WatchFaceRenderer.kt,f\a\fa89d8dda7854d218d280f6d74292342f20add77
-q
-Aapp/src/main/java/de/niilz/wearos/watchface/bttf/BttfWatchface.kt,e\7\e770d27ba7403f4e73b2cd46953dd5d25ff3ef69
