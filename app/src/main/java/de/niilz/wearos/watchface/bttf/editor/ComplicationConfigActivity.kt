@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,9 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.watchface.editor.EditorSession
 import de.niilz.wearos.watchface.bttf.TAG
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class ComplicationConfigActivity : ComponentActivity() {
 
@@ -47,11 +44,11 @@ class ComplicationConfigActivity : ComponentActivity() {
         }
 
         setContent {
-            complicationSelectRow(chooseComplication = ::chooseComplication, ids = listOf(0, 1, 2, 3))
+            complicationSelectRow(chooseComplication = ::selectComplicationHandler, ids = listOf(0, 1, 2, 3))
         }
     }
 
-    private fun chooseComplication(id: Int) {
+    private fun selectComplicationHandler(id: Int) {
         Log.i(TAG, "Selected Complication, ID: $id")
 
         // TODO: have a state holder class
