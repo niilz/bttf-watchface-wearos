@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "de.niilz.wearos.watchface.bttf"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "de.niilz.wearos.watchface.bttf"
@@ -59,12 +59,13 @@ dependencies {
     // Optional (for custom complication rendering)
     implementation("androidx.wear.watchface:watchface-complications-rendering:1.1.1")
 
-    // Compose
+  // Compose
     val composeBom = platform("androidx.compose:compose-bom:2023.06.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation("androidx.compose.material3:material3")
     implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.compose.ui:ui-unit-android:1.5.0")
     // Android Studio Preview support
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
