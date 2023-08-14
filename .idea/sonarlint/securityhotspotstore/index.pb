@@ -7,7 +7,5 @@ y
 Iapp/src/main/java/de/niilz/wearos/watchface/bttf/drawable/DrawableText.kt,9\2\92cdd20806252221c55f29a74d932908c64afaef
 @
 build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d
-D
-app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
 u
 Eapp/src/main/java/de/niilz/wearos/watchface/bttf/WatchFaceRenderer.kt,f\a\fa89d8dda7854d218d280f6d74292342f20add77
