@@ -31,5 +31,3 @@ P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
-…
-Uapp/src/main/java/de/niilz/wearos/watchface/bttf/editor/ComplicationConfigActivity.kt,4\b\4b00673d7da2ed599ec0e17577282478b53906e4
