@@ -221,7 +221,6 @@ class WatchFaceRenderer(
                     if (lastVal?.text?.endsWith('%') == true) {
                         // Get rid of the text-version of the percent sign if the value contains one
                         slotValues.removeLast()
-                        slotValues.add(TextVal("%"))
                     }
                     slotValues.add(TextVal("%"))
                 }
