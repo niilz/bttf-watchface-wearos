@@ -1,4 +1,4 @@
-package de.niilz.wearos.watchface.bttf.config
+package de.niilz.wearos.watchface.bttf.editor
 
 class ConfigState {
   companion object {

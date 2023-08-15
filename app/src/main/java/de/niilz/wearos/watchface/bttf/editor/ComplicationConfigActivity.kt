@@ -32,8 +32,7 @@ import androidx.compose.ui.unit.em
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.watchface.editor.EditorSession
 import de.niilz.wearos.watchface.bttf.TAG
-import de.niilz.wearos.watchface.bttf.config.ConfigState
-import de.niilz.wearos.watchface.bttf.config.ConfigState.Companion.complicationCount
+import de.niilz.wearos.watchface.bttf.editor.ConfigState.Companion.complicationCount
 import kotlinx.coroutines.launch
 
 class ComplicationConfigActivity : ComponentActivity() {
