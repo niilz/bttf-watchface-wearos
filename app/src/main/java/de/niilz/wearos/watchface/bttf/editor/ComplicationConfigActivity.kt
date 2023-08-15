@@ -97,12 +97,13 @@ fun complicationSelectRow(
     .fillMaxSize()
 
   val handleAddComplication = {
+    // FIXME: Update CurrentUserStyleRepository
     addComplication()
     setComplicationCount(complicationCount + 1)
   }
 
   val handleRemoveComplication = {
-    // TODO: Remove complication connection between ID and editorSession/Complication
+    // FIXME: Update CurrentUserStyleRepository
     removeComplication()
     setComplicationCount(complicationCount - 1)
   }
