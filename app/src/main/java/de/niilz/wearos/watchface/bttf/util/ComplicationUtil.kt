@@ -12,7 +12,6 @@ import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawable
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
-import de.niilz.wearos.watchface.bttf.editor.ConfigState
 
 fun createComplicationSlotManager(
     applicationContext: Context,
@@ -25,7 +24,7 @@ fun createComplicationSlotManager(
             CanvasComplicationDrawable(defaultCompicationDrawable, watchState, listener)
         }
     // FIXME: Use CurrentUserStyleRepository to figure out how many slots are active
-    val complicationSlots = (0..ConfigState.complicationCount).map { i ->
+    val complicationSlots = (0..4).map { i ->
         val complicationDrawable = ComplicationDrawable(applicationContext)
         complicationDrawable.noDataText = "Ooops"
         ComplicationSlot.createRoundRectComplicationSlotBuilder(
