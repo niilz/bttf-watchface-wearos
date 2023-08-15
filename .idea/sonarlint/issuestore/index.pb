@@ -27,7 +27,5 @@ q
 Aapp/src/main/java/de/niilz/wearos/watchface/bttf/BttfWatchface.kt,e\7\e770d27ba7403f4e73b2cd46953dd5d25ff3ef69
 F
 app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
