@@ -19,3 +19,4 @@ local.properties
 app/.classpath
 app/.project
 app/.settings
+/.idea/sonarlint
