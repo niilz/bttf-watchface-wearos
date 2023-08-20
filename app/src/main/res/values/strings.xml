@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">bttf</string>
     <string name="foo">foo</string>
+    <string name="SLOT_COUNT_SETTING">slot-count</string>
+    <string name="SLOT_COUNT">slot-count</string>
+    <string name="SLOT_ONE">slot-one</string>
+    <string name="SLOT_TWO">slot-two</string>
+    <string name="SLOT_THREE">slot-three</string>
+    <string name="SLOT_FOUR">slot-four</string>
+    <string name="SLOT_FIVE">slot-five</string>
+    <string name="SLOT_SIX">slot-six</string>
 </resources>

@@ -1,7 +1,7 @@
 package de.niilz.wearos.watchface.bttf.editor
 
 // FIXME: Replace with CurrentUserStyleRepository
-class ConfigState {
+class ConfigStateHolder {
   companion object {
     var complicationCount = 0
 
