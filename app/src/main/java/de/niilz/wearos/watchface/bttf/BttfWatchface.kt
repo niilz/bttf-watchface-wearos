@@ -11,6 +11,7 @@ import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
 import de.niilz.wearos.watchface.bttf.service.HeartBeatService
+import de.niilz.wearos.watchface.bttf.util.createBttfComplicationUserStyleSchema
 import de.niilz.wearos.watchface.bttf.util.createComplicationSlotManager
 import kotlinx.coroutines.runBlocking
 
@@ -19,7 +20,7 @@ class BttfWatchface : WatchFaceService() {
     private lateinit var heartBeatService: HeartBeatService
 
     override fun createUserStyleSchema(): UserStyleSchema {
-        return UserStyleSchema(listOf())
+        return createBttfComplicationUserStyleSchema(applicationContext)
     }
 
     override fun createComplicationSlotsManager(currentUserStyleRepository: CurrentUserStyleRepository): ComplicationSlotsManager {
