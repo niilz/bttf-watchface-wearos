@@ -37,7 +37,6 @@ import retrieveSlotCount
 
 class ComplicationConfigActivity : ComponentActivity() {
   private lateinit var editorSession: EditorSession
-  private val complicationCount by lazy { retrieveSlotCount(editorSession.userStyle) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -51,15 +50,14 @@ class ComplicationConfigActivity : ComponentActivity() {
       if (!hasHeartRatePermission) {
         requestPermissions(arrayOf(Manifest.permission.BODY_SENSORS), 1)
       }
-    }
-
-
-    setContent {
-      complicationSelectRow(
-        chooseComplication = ::selectComplicationHandler,
-        updateComplicationOption = ::updateComplicationOption,
-        maxId = complicationCount
-      )
+      val complicationCount = retrieveSlotCount(editorSession.userStyle)
+      setContent {
+        complicationSelectRow(
+          chooseComplication = ::selectComplicationHandler,
+          updateComplicationOption = ::updateComplicationOption,
+          maxId = complicationCount
+        )
+      }
     }
   }
 
