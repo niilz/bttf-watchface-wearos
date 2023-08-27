@@ -16,7 +16,6 @@ import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
-import androidx.wear.watchface.style.UserStyleSetting
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.DrawService
 import de.niilz.wearos.watchface.bttf.service.NumVal
@@ -28,6 +27,7 @@ import de.niilz.wearos.watchface.bttf.util.MapperUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import retrieveSlotCount
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
 
@@ -106,9 +106,7 @@ class WatchFaceRenderer(
 
     drawBackground(canvas)
 
-    val activeSlotCount =
-      currentUserStyleRepository.userStyle.value[UserStyleSetting.Id("complication-slot-settings")].toString()
-        .replace("slot-counts-", "").toInt()
+    val activeSlotCount = retrieveSlotCount(currentUserStyleRepository.userStyle)
 
     val complications =
       complicationSlotsManager.complicationSlots.values.take(activeSlotCount)

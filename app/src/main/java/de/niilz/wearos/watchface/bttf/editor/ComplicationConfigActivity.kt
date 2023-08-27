@@ -32,11 +32,12 @@ import androidx.compose.ui.unit.em
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.watchface.editor.EditorSession
 import de.niilz.wearos.watchface.bttf.TAG
-import de.niilz.wearos.watchface.bttf.editor.ConfigStateHolder.Companion.complicationCount
 import kotlinx.coroutines.launch
+import retrieveSlotCount
 
 class ComplicationConfigActivity : ComponentActivity() {
   private lateinit var editorSession: EditorSession
+  private val complicationCount by lazy { retrieveSlotCount(editorSession.userStyle) }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -52,25 +53,14 @@ class ComplicationConfigActivity : ComponentActivity() {
       }
     }
 
+
     setContent {
       complicationSelectRow(
         chooseComplication = ::selectComplicationHandler,
-        addComplication = ::incrementComplicationCount,
-        removeComplication = ::decrementComplicationCount,
         updateComplicationOption = ::updateComplicationOption,
         maxId = complicationCount
       )
     }
-  }
-
-  private fun incrementComplicationCount() {
-    ConfigStateHolder.incrementComplicationCount()
-    Log.d(TAG, "ComplicationCount: $complicationCount")
-  }
-
-  private fun decrementComplicationCount() {
-    ConfigStateHolder.decrementComplicationCount()
-    Log.d(TAG, "ComplicationCount: $complicationCount")
   }
 
   private fun updateComplicationOption(complicationCount: Int) {
@@ -96,8 +86,6 @@ class ComplicationConfigActivity : ComponentActivity() {
 @Composable
 fun complicationSelectRow(
   chooseComplication: (Int) -> Unit,
-  addComplication: () -> Unit,
-  removeComplication: () -> Unit,
   updateComplicationOption: (Int) -> Unit,
   maxId: Int
 ) {
@@ -108,14 +96,12 @@ fun complicationSelectRow(
     .fillMaxSize()
 
   val handleAddComplication = {
-    addComplication()
     val newComplicationCount = complicationCount + 1
     setComplicationCount(newComplicationCount)
     updateComplicationOption(newComplicationCount)
   }
 
   val handleRemoveComplication = {
-    removeComplication()
     val newComplicationCount = complicationCount - 1
     setComplicationCount(newComplicationCount)
     updateComplicationOption(newComplicationCount)
@@ -185,8 +171,6 @@ fun preview() {
   val dummyCallback: (Int) -> Unit = { id -> println("The ID is: $id") }
   complicationSelectRow(
     dummyCallback,
-    { setComplicationCount(complicationCount + 1) },
-    { setComplicationCount(complicationCount - 1) },
     { println("Updated complication option") },
     complicationCount
   )

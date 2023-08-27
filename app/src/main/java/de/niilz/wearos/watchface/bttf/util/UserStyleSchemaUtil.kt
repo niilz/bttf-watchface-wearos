@@ -1,12 +1,11 @@
-package de.niilz.wearos.watchface.bttf.util
-
 import android.content.Context
+import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
 import de.niilz.wearos.watchface.bttf.R
+import kotlinx.coroutines.flow.StateFlow
 
-// FIXME: We probably need to add a ConfigStateHolder aswell, use it in the editor and listen for updates
 fun createBttfComplicationUserStyleSchema(applicationContext: Context): UserStyleSchema {
   val optionsConfig = (0..7).map { createComplicationSlotOptions(it) }
   val complicationSettings = UserStyleSetting.ComplicationSlotsUserStyleSetting(
@@ -20,6 +19,11 @@ fun createBttfComplicationUserStyleSchema(applicationContext: Context): UserStyl
   )
   return UserStyleSchema(listOf(complicationSettings))
 
+}
+
+fun retrieveSlotCount(userStyle: StateFlow<UserStyle>): Int {
+  return userStyle.value[UserStyleSetting.Id("complication-slot-settings")].toString()
+    .replace("slot-counts-", "").toInt()
 }
 
 private fun createComplicationSlotOptions(slotCounts: Int): UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption {

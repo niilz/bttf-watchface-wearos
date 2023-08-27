@@ -10,8 +10,8 @@ import androidx.wear.watchface.WatchFaceType
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 import androidx.wear.watchface.style.UserStyleSchema
+import createBttfComplicationUserStyleSchema
 import de.niilz.wearos.watchface.bttf.service.HeartBeatService
-import de.niilz.wearos.watchface.bttf.util.createBttfComplicationUserStyleSchema
 import de.niilz.wearos.watchface.bttf.util.createComplicationSlotManager
 import kotlinx.coroutines.runBlocking
 

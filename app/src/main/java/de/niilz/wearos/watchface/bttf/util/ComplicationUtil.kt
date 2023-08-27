@@ -24,7 +24,7 @@ fun createComplicationSlotManager(
     CanvasComplicationFactory { watchState, listener ->
       CanvasComplicationDrawable(defaultCompicationDrawable, watchState, listener)
     }
-  val complicationSlots = (0..MAX_SLOT_COUNT).map { i ->
+  val complicationSlots = (1..MAX_SLOT_COUNT).map { i ->
     val complicationDrawable = ComplicationDrawable(applicationContext)
     complicationDrawable.noDataText = "Ooops"
     ComplicationSlot.createRoundRectComplicationSlotBuilder(
