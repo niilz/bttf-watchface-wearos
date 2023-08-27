@@ -4,10 +4,11 @@ import androidx.wear.watchface.style.UserStyleSchema
 import androidx.wear.watchface.style.UserStyleSetting
 import androidx.wear.watchface.style.WatchFaceLayer
 import de.niilz.wearos.watchface.bttf.R
+import de.niilz.wearos.watchface.bttf.util.MAX_SLOT_COUNT
 import kotlinx.coroutines.flow.StateFlow
 
 fun createBttfComplicationUserStyleSchema(applicationContext: Context): UserStyleSchema {
-  val optionsConfig = (0..7).map { createComplicationSlotOptions(it) }
+  val optionsConfig = (0 until MAX_SLOT_COUNT).map { createComplicationSlotOptions(it) }
   val complicationSettings = UserStyleSetting.ComplicationSlotsUserStyleSetting(
     id = UserStyleSetting.Id("complication-slot-settings"),
     resources = applicationContext.resources,
