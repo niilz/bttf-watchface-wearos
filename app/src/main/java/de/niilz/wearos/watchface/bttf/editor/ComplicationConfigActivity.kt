@@ -157,12 +157,14 @@ fun complicationChooserButton(
   val chooseButtonColor = ButtonDefaults.buttonColors(containerColor = Color.Blue)
   val removeFieldColor = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
   Column(modifier = chooseButtonModifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    // Do not use 0 as Id
+    val idValue = id + 1
     Button(
-      onClick = { selectComplicationHandler(id) },
+      onClick = { selectComplicationHandler(idValue) },
       modifier = chooseButtonModifier,
       colors = chooseButtonColor,
     ) {
-      Text("$id", textAlign = TextAlign.Center)
+      Text("$idValue", textAlign = TextAlign.Center)
     }
     Button(
       onClick = removeComplication,
