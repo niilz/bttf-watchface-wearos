@@ -13,6 +13,7 @@ import androidx.wear.watchface.complications.rendering.CanvasComplicationDrawabl
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 import androidx.wear.watchface.style.CurrentUserStyleRepository
 
+const val MAX_SLOT_COUNT = 6
 fun createComplicationSlotManager(
     applicationContext: Context,
     userStyleRepository: CurrentUserStyleRepository
@@ -23,8 +24,7 @@ fun createComplicationSlotManager(
         CanvasComplicationFactory { watchState, listener ->
             CanvasComplicationDrawable(defaultCompicationDrawable, watchState, listener)
         }
-    // FIXME: Use CurrentUserStyleRepository to figure out how many slots are active
-    val complicationSlots = (0..4).map { i ->
+    val complicationSlots = (0..MAX_SLOT_COUNT).map { i ->
         val complicationDrawable = ComplicationDrawable(applicationContext)
         complicationDrawable.noDataText = "Ooops"
         ComplicationSlot.createRoundRectComplicationSlotBuilder(
@@ -32,7 +32,7 @@ fun createComplicationSlotManager(
             canvasComplicationFactory = defaultComplicationFactory,
             supportedTypes = listOf(ComplicationType.SHORT_TEXT),
             defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-                SystemDataSources.DATA_SOURCE_WATCH_BATTERY,
+                SystemDataSources.NO_DATA_SOURCE,
                 ComplicationType.SHORT_TEXT,
             ),
             bounds = ComplicationSlotBounds(RectF(0f, 0f, 0f, 0f))

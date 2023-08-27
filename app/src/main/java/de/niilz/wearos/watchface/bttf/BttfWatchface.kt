@@ -17,46 +17,46 @@ import kotlinx.coroutines.runBlocking
 
 class BttfWatchface : WatchFaceService() {
 
-    private lateinit var heartBeatService: HeartBeatService
+  private lateinit var heartBeatService: HeartBeatService
 
-    override fun createUserStyleSchema(): UserStyleSchema {
-        return createBttfComplicationUserStyleSchema(applicationContext)
+  override fun createUserStyleSchema(): UserStyleSchema {
+    return createBttfComplicationUserStyleSchema(applicationContext)
+  }
+
+  override fun createComplicationSlotsManager(currentUserStyleRepository: CurrentUserStyleRepository): ComplicationSlotsManager {
+    return createComplicationSlotManager(applicationContext, currentUserStyleRepository)
+  }
+
+  override suspend fun createWatchFace(
+    surfaceHolder: SurfaceHolder,
+    watchState: WatchState,
+    complicationSlotsManager: ComplicationSlotsManager,
+    currentUserStyleRepository: CurrentUserStyleRepository
+  ): WatchFace {
+
+    heartBeatService = HeartBeatService(applicationContext)
+    Log.i(TAG, "Registering HeartBeatReceiver")
+
+    val renderer = WatchFaceRenderer(
+      applicationContext,
+      resources,
+      surfaceHolder,
+      watchState,
+      complicationSlotsManager,
+      currentUserStyleRepository,
+      CanvasType.HARDWARE
+    )
+    Log.i(TAG, "Creating BTTF-Watchface")
+    return WatchFace(WatchFaceType.DIGITAL, renderer)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    runBlocking {
+      Log.i(TAG, "Unregistering HeartBeatReceiver")
+      heartBeatService.unregisterHeartBeatReceive()
     }
-
-    override fun createComplicationSlotsManager(currentUserStyleRepository: CurrentUserStyleRepository): ComplicationSlotsManager {
-        return createComplicationSlotManager(applicationContext, currentUserStyleRepository)
-    }
-
-    override suspend fun createWatchFace(
-        surfaceHolder: SurfaceHolder,
-        watchState: WatchState,
-        complicationSlotsManager: ComplicationSlotsManager,
-        currentUserStyleRepository: CurrentUserStyleRepository
-    ): WatchFace {
-
-        heartBeatService = HeartBeatService(applicationContext)
-        Log.i(TAG, "Registering HeartBeatReceiver")
-
-        val renderer = WatchFaceRenderer(
-            applicationContext,
-            resources,
-            surfaceHolder,
-            watchState,
-            complicationSlotsManager,
-            currentUserStyleRepository,
-            CanvasType.HARDWARE
-        )
-        Log.i(TAG, "Creating BTTF-Watchface")
-        return WatchFace(WatchFaceType.DIGITAL, renderer)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        runBlocking {
-            Log.i(TAG, "Unregistering HeartBeatReceiver")
-            heartBeatService.unregisterHeartBeatReceive()
-        }
-    }
+  }
 }
 
 const val TAG = "### Bttf-Watchface"

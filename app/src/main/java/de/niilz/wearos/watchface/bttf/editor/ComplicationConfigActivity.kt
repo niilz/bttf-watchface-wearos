@@ -36,142 +36,156 @@ import de.niilz.wearos.watchface.bttf.editor.ConfigStateHolder.Companion.complic
 import kotlinx.coroutines.launch
 
 class ComplicationConfigActivity : ComponentActivity() {
+  private lateinit var editorSession: EditorSession
 
-    private lateinit var editorSession: EditorSession
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    lifecycleScope.launch {
+      editorSession =
+        EditorSession.createOnWatchEditorSession(this@ComplicationConfigActivity)
 
-        lifecycleScope.launch {
-            editorSession =
-                EditorSession.createOnWatchEditorSession(this@ComplicationConfigActivity)
-
-            val hasHeartRatePermission =
-                checkSelfPermission(Manifest.permission.BODY_SENSORS) == PackageManager.PERMISSION_GRANTED
-            if (!hasHeartRatePermission) {
-                requestPermissions(arrayOf(Manifest.permission.BODY_SENSORS), 1)
-            }
-        }
-
-        setContent {
-            complicationSelectRow(
-                chooseComplication = ::selectComplicationHandler,
-                addComplication = ::incrementComplicationCount,
-                removeComplication = ::decrementComplicationCount,
-                maxId = complicationCount
-            )
-        }
+      val hasHeartRatePermission =
+        checkSelfPermission(Manifest.permission.BODY_SENSORS) == PackageManager.PERMISSION_GRANTED
+      if (!hasHeartRatePermission) {
+        requestPermissions(arrayOf(Manifest.permission.BODY_SENSORS), 1)
+      }
     }
 
-    private fun incrementComplicationCount() {
-        ConfigStateHolder.incrementComplicationCount()
-        Log.d(TAG, "ComplicationCount: $complicationCount")
+    setContent {
+      complicationSelectRow(
+        chooseComplication = ::selectComplicationHandler,
+        addComplication = ::incrementComplicationCount,
+        removeComplication = ::decrementComplicationCount,
+        updateComplicationOption = ::updateComplicationOption,
+        maxId = complicationCount
+      )
     }
+  }
 
-    private fun decrementComplicationCount() {
-        ConfigStateHolder.decrementComplicationCount()
-        Log.d(TAG, "ComplicationCount: $complicationCount")
+  private fun incrementComplicationCount() {
+    ConfigStateHolder.incrementComplicationCount()
+    Log.d(TAG, "ComplicationCount: $complicationCount")
+  }
+
+  private fun decrementComplicationCount() {
+    ConfigStateHolder.decrementComplicationCount()
+    Log.d(TAG, "ComplicationCount: $complicationCount")
+  }
+
+  private fun updateComplicationOption(complicationCount: Int) {
+    val complicationSettings = editorSession.userStyleSchema.userStyleSettings[0]
+    val newOption =
+      editorSession.userStyleSchema.userStyleSettings[0].options[complicationCount]
+    val mutableSetting = editorSession.userStyle.value.toMutableUserStyle()
+    mutableSetting[complicationSettings] = newOption
+    editorSession.userStyle.value = mutableSetting.toUserStyle()
+    Log.i(TAG, "Updated setting to: ${editorSession.userStyle.value}")
+  }
+
+  private fun selectComplicationHandler(id: Int) {
+    Log.i(TAG, "Selected Complication, ID: $id")
+
+    // TODO: have a state holder class
+    lifecycleScope.launch {
+      editorSession.openComplicationDataSourceChooser(42 + id)
     }
-
-    private fun selectComplicationHandler(id: Int) {
-        Log.i(TAG, "Selected Complication, ID: $id")
-
-        // TODO: have a state holder class
-        lifecycleScope.launch {
-            editorSession.openComplicationDataSourceChooser(42 + id)
-        }
-    }
+  }
 }
 
 @Composable
 fun complicationSelectRow(
-    chooseComplication: (Int) -> Unit,
-    addComplication: () -> Unit,
-    removeComplication: () -> Unit,
-    maxId: Int
+  chooseComplication: (Int) -> Unit,
+  addComplication: () -> Unit,
+  removeComplication: () -> Unit,
+  updateComplicationOption: (Int) -> Unit,
+  maxId: Int
 ) {
-    val (complicationCount, setComplicationCount) = remember { mutableStateOf(maxId) }
-    val myMod = Modifier
+  val (complicationCount, setComplicationCount) = remember { mutableStateOf(maxId) }
+  val myMod = Modifier
       .background(color = Color.Black)
       .fillMaxWidth()
       .fillMaxSize()
 
-    val handleAddComplication = {
-        // FIXME: Update CurrentUserStyleRepository
-        addComplication()
-        setComplicationCount(complicationCount + 1)
-    }
+  val handleAddComplication = {
+    addComplication()
+    val newComplicationCount = complicationCount + 1
+    setComplicationCount(newComplicationCount)
+    updateComplicationOption(newComplicationCount)
+  }
 
-    val handleRemoveComplication = {
-        // FIXME: Update CurrentUserStyleRepository
-        removeComplication()
-        setComplicationCount(complicationCount - 1)
-    }
+  val handleRemoveComplication = {
+    removeComplication()
+    val newComplicationCount = complicationCount - 1
+    setComplicationCount(newComplicationCount)
+    updateComplicationOption(newComplicationCount)
+  }
 
-    Column(
-        modifier = myMod,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Chose Complications", color = Color.White)
-        LazyRow {
-            items(complicationCount) { id ->
-                complicationChooserButton(
-                    selectComplicationHandler = chooseComplication,
-                    removeComplication = handleRemoveComplication,
-                    id = id
-                )
-            }
-            item {
-                Button(onClick = handleAddComplication) {
-                    Text("+")
-                }
-            }
+  Column(
+    modifier = myMod,
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Text("Chose Complications", color = Color.White)
+    LazyRow {
+      items(complicationCount) { id ->
+        complicationChooserButton(
+          selectComplicationHandler = chooseComplication,
+          removeComplication = handleRemoveComplication,
+          id = id
+        )
+      }
+      item {
+        Button(onClick = handleAddComplication) {
+          Text("+")
         }
+      }
     }
+  }
 }
 
 @Composable
 fun complicationChooserButton(
-    selectComplicationHandler: (Int) -> Unit,
-    removeComplication: () -> Unit,
-    id: Int
+  selectComplicationHandler: (Int) -> Unit,
+  removeComplication: () -> Unit,
+  id: Int
 ) {
-    val chooseButtonModifier = Modifier.width(50.dp)
-    val removeFieldModifier = Modifier
+  val chooseButtonModifier = Modifier.width(50.dp)
+  val removeFieldModifier = Modifier
       .width(30.dp)
       .height(30.dp)
-    val chooseButtonColor = ButtonDefaults.buttonColors(containerColor = Color.Blue)
-    val removeFieldColor = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
-    Column(modifier = chooseButtonModifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(
-            onClick = { selectComplicationHandler(id) },
-            modifier = chooseButtonModifier,
-            colors = chooseButtonColor,
-        ) {
-            Text("$id", textAlign = TextAlign.Center)
-        }
-        Button(
-            onClick = removeComplication,
-            modifier = removeFieldModifier,
-            colors = removeFieldColor,
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Text(text = "❌", fontSize = 1.em, textAlign = TextAlign.Center)
-        }
+  val chooseButtonColor = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+  val removeFieldColor = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
+  Column(modifier = chooseButtonModifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Button(
+      onClick = { selectComplicationHandler(id) },
+      modifier = chooseButtonModifier,
+      colors = chooseButtonColor,
+    ) {
+      Text("$id", textAlign = TextAlign.Center)
     }
+    Button(
+      onClick = removeComplication,
+      modifier = removeFieldModifier,
+      colors = removeFieldColor,
+      contentPadding = PaddingValues(0.dp)
+    ) {
+      Text(text = "❌", fontSize = 1.em, textAlign = TextAlign.Center)
+    }
+  }
 }
 
 
 @Preview(device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
 fun preview() {
-    var (complicationCount, setComplicationCount) = remember { mutableStateOf(3) }
-    val dummyCallback: (Int) -> Unit = { id -> println("The ID is: $id") }
-    complicationSelectRow(
-        dummyCallback,
-        { setComplicationCount(complicationCount + 1) },
-        { setComplicationCount(complicationCount - 1) },
-        complicationCount
-    )
+  var (complicationCount, setComplicationCount) = remember { mutableStateOf(3) }
+  val dummyCallback: (Int) -> Unit = { id -> println("The ID is: $id") }
+  complicationSelectRow(
+    dummyCallback,
+    { setComplicationCount(complicationCount + 1) },
+    { setComplicationCount(complicationCount - 1) },
+    { println("Updated complication option") },
+    complicationCount
+  )
 }

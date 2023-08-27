@@ -25,6 +25,10 @@ import de.niilz.wearos.watchface.bttf.service.SlotValue
 import de.niilz.wearos.watchface.bttf.service.TextVal
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
 
@@ -36,7 +40,7 @@ class WatchFaceRenderer(
   surfaceHolder: SurfaceHolder,
   watchState: WatchState,
   private val complicationSlotsManager: ComplicationSlotsManager,
-  currentUserStyleRepository: CurrentUserStyleRepository,
+  private val currentUserStyleRepository: CurrentUserStyleRepository,
   canvasType: Int
 ) : Renderer.CanvasRenderer2<WatchFaceRenderer.DigitalSharedAssets>(
   surfaceHolder,
@@ -72,11 +76,23 @@ class WatchFaceRenderer(
 
   private var drawService: DrawService;
 
+  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
   init {
     //println("*** init ***")
     initializeBackground()
     initializeNumbers()
     drawService = DrawService(context = context, numberBitmaps = numbers)
+    scope.launch {
+      currentUserStyleRepository.userStyle.collect { userStyle ->
+        for (options in userStyle) {
+          when (options.key.id.toString()) {
+            "complication-slot-settings" -> Log.i(TAG, "slot setting: ${options.value}")
+            else -> Log.e(TAG, "unsupported setting")
+          }
+        }
+      }
+    }
   }
 
   override suspend fun createSharedAssets(): DigitalSharedAssets {
@@ -101,9 +117,11 @@ class WatchFaceRenderer(
 
     drawBackground(canvas)
 
+
     val complications =
       complicationSlotsManager.complicationSlots.map { (_, complication) -> complication }
         .filter { it.enabled }
+
 
     // NOTE: when we wait for the complicationdata to be available we have no
     //  memory leaks (segfaults in libc) on the bitmap number data?

@@ -5,31 +5,31 @@ import androidx.wear.watchface.editor.EditorSession
 import kotlinx.coroutines.CoroutineScope
 
 class ConfigStateHolder(private val scope: CoroutineScope, activity: ComponentActivity) {
+  private lateinit var editorSession: EditorSession
 
-    private lateinit var editorSession: EditorSession
+  // FIXME: Can we use the UserStyleSchema with the complication config options here?
+  /*
+  val uiState: StateFlow<Int> = flow<Int> {
+      editorSession = EditorSession.createOnWatchEditorSession(activity)
+      val userSettings = editorSession.userStyleSchema.userStyleSettings
+      assert(userSettings.size == 1)
+      val complicationSetting = userSettings[0]
+      assert(complicationSetting.id.value == ("slot-count"))
+      val complicationCount = complicationSetting.options[0]
+    emit(complicationCount.)
 
-    /*
-    val uiState: StateFlow<Int> = flow<Int> {
-        editorSession = EditorSession.createOnWatchEditorSession(activity)
-        val userSettings = editorSession.userStyleSchema.userStyleSettings
-        assert(userSettings.size == 1)
-        val complicationSetting = userSettings[0]
-        assert(complicationSetting.id.value == ("slot-count"))
-        val complicationCount = complicationSetting.options[0]
-      emit(complicationCount.)
+  }.stateIn(scope + Dispatchers.Main.immediate, SharingStarted.Eagerly, 0)
+   */
 
-    }.stateIn(scope + Dispatchers.Main.immediate, SharingStarted.Eagerly, 0)
-     */
+  companion object {
+    var complicationCount = 0
 
-    companion object {
-        var complicationCount = 0
-
-        fun incrementComplicationCount() {
-            complicationCount += 1
-        }
-
-        fun decrementComplicationCount() {
-            complicationCount -= 1
-        }
+    fun incrementComplicationCount() {
+      complicationCount += 1
     }
+
+    fun decrementComplicationCount() {
+      complicationCount -= 1
+    }
+  }
 }
