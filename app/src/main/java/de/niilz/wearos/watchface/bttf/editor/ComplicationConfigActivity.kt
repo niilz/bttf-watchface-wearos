@@ -88,7 +88,7 @@ class ComplicationConfigActivity : ComponentActivity() {
 
     // TODO: have a state holder class
     lifecycleScope.launch {
-      editorSession.openComplicationDataSourceChooser(42 + id)
+      editorSession.openComplicationDataSourceChooser(id)
     }
   }
 }
@@ -103,9 +103,9 @@ fun complicationSelectRow(
 ) {
   val (complicationCount, setComplicationCount) = remember { mutableStateOf(maxId) }
   val myMod = Modifier
-      .background(color = Color.Black)
-      .fillMaxWidth()
-      .fillMaxSize()
+    .background(color = Color.Black)
+    .fillMaxWidth()
+    .fillMaxSize()
 
   val handleAddComplication = {
     addComplication()
@@ -152,8 +152,8 @@ fun complicationChooserButton(
 ) {
   val chooseButtonModifier = Modifier.width(50.dp)
   val removeFieldModifier = Modifier
-      .width(30.dp)
-      .height(30.dp)
+    .width(30.dp)
+    .height(30.dp)
   val chooseButtonColor = ButtonDefaults.buttonColors(containerColor = Color.Blue)
   val removeFieldColor = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
   Column(modifier = chooseButtonModifier, horizontalAlignment = Alignment.CenterHorizontally) {
