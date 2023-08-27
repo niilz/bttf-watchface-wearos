@@ -37,6 +37,7 @@ private fun createComplicationSlotOptions(slotCounts: Int): UserStyleSetting.Com
 private fun createComplicationSlotOverlay(id: Int): UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay {
   // Log.d(TAG, "Slot-Overlay-ID: $id")
   return UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotOverlay(
+    // Starts with id = 1 -> 101
     complicationSlotId = 100 + id,
     enabled = true,
   )
