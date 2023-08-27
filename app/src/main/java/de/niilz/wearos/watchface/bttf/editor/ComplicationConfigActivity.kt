@@ -88,7 +88,7 @@ class ComplicationConfigActivity : ComponentActivity() {
 
     // TODO: have a state holder class
     lifecycleScope.launch {
-      editorSession.openComplicationDataSourceChooser(id)
+      editorSession.openComplicationDataSourceChooser(100 + id)
     }
   }
 }

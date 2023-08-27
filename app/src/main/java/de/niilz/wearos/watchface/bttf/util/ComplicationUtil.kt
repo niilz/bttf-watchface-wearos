@@ -28,7 +28,7 @@ fun createComplicationSlotManager(
     val complicationDrawable = ComplicationDrawable(applicationContext)
     complicationDrawable.noDataText = "Ooops"
     ComplicationSlot.createRoundRectComplicationSlotBuilder(
-      id = i,
+      id = 100 + i,
       canvasComplicationFactory = defaultComplicationFactory,
       supportedTypes = listOf(ComplicationType.SHORT_TEXT),
       defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
