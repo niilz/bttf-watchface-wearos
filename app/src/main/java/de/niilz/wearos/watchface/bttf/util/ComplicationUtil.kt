@@ -15,28 +15,28 @@ import androidx.wear.watchface.style.CurrentUserStyleRepository
 
 const val MAX_SLOT_COUNT = 6
 fun createComplicationSlotManager(
-    applicationContext: Context,
-    userStyleRepository: CurrentUserStyleRepository
+  applicationContext: Context,
+  userStyleRepository: CurrentUserStyleRepository
 ): ComplicationSlotsManager {
 
-    val defaultCompicationDrawable = ComplicationDrawable(applicationContext)
-    val defaultComplicationFactory =
-        CanvasComplicationFactory { watchState, listener ->
-            CanvasComplicationDrawable(defaultCompicationDrawable, watchState, listener)
-        }
-    val complicationSlots = (0..MAX_SLOT_COUNT).map { i ->
-        val complicationDrawable = ComplicationDrawable(applicationContext)
-        complicationDrawable.noDataText = "Ooops"
-        ComplicationSlot.createRoundRectComplicationSlotBuilder(
-            id = 42 + i,
-            canvasComplicationFactory = defaultComplicationFactory,
-            supportedTypes = listOf(ComplicationType.SHORT_TEXT),
-            defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
-                SystemDataSources.NO_DATA_SOURCE,
-                ComplicationType.SHORT_TEXT,
-            ),
-            bounds = ComplicationSlotBounds(RectF(0f, 0f, 0f, 0f))
-        ).build()
+  val defaultCompicationDrawable = ComplicationDrawable(applicationContext)
+  val defaultComplicationFactory =
+    CanvasComplicationFactory { watchState, listener ->
+      CanvasComplicationDrawable(defaultCompicationDrawable, watchState, listener)
     }
-    return ComplicationSlotsManager(complicationSlots, userStyleRepository)
+  val complicationSlots = (0..MAX_SLOT_COUNT).map { i ->
+    val complicationDrawable = ComplicationDrawable(applicationContext)
+    complicationDrawable.noDataText = "Ooops"
+    ComplicationSlot.createRoundRectComplicationSlotBuilder(
+      id = i,
+      canvasComplicationFactory = defaultComplicationFactory,
+      supportedTypes = listOf(ComplicationType.SHORT_TEXT),
+      defaultDataSourcePolicy = DefaultComplicationDataSourcePolicy(
+        SystemDataSources.NO_DATA_SOURCE,
+        ComplicationType.SHORT_TEXT,
+      ),
+      bounds = ComplicationSlotBounds(RectF(0f, 0f, 0f, 0f))
+    ).build()
+  }
+  return ComplicationSlotsManager(complicationSlots, userStyleRepository)
 }
