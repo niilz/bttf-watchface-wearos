@@ -8,7 +8,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.SurfaceHolder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -17,6 +16,7 @@ import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
+import androidx.wear.watchface.style.UserStyleSetting
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.DrawService
 import de.niilz.wearos.watchface.bttf.service.NumVal
@@ -28,7 +28,6 @@ import de.niilz.wearos.watchface.bttf.util.MapperUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
 
@@ -79,20 +78,10 @@ class WatchFaceRenderer(
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
   init {
-    //println("*** init ***")
+    // Log.d(TAG, "*** init ***")
     initializeBackground()
     initializeNumbers()
     drawService = DrawService(context = context, numberBitmaps = numbers)
-    scope.launch {
-      currentUserStyleRepository.userStyle.collect { userStyle ->
-        for (options in userStyle) {
-          when (options.key.id.toString()) {
-            "complication-slot-settings" -> Log.i(TAG, "slot setting: ${options.value}")
-            else -> Log.e(TAG, "unsupported setting")
-          }
-        }
-      }
-    }
   }
 
   override suspend fun createSharedAssets(): DigitalSharedAssets {
@@ -105,7 +94,7 @@ class WatchFaceRenderer(
     zonedDateTime: ZonedDateTime,
     sharedAssets: DigitalSharedAssets
   ) {
-    //println("*** onDraw ***")
+    //  Log.d(TAG, "*** onDraw ***")
     if (drawService.canvas == null) {
       drawService.canvas = canvas
     }
@@ -117,11 +106,13 @@ class WatchFaceRenderer(
 
     drawBackground(canvas)
 
+    val activeSlotCount =
+      currentUserStyleRepository.userStyle.value[UserStyleSetting.Id("complication-slot-settings")].toString()
+        .replace("slot-counts-", "").toInt()
 
     val complications =
-      complicationSlotsManager.complicationSlots.map { (_, complication) -> complication }
+      complicationSlotsManager.complicationSlots.values.take(activeSlotCount)
         .filter { it.enabled }
-
 
     // NOTE: when we wait for the complicationdata to be available we have no
     //  memory leaks (segfaults in libc) on the bitmap number data?
@@ -142,7 +133,7 @@ class WatchFaceRenderer(
   }
 
   private fun drawSlots(dateTime: ZonedDateTime, complications: List<SlotMetadata>) {
-    //println("*** drawSlots ***")
+    // Log.d(TAG, "*** drawSlots ***")
 
     val topRow1 = topLeftY + topBottomMargin
     val bottomRow1 =
@@ -156,6 +147,7 @@ class WatchFaceRenderer(
   }
 
   private fun drawRow1(now: ZonedDateTime, valueColor: Int, startTop: Float): Float {
+    // Log.d(TAG, "DRAW ROW 1")
     // FIRST-ROW
     var leftStart = topLeftX + firstRowLeftMargin
     // TODO: Maybe globally define margin
@@ -208,6 +200,7 @@ class WatchFaceRenderer(
     startTop: Float,
     complicationSlotDataList: List<SlotMetadata>
   ): Float {
+    // Log.d(TAG, "DRAW ROW 2")
     val leftStart = topLeftX + firstRowLeftMargin
 
     return drawService.drawRow(
@@ -248,6 +241,7 @@ class WatchFaceRenderer(
   }
 
   fun drawRow3(now: ZonedDateTime, valueColor: Int, bottomRow2: Float): Float {
+    // Log.d(TAG, "DRAW ROW 3")
     // TODO: actually develop logic to draw values for row 3
     return drawRow1(now, valueColor, bottomRow2)
   }
