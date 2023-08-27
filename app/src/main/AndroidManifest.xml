@@ -60,6 +60,7 @@
             android:name=".service.HeartRateComplicationDSService"
             android:exported="true"
             android:label="Heart Rate BPM"
+            android:icon="@drawable/heart_icon"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter>
                 <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
