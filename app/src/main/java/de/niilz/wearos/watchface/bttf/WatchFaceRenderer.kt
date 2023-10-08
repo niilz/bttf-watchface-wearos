@@ -19,6 +19,8 @@ import androidx.wear.watchface.style.CurrentUserStyleRepository
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.DrawService
 import de.niilz.wearos.watchface.bttf.service.NumVal
+import de.niilz.wearos.watchface.bttf.service.ShapeType
+import de.niilz.wearos.watchface.bttf.service.ShapeVal
 import de.niilz.wearos.watchface.bttf.service.SlotMetadata
 import de.niilz.wearos.watchface.bttf.service.SlotValue
 import de.niilz.wearos.watchface.bttf.service.TextVal
@@ -169,14 +171,17 @@ class WatchFaceRenderer(
     // Year Slot
     val yearNums = MapperUtil.mapYearToInts(now.year).map { NumVal(it) }
     val yearSlotData =
-      SlotMetadata("YEAR", valueColor, margin, yearNums)
+      SlotMetadata("YEAR", valueColor, margin / 2, yearNums)
+
+    // Colon Slot (AM/PM)
+    val colon = ShapeVal(ShapeType.COLON)
+    val colonSlotData =
+      SlotMetadata(valueColor = 0, marginRight = margin, slotValues = listOf(colon))
 
     // Hour Slot
     val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour).map { NumVal(it) }
     val hourSlotData =
-      SlotMetadata("HOUR", valueColor, 2 * margin, hourNums)
-
-    // TODO: Draw am-pm dots (Dot-Slot / drwable Item)
+      SlotMetadata("HOUR", valueColor, margin, hourNums)
 
     // Minute Slot
     val minuteNums =
@@ -187,7 +192,7 @@ class WatchFaceRenderer(
     return drawService.drawRow(
       leftStart,
       startTop,
-      listOf(monthSlotData, daySlotData, yearSlotData, hourSlotData, minuteSlotData),
+      listOf(monthSlotData, daySlotData, yearSlotData, colonSlotData, hourSlotData, minuteSlotData),
       "DESTINATION TIME",
       DrawUtil.darkenColor(valueColor, 0.8f)
     )
