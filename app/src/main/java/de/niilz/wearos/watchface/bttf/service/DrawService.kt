@@ -108,7 +108,7 @@ class DrawService(
 
   private fun createDrawableItems(slotMetadata: SlotMetadata): List<DrawableItem> {
     val color = slotMetadata.valueColor
-    return slotMetadata.slotValues.map {
+    return slotMetadata.slotValues.map { it ->
       when (it) {
         is NumVal ->
           MapperUtil.numberToDrawable(
@@ -126,7 +126,9 @@ class DrawService(
             slotMetadata.valueColor,
           )
 
-        is ShapeVal -> DrawableColon(getCharHeight())
+        is ShapeVal -> slotMetadata.now?.let { now -> DrawableColon(getCharHeight(), now) }
+          ?: throw IllegalStateException("Now must be set for colon")
+
         else -> throw IllegalStateException("Unsupported SlotValue-type: $it")
       }
     }

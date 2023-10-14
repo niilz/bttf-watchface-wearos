@@ -176,7 +176,7 @@ class WatchFaceRenderer(
     // Colon Slot (AM/PM)
     val colon = ShapeVal(ShapeType.COLON)
     val colonSlotData =
-      SlotMetadata(valueColor = 0, marginRight = margin, slotValues = listOf(colon))
+      SlotMetadata(valueColor = 0, marginRight = margin, slotValues = listOf(colon), now = now)
 
     // Hour Slot
     val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour).map { NumVal(it) }
