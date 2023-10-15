@@ -21,7 +21,7 @@ class DrawableSlot(
   private val padding = 2 * gap
 
 
-  fun draw(canvas: Canvas): Pair<Float, Float> {
+  fun draw(canvas: Canvas): Float {
     var cursor = left + padding
     val marginTopToLabels = top + padding
 
@@ -60,7 +60,7 @@ class DrawableSlot(
       cursor += item.getWidth() + gap
     }
     // Return right-end and bottom-end of Slot
-    return Pair(right - left, bottom)
+    return bottom
   }
 
   fun calcSlotWidth(): Float {

@@ -39,7 +39,7 @@ class DrawService(
       )
     }
     for (slot in drawableSlots) {
-      val (_slotRightEnd, slotBottomEnd) = drawSlot(slot, cursor, top)
+      val slotBottomEnd = drawSlot(slot, cursor, top)
       cursor += slot.calcSlotWidth() + slot.marginRight
       if (slotBottomEnd > slotBottom) {
         slotBottom = slotBottomEnd
@@ -89,12 +89,11 @@ class DrawService(
     drawableSlot: DrawableSlot,
     leftStart: Float,
     topStart: Float,
-  ): Pair<Float, Float> {
+  ): Float {
     drawableSlot.left = leftStart
     drawableSlot.top = topStart
     canvas?.let {
-      val (rightEnd, bottomEnd) = drawableSlot.draw(it)
-      return Pair(rightEnd + 50, bottomEnd)
+      return drawableSlot.draw(it)
     }
     throw IllegalStateException("Could not draw slot to canvas")
   }
