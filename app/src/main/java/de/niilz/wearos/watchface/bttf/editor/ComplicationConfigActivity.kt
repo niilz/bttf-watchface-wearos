@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -87,7 +88,7 @@ fun complicationSelectRow(
   updateComplicationOption: (Int) -> Unit,
   maxId: Int
 ) {
-  val (complicationCount, setComplicationCount) = remember { mutableStateOf(maxId) }
+  val (complicationCount, setComplicationCount) = remember { mutableIntStateOf(maxId) }
   val myMod = Modifier
     .background(color = Color.Black)
     .fillMaxWidth()
