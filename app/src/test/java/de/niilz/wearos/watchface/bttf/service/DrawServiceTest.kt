@@ -31,7 +31,7 @@ class DrawServiceTest {
     val drawableItems = (1..4).map { drawableItem }
     val label = mock<DrawableLabel>()
     val slots =
-      (1..3).map { DrawableSlot(mockContext, drawableItems, label, 0f, 0f, Color.BLACK, 0f) }
+      (1..3).map { DrawableSlot(mockContext, drawableItems, label, 0f, 0f, Color.BLACK) }
         .toMutableList()
 
     // 3 Slots times 4 items with times 10 itemwidth = 120 (one too large)
