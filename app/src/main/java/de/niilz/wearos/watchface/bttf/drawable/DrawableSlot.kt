@@ -11,10 +11,9 @@ class DrawableSlot(
   context: Context,
   private val items: List<DrawableItem>,
   private val label: DrawableItem,
-  var left: Float,
-  var top: Float,
+  var left: Float? = null,
+  var top: Float? = null,
   private val backgroundColor: Int,
-  val marginRight: Float,
 ) {
   private val frameColor = ContextCompat.getColor(context, R.color.frame_color)
   private val gap = context.resources.getDimension(R.dimen.gap)
@@ -22,6 +21,11 @@ class DrawableSlot(
 
 
   fun draw(canvas: Canvas): Float {
+    if (left == null || top == null) {
+      throw IllegalStateException("left and top must not be null")
+    }
+    val left = left!!
+    val top = top!!
     var cursor = left + padding
     val marginTopToLabels = top + padding
 

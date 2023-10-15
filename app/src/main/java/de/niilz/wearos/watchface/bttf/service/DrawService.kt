@@ -89,10 +89,7 @@ class DrawService(
       context,
       itemsToDraw,
       label,
-      0f,//leftStart,
-      0f, // topStart,
-      backgroundColor,
-      marginRight
+      backgroundColor = backgroundColor,
     )
   }
 
