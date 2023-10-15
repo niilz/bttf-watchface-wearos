@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.view.SurfaceHolder
@@ -19,7 +18,6 @@ import androidx.wear.watchface.style.CurrentUserStyleRepository
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.service.DrawService
 import de.niilz.wearos.watchface.bttf.service.NumVal
-import de.niilz.wearos.watchface.bttf.service.ShapeType
 import de.niilz.wearos.watchface.bttf.service.ShapeVal
 import de.niilz.wearos.watchface.bttf.service.SlotMetadata
 import de.niilz.wearos.watchface.bttf.service.SlotValue
@@ -60,9 +58,6 @@ class WatchFaceRenderer(
   private val topMarginScalar = resources.getDimension(R.dimen.left_margin_scalar)
   private var initialNumberWidth = 0.0f
   private var initialNumberHeight = 0.0f
-  private val gap = resources.getDimension(R.dimen.gap)
-
-  private lateinit var numberPaint: Paint
 
   private var topLeftX = 0f
   private var topLeftY = 0f
@@ -72,7 +67,7 @@ class WatchFaceRenderer(
   private var firstRowLeftMargin = 0f
   private var areValuesInit = false
 
-  private var drawService: DrawService;
+  private var drawService: DrawService
 
   init {
     // Log.d(TAG, "*** init ***")
@@ -112,7 +107,7 @@ class WatchFaceRenderer(
     // NOTE: when we wait for the complicationdata to be available we have no
     //  memory leaks (segfaults in libc) on the bitmap number data?
     val complicationSlotsRow2 =
-      mapComplicationsToSlotMetadata(complications, WatchFaceColors.NumberColorRow2, 2 * gap)
+      mapComplicationsToSlotMetadata(complications, WatchFaceColors.NumberColorRow2)
     if (complicationSlotsRow2.isNotEmpty()) {
       drawSlots(zonedDateTime, complicationSlotsRow2)
     }
@@ -138,21 +133,18 @@ class WatchFaceRenderer(
       bottomRow1,
       complications,
     ) + 3 * topBottomMargin
-    val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2);
+    val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2)
   }
 
   private fun drawRow1(now: ZonedDateTime, valueColor: Int, startTop: Float): Float {
     // Log.d(TAG, "DRAW ROW 1")
     // FIRST-ROW
-    var leftStart = topLeftX
-    // TODO: Maybe globally define margin
-    val margin = 2 * gap
+    val leftStart = topLeftX
 
     // Month-Name Slot
     val monthSlotData = SlotMetadata(
       "MONTH",
       valueColor,
-      margin,
       listOf(
         TextVal(now.month.toString().substring(0, 3))
       )
@@ -161,28 +153,28 @@ class WatchFaceRenderer(
     // Day Slot
     val dayNums = MapperUtil.mapTwoDigitNumToInts(now.dayOfMonth).map { NumVal(it) }
     val daySlotData =
-      SlotMetadata("DAY", valueColor, margin, dayNums)
+      SlotMetadata("DAY", valueColor, dayNums)
 
     // Year Slot
     val yearNums = MapperUtil.mapYearToInts(now.year).map { NumVal(it) }
     val yearSlotData =
-      SlotMetadata("YEAR", valueColor, margin / 2, yearNums)
+      SlotMetadata("YEAR", valueColor, yearNums)
 
     // Colon Slot (AM/PM)
-    val colon = ShapeVal(ShapeType.COLON)
+    val colon = ShapeVal()
     val colonSlotData =
-      SlotMetadata(valueColor = 0, marginRight = margin, slotValues = listOf(colon), now = now)
+      SlotMetadata(valueColor = 0, slotValues = listOf(colon), now = now)
 
     // Hour Slot
     val hourNums = MapperUtil.mapTwoDigitNumToInts(now.hour).map { NumVal(it) }
     val hourSlotData =
-      SlotMetadata("HOUR", valueColor, margin, hourNums)
+      SlotMetadata("HOUR", valueColor, hourNums)
 
     // Minute Slot
     val minuteNums =
       MapperUtil.mapTwoDigitNumToInts(now.minute).map { NumVal(it) }
     val minuteSlotData =
-      SlotMetadata("MIN", valueColor, 0f, minuteNums)
+      SlotMetadata("MIN", valueColor, minuteNums)
 
     return drawService.drawRow(
       leftStart,
@@ -195,7 +187,7 @@ class WatchFaceRenderer(
     )
   }
 
-  fun drawRow2(
+  private fun drawRow2(
     valueColor: Int,
     startTop: Float,
     complicationSlotDataList: List<SlotMetadata>
@@ -216,8 +208,7 @@ class WatchFaceRenderer(
 
   private fun mapComplicationsToSlotMetadata(
     complications: List<ComplicationSlot>,
-    valueColor: Int,
-    margin: Float
+    valueColor: Int
   ): List<SlotMetadata> {
     return complications.asSequence()
       .map { it.complicationData.value }
@@ -238,7 +229,7 @@ class WatchFaceRenderer(
           }
           slotValues.add(TextVal("%"))
         }
-        SlotMetadata(label, valueColor, margin, slotValues)
+        SlotMetadata(label, valueColor, slotValues)
       }.toList()
   }
 

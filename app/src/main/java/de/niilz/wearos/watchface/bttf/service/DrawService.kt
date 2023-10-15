@@ -36,8 +36,7 @@ class DrawService(
     val drawableSlots = rowData.map { slotData ->
       createDrawableSlot(
         slotData,
-        backgroundColor,
-        slotData.marginRight
+        backgroundColor
       )
     }.toMutableList()
 
@@ -79,7 +78,6 @@ class DrawService(
   private fun createDrawableSlot(
     slotMetadata: SlotMetadata,
     backgroundColor: Int,
-    marginRight: Float
   ): DrawableSlot {
     val itemsToDraw = createDrawableItems(slotMetadata)
     val labelText = slotMetadata.labelText ?: ""
