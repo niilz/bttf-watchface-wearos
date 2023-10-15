@@ -34,13 +34,13 @@ class DrawServiceTest {
       (1..3).map { DrawableSlot(mockContext, drawableItems, label, 0f, 0f, Color.BLACK) }
         .toMutableList()
 
-    // 3 Slots times 4 items with times 10 itemwidth = 120 (one too large)
+    // 3 Slots times 4 items with each 10f itemwidth = 120 (one too large)
     val totalWidth = slots.map { slot -> slot.calcSlotWidth() }.sum()
     assertEquals(3, slots.size)
     assertEquals(120f, totalWidth)
 
     // When
-    val evenMargin = DrawService.calculateEvenMargin(
+    val evenMargin = DrawService.fitSlotsAndCaldEvenMargin(
       slots,
       canvasInnerWidthOrHeight,
       minLeftRightMaring

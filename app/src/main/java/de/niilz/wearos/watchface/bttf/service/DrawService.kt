@@ -42,7 +42,7 @@ class DrawService(
     }.toMutableList()
 
     // This also modifies the amount of drawable slots in the list
-    val evenMargin = calculateEvenMargin(
+    val evenMargin = fitSlotsAndCaldEvenMargin(
       drawableSlots,
       canvasInnerWidthOrHeight,
       minLeftRightMargin
@@ -166,7 +166,7 @@ class DrawService(
   }
 
   companion object {
-    fun calculateEvenMargin(
+    fun fitSlotsAndCaldEvenMargin(
       drawableSlots: MutableList<DrawableSlot>,
       canvasInnerWidthOrHeight: Float,
       minLeftRightMargin: Float
