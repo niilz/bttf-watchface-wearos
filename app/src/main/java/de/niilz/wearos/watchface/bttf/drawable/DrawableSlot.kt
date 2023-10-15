@@ -11,9 +11,10 @@ class DrawableSlot(
   context: Context,
   private val items: List<DrawableItem>,
   private val label: DrawableItem,
-  private val left: Float,
-  private val top: Float,
+  var left: Float,
+  var top: Float,
   private val backgroundColor: Int,
+  val marginRight: Float,
 ) {
   private val frameColor = ContextCompat.getColor(context, R.color.frame_color)
   private val gap = context.resources.getDimension(R.dimen.gap)
@@ -62,16 +63,16 @@ class DrawableSlot(
     return Pair(right - left, bottom)
   }
 
-  private fun labelToItemOffset(): Float {
-    val slotCenter = calcSlotWidth() / 2f
-    val labelCenter = label!!.getWidth() / 2f
-    return slotCenter - labelCenter
-  }
-
-  private fun calcSlotWidth(): Float {
+  fun calcSlotWidth(): Float {
     val totalWidthOfItems = items.map { it.getWidth() }.sum()
     val totalGapBetweenItems = ((items.size - 1) * gap)
     val paddingLeftAndRight = 2 * padding
     return totalWidthOfItems + totalGapBetweenItems + paddingLeftAndRight
+  }
+
+  private fun labelToItemOffset(): Float {
+    val slotCenter = calcSlotWidth() / 2f
+    val labelCenter = label!!.getWidth() / 2f
+    return slotCenter - labelCenter
   }
 }
