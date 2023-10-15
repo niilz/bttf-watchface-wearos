@@ -33,8 +33,6 @@ class DrawService(
     backgroundColor: Int,
     canvasInnerWidthOrHeight: Float
   ): Float {
-    var cursor = leftStart
-    var slotBottom = 0f
     val drawableSlots = rowData.map { slotData ->
       createDrawableSlot(
         slotData,
@@ -49,6 +47,8 @@ class DrawService(
       canvasInnerWidthOrHeight,
       minLeftRightMargin
     )
+    var cursor = leftStart + maxOf(minLeftRightMargin, evenMargin / 2)
+    var slotBottom = 0f
     for (slot in drawableSlots) {
       val slotBottomEnd = drawSlot(slot, cursor, top)
       cursor += slot.calcSlotWidth() + evenMargin

@@ -26,9 +26,6 @@ import de.niilz.wearos.watchface.bttf.service.SlotValue
 import de.niilz.wearos.watchface.bttf.service.TextVal
 import de.niilz.wearos.watchface.bttf.util.DrawUtil
 import de.niilz.wearos.watchface.bttf.util.MapperUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import retrieveSlotCount
 import java.time.ZonedDateTime
 import kotlin.math.sqrt
@@ -76,8 +73,6 @@ class WatchFaceRenderer(
   private var areValuesInit = false
 
   private var drawService: DrawService;
-
-  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
   init {
     // Log.d(TAG, "*** init ***")
@@ -141,7 +136,7 @@ class WatchFaceRenderer(
     val bottomRow2 = drawRow2(
       WatchFaceColors.NumberColorRow2,
       bottomRow1,
-      complications
+      complications,
     ) + 3 * topBottomMargin
     val bottomRow3 = drawRow3(dateTime, WatchFaceColors.NumberColorRow3, bottomRow2);
   }
@@ -149,7 +144,7 @@ class WatchFaceRenderer(
   private fun drawRow1(now: ZonedDateTime, valueColor: Int, startTop: Float): Float {
     // Log.d(TAG, "DRAW ROW 1")
     // FIRST-ROW
-    var leftStart = topLeftX + firstRowLeftMargin
+    var leftStart = topLeftX
     // TODO: Maybe globally define margin
     val margin = 2 * gap
 
@@ -191,10 +186,12 @@ class WatchFaceRenderer(
 
     return drawService.drawRow(
       leftStart,
+      minLeftRightMargin = firstRowLeftMargin,
       startTop,
       listOf(monthSlotData, daySlotData, yearSlotData, colonSlotData, hourSlotData, minuteSlotData),
       "DESTINATION TIME",
-      DrawUtil.darkenColor(valueColor, 0.8f)
+      DrawUtil.darkenColor(valueColor, 0.8f),
+      canvasInnerWidthOrHeight
     )
   }
 
@@ -204,14 +201,16 @@ class WatchFaceRenderer(
     complicationSlotDataList: List<SlotMetadata>
   ): Float {
     // Log.d(TAG, "DRAW ROW 2")
-    val leftStart = topLeftX + firstRowLeftMargin
+    val leftStart = topLeftX
 
     return drawService.drawRow(
       leftStart,
+      minLeftRightMargin = firstRowLeftMargin,
       startTop,
       complicationSlotDataList,
       "DESTINATION TIME",
-      DrawUtil.darkenColor(valueColor, 0.8f)
+      DrawUtil.darkenColor(valueColor, 0.8f),
+      canvasInnerWidthOrHeight
     )
   }
 
