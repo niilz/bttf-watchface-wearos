@@ -25,7 +25,7 @@
         <service
             android:name=".BttfWatchface"
             android:exported="true"
-            android:label="@string/foo"
+            android:label="@string/bttf_watchface"
             android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
@@ -34,10 +34,10 @@
 
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview"
-                android:resource="@drawable/preview_analog" />
+                android:resource="@drawable/watch_face_preview_square" />
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
-                android:resource="@drawable/preview_analog_round" />
+                android:resource="@drawable/watch_face_preview_circular" />
             <meta-data
                 android:name="android.service.wallpaper.square_mode"
                 android:value="false" />
