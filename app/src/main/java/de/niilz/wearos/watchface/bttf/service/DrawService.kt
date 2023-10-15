@@ -3,7 +3,9 @@ package de.niilz.wearos.watchface.bttf.service
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.util.Log
 import de.niilz.wearos.watchface.bttf.R
+import de.niilz.wearos.watchface.bttf.TAG
 import de.niilz.wearos.watchface.bttf.config.WatchFaceColors
 import de.niilz.wearos.watchface.bttf.drawable.DrawableColon
 import de.niilz.wearos.watchface.bttf.drawable.DrawableItem
@@ -15,7 +17,7 @@ import de.niilz.wearos.watchface.bttf.util.MapperUtil
 class DrawService(
   private val context: Context,
   private var numberBitmaps: List<Bitmap>,
-  var canvas: Canvas?
+  var canvas: Canvas?,
 ) {
   // TODO: Do we really need both constructors?
   private val labelSize = context.resources.getInteger(R.integer.label_size).toFloat()
@@ -24,10 +26,12 @@ class DrawService(
 
   fun drawRow(
     leftStart: Float,
+    minLeftRightMargin: Float,
     top: Float,
     rowData: List<SlotMetadata>,
     footerText: String,
-    backgroundColor: Int
+    backgroundColor: Int,
+    canvasInnerWidthOrHeight: Float
   ): Float {
     var cursor = leftStart
     var slotBottom = 0f
@@ -37,10 +41,17 @@ class DrawService(
         backgroundColor,
         slotData.marginRight
       )
-    }
+    }.toMutableList()
+
+    // This also modifies the amount of drawable slots in the list
+    val evenMargin = calculateEvenMargin(
+      drawableSlots,
+      canvasInnerWidthOrHeight,
+      minLeftRightMargin
+    )
     for (slot in drawableSlots) {
       val slotBottomEnd = drawSlot(slot, cursor, top)
-      cursor += slot.calcSlotWidth() + slot.marginRight
+      cursor += slot.calcSlotWidth() + evenMargin
       if (slotBottomEnd > slotBottom) {
         slotBottom = slotBottomEnd
       }
@@ -155,5 +166,28 @@ class DrawService(
 
   private fun getCharHeight(): Float {
     return numberBitmaps[1].height.toFloat()
+  }
+
+  companion object {
+    fun calculateEvenMargin(
+      drawableSlots: MutableList<DrawableSlot>,
+      canvasInnerWidthOrHeight: Float,
+      minLeftRightMargin: Float
+    ): Float {
+      // Remove slot if they do not all fit on the canvas
+      while (true) {
+        if (drawableSlots.size < 1) {
+          Log.e(TAG, "Not even one slot fits on the canvas")
+          break
+        }
+        val totalSlotWidth = drawableSlots.map { slot -> slot.calcSlotWidth() }.sum()
+        val remainingSpace = canvasInnerWidthOrHeight - totalSlotWidth - 2 * minLeftRightMargin
+        if (remainingSpace > 0) {
+          return remainingSpace / drawableSlots.size
+        }
+        drawableSlots.removeLast()
+      }
+      return 0f
+    }
   }
 }
