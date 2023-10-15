@@ -31,9 +31,16 @@ class DrawService(
   ): Float {
     var cursor = leftStart
     var slotBottom = 0f
-    for (slotData in rowData) {
-      val (slotRightEnd, slotBottomEnd) = drawSlot(slotData, cursor, top, backgroundColor)
-      cursor += slotRightEnd + slotData.marginRight
+    val drawableSlots = rowData.map { slotData ->
+      createDrawableSlot(
+        slotData,
+        backgroundColor,
+        slotData.marginRight
+      )
+    }
+    for (slot in drawableSlots) {
+      val (_slotRightEnd, slotBottomEnd) = drawSlot(slot, cursor, top)
+      cursor += slot.calcSlotWidth() + slot.marginRight
       if (slotBottomEnd > slotBottom) {
         slotBottom = slotBottomEnd
       }
@@ -58,27 +65,36 @@ class DrawService(
     return footerLabelTop + footerLabel.getHeight()
   }
 
-  private fun drawSlot(
-    slotData: SlotMetadata,
-    leftStart: Float,
-    topStart: Float,
+  private fun createDrawableSlot(
+    slotMetadata: SlotMetadata,
     backgroundColor: Int,
-  ): Pair<Float, Float> {
-    val itemsToDraw = createDrawableItems(slotData)
-    val labelText = slotData.labelText ?: ""
+    marginRight: Float
+  ): DrawableSlot {
+    val itemsToDraw = createDrawableItems(slotMetadata)
+    val labelText = slotMetadata.labelText ?: ""
     val label = DrawableLabel(labelText, labelSize)
 
-    val drawableSlot = DrawableSlot(
+    return DrawableSlot(
       context,
       itemsToDraw,
       label,
-      leftStart,
-      topStart,
-      backgroundColor
+      0f,//leftStart,
+      0f, // topStart,
+      backgroundColor,
+      marginRight
     )
+  }
+
+  private fun drawSlot(
+    drawableSlot: DrawableSlot,
+    leftStart: Float,
+    topStart: Float,
+  ): Pair<Float, Float> {
+    drawableSlot.left = leftStart
+    drawableSlot.top = topStart
     canvas?.let {
       val (rightEnd, bottomEnd) = drawableSlot.draw(it)
-      return Pair(rightEnd, bottomEnd)
+      return Pair(rightEnd + 50, bottomEnd)
     }
     throw IllegalStateException("Could not draw slot to canvas")
   }
