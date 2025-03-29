@@ -5,7 +5,7 @@ plugins {
 
 android {
   namespace = "de.niilz.wearos.watchface.bttf"
-  compileSdk = 34
+  compileSdk = 35
 
   defaultConfig {
     applicationId = "de.niilz.wearos.watchface.bttf"
@@ -51,29 +51,29 @@ android {
 }
 
 dependencies {
-  implementation("androidx.core:core-ktx:1.10.1")
+  implementation("androidx.core:core-ktx:1.15.0")
 
-  implementation("androidx.wear.watchface:watchface:1.1.1")
-  implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.1.1")
-  implementation("androidx.wear.watchface:watchface-editor:1.1.1")
+  implementation("androidx.wear.watchface:watchface:1.2.1")
+  implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
+  implementation("androidx.wear.watchface:watchface-editor:1.2.1")
   // Optional (for custom complication rendering)
-  implementation("androidx.wear.watchface:watchface-complications-rendering:1.1.1")
+  implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
 
   // Compose
   val composeBom = platform("androidx.compose:compose-bom:2023.06.01")
   implementation(composeBom)
   androidTestImplementation(composeBom)
   implementation("androidx.compose.material3:material3")
-  implementation("androidx.activity:activity-compose:1.7.2")
-  implementation("androidx.compose.ui:ui-unit-android:1.5.0")
+  implementation("androidx.activity:activity-compose:1.10.1")
+  implementation("androidx.compose.ui:ui-unit-android:1.7.8")
   // Android Studio Preview support
   implementation("androidx.compose.ui:ui-tooling-preview")
   debugImplementation("androidx.compose.ui:ui-tooling")
 
   // Health
-  implementation("androidx.health:health-services-client:1.0.0-rc01")
-  implementation("androidx.datastore:datastore-preferences:1.0.0")
-  implementation("androidx.datastore:datastore-core:1.0.0")
+  implementation("androidx.health:health-services-client:1.0.0-rc02")
+  implementation("androidx.datastore:datastore-preferences:1.1.4")
+  implementation("androidx.datastore:datastore-core:1.1.4")
 
   // Test
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")

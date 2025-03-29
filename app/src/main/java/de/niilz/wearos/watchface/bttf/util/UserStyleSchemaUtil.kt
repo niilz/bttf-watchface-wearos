@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.wear.watchface.style.UserStyle
 import androidx.wear.watchface.style.UserStyleSchema
@@ -27,6 +28,7 @@ fun retrieveSlotCount(userStyle: StateFlow<UserStyle>): Int {
     .replace("slot-counts-", "").toInt()
 }
 
+@SuppressLint("RestrictedApi")
 private fun createComplicationSlotOptions(slotCounts: Int): UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption {
   val complicationOverlays = (1..slotCounts).map { slotId ->
     createComplicationSlotOverlay(slotId)
@@ -34,6 +36,7 @@ private fun createComplicationSlotOptions(slotCounts: Int): UserStyleSetting.Com
   return UserStyleSetting.ComplicationSlotsUserStyleSetting.ComplicationSlotsOption(
     UserStyleSetting.Option.Id("slot-counts-${complicationOverlays.size}"),
     "Slot-Counts-${complicationOverlays.size}",
+    "Slot-Counts-Screen-Reader-Name",
     null,
     complicationOverlays
   )
